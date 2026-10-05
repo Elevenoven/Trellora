@@ -18,8 +18,6 @@ Where ideas grow connected.
 
 [下载软件](#下载软件) · [产品功能](#产品功能) · [菜单与截图](#菜单与截图) · [快速开始](#快速开始) · [详细代码架构](docs/architecture.md) · [问题反馈](https://github.com/Elevenoven/Trellora-plus/issues)
 
-![Trellora Markdown 笔记工作台](docs/assets/screenshots/notes-zh-light.png)
-
 </div>
 
 ## Trellora 是什么
@@ -29,6 +27,8 @@ Trellora 面向需要持续阅读、写作和整理资料的开发者、学生�
 产品围绕一条完整的知识工作流程展开：**收集资料 → 解析和索引 → 阅读与提问 → 整理为笔记 → 建立关联 → 持续复用**。笔记库用于主动写作，资料库用于保留和检索来源，Wiki 用于按章节学习，地图用于发现跨文档关系，助手把这些能力连接起来。
 
 当前目标平台是 **Windows x64**，项目仍在持续开发。本文描述当前工作树的界面和实现；需要模型、Embedding、联网搜索或 PDF 云解析的功能，会在对应位置注明条件。正式分发状态以 [桌面分发验收记录](docs/verification/desktop-distribution-acceptance.md) 为准。
+
+![Trellora Markdown 笔记工作台](docs/assets/screenshots/notes-zh-light.png)
 
 ## 目录
 
