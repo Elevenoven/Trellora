@@ -18,8 +18,6 @@ Markdown notes, source documents, AI conversations, and connected knowledge in o
 
 [Download](#download) · [Features](#features) · [Menus and screenshots](#menus-and-screenshots) · [Quick start](#quick-start) · [Detailed architecture](docs/architecture.en.md) · [Report an issue](https://github.com/Elevenoven/Trellora-plus/issues)
 
-![Trellora notes workspace with the English interface and dark theme](docs/assets/screenshots/notes-en-dark.png)
-
 </div>
 
 ## What is Trellora?
@@ -29,6 +27,8 @@ Trellora is for developers, students, and knowledge workers who regularly read, 
 The workflow is **collect → parse and index → read and ask → save as notes → connect → reuse**. Note libraries support writing; materials libraries preserve and retrieve sources; Wiki supports chapter-based learning; Map reveals relationships across documents; the assistant connects these workflows.
 
 The current target is **Windows x64**, and development is ongoing. This README describes the current working tree. Model, embedding, web search, and PDF cloud parsing requirements are stated where relevant. See the [desktop distribution acceptance record](docs/verification/desktop-distribution-acceptance.md) for release validation status.
+
+![Trellora notes workspace with the English interface and dark theme](docs/assets/screenshots/notes-en-dark.png)
 
 ## Contents
 
