@@ -1,0 +1,834 @@
+/* A single semantic palette keeps custom CSS and Mantine surfaces in step. */
+:root,
+:root[data-theme="light"] {
+  color-scheme: light;
+  --surface-canvas: #f5f8f6;
+  --surface-panel: #edf3ef;
+  --surface-raised: #ffffff;
+  --surface-hover: #e5efe8;
+  --surface-selected: #e3f0e8;
+  --border-subtle: #d8e3dc;
+  --border-strong: #b9cdbf;
+  --text-primary: #24352c;
+  --text-secondary: #55675c;
+  --text-tertiary: #627367;
+  --accent-primary: #26745b;
+  --accent-fill: #26745b;
+  --accent-focus: #3e8c6f;
+  --accent-slate: #607b8d;
+  --accent-coral: #aa7162;
+  --accent-violet: #7b6aa0;
+  --accent-knowledge-soft: #f7eedc;
+  --accent-knowledge: #b98532;
+  --accent-ai-soft: #e8f0f4;
+  --accent-ai: #3d7388;
+  --text-on-accent: #ffffff;
+  --status-success: #3e7d61;
+  --status-warning: #a86f32;
+  --status-danger: #bd514a;
+  --shadow-overlay: rgb(26 26 24 / 0.12);
+  --scrim: rgb(26 26 24 / 0.38);
+  --graph-note: #607b8d;
+  --graph-tag: #7b6aa0;
+  --graph-entity: #b98532;
+  --graph-concept: #438364;
+  --graph-project: #aa7162;
+  --graph-edge: #8ea498;
+  --graph-selected: #ffffff;
+  --bg-primary: var(--surface-canvas);
+  --bg-secondary: var(--surface-panel);
+  --bg-hover: var(--surface-hover);
+  --border-color: var(--border-subtle);
+  --accent-blue: var(--accent-primary);
+  --interaction-gray: var(--surface-hover);
+  --interaction-gray-strong: var(--surface-selected);
+  --quote-bg: #f0f6f2;
+  --quote-border: #b9d4c4;
+  --quote-text: #55675c;
+  --code-bg: #f1f5f3;
+  --code-border: #d8e3dc;
+  --code-text: #24352c;
+  --code-comment: #627367;
+  --code-keyword: #706092;
+  --code-string: #317457;
+  --code-number: #96632b;
+  --code-title: #3d7388;
+  --code-type: #7b6aa0;
+  --code-attr: #a56b46;
+  --document-paper-background: #ffffff;
+  --document-paper-ink: #24352c;
+  --document-paper-border: #d8e3dc;
+  --document-paper-shadow: rgb(26 26 24 / 0.16);
+  --mantine-color-body: var(--surface-canvas);
+  --mantine-color-text: var(--text-primary);
+  --mantine-color-dimmed: var(--text-secondary);
+  --mantine-color-default: var(--surface-raised);
+  --mantine-color-default-hover: var(--surface-hover);
+  --mantine-color-default-color: var(--text-primary);
+  --mantine-color-default-border: var(--border-strong);
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme]) {
+    color-scheme: dark;
+    --surface-canvas: #17201b;
+    --surface-panel: #1e2a23;
+    --surface-raised: #25342b;
+    --surface-hover: #2d3f33;
+    --surface-selected: #304d3c;
+    --border-subtle: #364b3d;
+    --border-strong: #4f6b58;
+    --text-primary: #e8f0ea;
+    --text-secondary: #b2c5b8;
+    --text-tertiary: #95a99c;
+    --accent-primary: #83c8a5;
+    --accent-fill: #337c60;
+    --accent-focus: #96d7b7;
+    --accent-slate: #a1b8c9;
+    --accent-coral: #d5a495;
+    --accent-violet: #b6a6d3;
+    --accent-knowledge-soft: #3d3425;
+    --accent-knowledge: #d7b36c;
+    --accent-ai-soft: #263c45;
+    --accent-ai: #8fbccb;
+    --accent-blue: var(--accent-ai);
+    --text-on-accent: #ffffff;
+    --status-success: #62a985;
+    --status-warning: #d19a55;
+    --status-danger: #d87770;
+    --shadow-overlay: rgb(0 0 0 / 0.30);
+    --scrim: rgb(0 0 0 / 0.58);
+    --graph-note: #a1b8c9;
+    --graph-tag: #b6a6d3;
+    --graph-entity: #d7b36c;
+    --graph-concept: #83c8a5;
+    --graph-project: #d5a495;
+    --graph-edge: #819c8a;
+    --graph-selected: #f2f2ee;
+    --quote-bg: #263a2e;
+    --quote-border: #4b6e58;
+    --quote-text: #b2c5b8;
+    --code-bg: #1e2c24;
+    --code-border: #364b3d;
+    --code-text: #e8f0ea;
+    --code-comment: #95a99c;
+    --code-keyword: #b6a6d3;
+    --code-string: #93c8a8;
+    --code-number: #dcb377;
+    --code-title: #8fbccb;
+    --code-type: #b6a6d3;
+    --code-attr: #d7ad82;
+    --document-paper-background: #25342b;
+    --document-paper-ink: #e8f0ea;
+    --document-paper-border: #4f6b58;
+    --document-paper-shadow: rgb(0 0 0 / 0.38);
+    --mantine-color-body: var(--surface-canvas);
+    --mantine-color-text: var(--text-primary);
+    --mantine-color-dimmed: var(--text-secondary);
+    --mantine-color-default: var(--surface-raised);
+    --mantine-color-default-hover: var(--surface-hover);
+    --mantine-color-default-color: var(--text-primary);
+    --mantine-color-default-border: var(--border-strong);
+  }
+}
+
+:root[data-theme="dark"] {
+  color-scheme: dark;
+  --surface-canvas: #17201b;
+  --surface-panel: #1e2a23;
+  --surface-raised: #25342b;
+  --surface-hover: #2d3f33;
+  --surface-selected: #304d3c;
+  --border-subtle: #364b3d;
+  --border-strong: #4f6b58;
+  --text-primary: #e8f0ea;
+  --text-secondary: #b2c5b8;
+  --text-tertiary: #95a99c;
+  --accent-primary: #83c8a5;
+  --accent-fill: #337c60;
+  --accent-focus: #96d7b7;
+  --accent-slate: #a1b8c9;
+  --accent-coral: #d5a495;
+  --accent-violet: #b6a6d3;
+  --accent-knowledge-soft: #3d3425;
+  --accent-knowledge: #d7b36c;
+  --accent-ai-soft: #263c45;
+  --accent-ai: #8fbccb;
+  --accent-blue: var(--accent-ai);
+  --text-on-accent: #ffffff;
+  --status-success: #62a985;
+  --status-warning: #d19a55;
+  --status-danger: #d87770;
+  --shadow-overlay: rgb(0 0 0 / 0.30);
+  --scrim: rgb(0 0 0 / 0.58);
+  --graph-note: #a1b8c9;
+  --graph-tag: #b6a6d3;
+  --graph-entity: #d7b36c;
+  --graph-concept: #83c8a5;
+  --graph-project: #d5a495;
+  --graph-edge: #819c8a;
+  --graph-selected: #f2f2ee;
+  --quote-bg: #263a2e;
+  --quote-border: #4b6e58;
+  --quote-text: #b2c5b8;
+  --code-bg: #1e2c24;
+  --code-border: #364b3d;
+  --code-text: #e8f0ea;
+  --code-comment: #95a99c;
+  --code-keyword: #b6a6d3;
+  --code-string: #93c8a8;
+  --code-number: #dcb377;
+  --code-title: #8fbccb;
+  --code-type: #b6a6d3;
+  --code-attr: #d7ad82;
+  --document-paper-background: #25342b;
+  --document-paper-ink: #e8f0ea;
+  --document-paper-border: #4f6b58;
+  --document-paper-shadow: rgb(0 0 0 / 0.38);
+  --mantine-color-body: var(--surface-canvas);
+  --mantine-color-text: var(--text-primary);
+  --mantine-color-dimmed: var(--text-secondary);
+  --mantine-color-default: var(--surface-raised);
+  --mantine-color-default-hover: var(--surface-hover);
+  --mantine-color-default-color: var(--text-primary);
+  --mantine-color-default-border: var(--border-strong);
+}
+
+:root[data-theme-transition="true"]::view-transition-old(root) {
+  animation: trellora-theme-fade-out 180ms cubic-bezier(0.2, 0.8, 0.2, 1) both;
+}
+
+:root[data-theme-transition="true"]::view-transition-new(root) {
+  animation: trellora-theme-fade-in 180ms cubic-bezier(0.2, 0.8, 0.2, 1) both;
+}
+
+@keyframes trellora-theme-fade-out {
+  to { opacity: 0; }
+}
+
+@keyframes trellora-theme-fade-in {
+  from { opacity: 0; }
+}
+
+/* Forest-green interaction accents sit on quiet reading surfaces. */
+.app-nav-rail {
+  color: var(--text-secondary);
+  background: var(--surface-panel);
+  border-right-color: var(--border-subtle);
+}
+
+.app-nav-brand {
+  color: var(--text-on-accent);
+  background: transparent;
+  box-shadow: none;
+}
+
+.app-nav-divider { background: var(--border-strong); }
+.app-nav-item,
+.app-nav-rail-caption { color: var(--text-tertiary); }
+
+.app-nav-item:hover:not(:disabled),
+.app-nav-item:focus-visible,
+.app-nav-item.active {
+  color: var(--text-primary);
+  background: var(--surface-selected);
+  box-shadow: none;
+}
+
+.app-nav-item.active::before { background: var(--accent-primary); }
+.app-nav-item:disabled { color: var(--text-tertiary); }
+
+.home-view { background: var(--surface-canvas); }
+.home-eyebrow,
+.home-section-kicker,
+.metric-icon { color: var(--text-secondary); }
+
+.home-hero h1,
+.home-section-heading h2,
+.home-context-card h3,
+.library-card h3 { color: var(--text-primary); }
+
+.home-intro { color: var(--text-secondary); }
+
+.home-empty-state,
+.library-card,
+.home-context-card {
+  background: var(--surface-raised);
+  border-color: var(--border-subtle);
+  box-shadow: 0 8px 24px var(--shadow-overlay);
+}
+
+.library-card:hover {
+  border-color: var(--border-strong);
+  box-shadow: 0 10px 28px var(--shadow-overlay);
+}
+
+.library-card.active {
+  border-color: var(--border-strong);
+  box-shadow: inset 2px 0 0 var(--accent-primary), 0 8px 24px var(--shadow-overlay);
+}
+
+.library-card-footer { border-top-color: var(--border-subtle); }
+.library-metric,
+.library-metric.muted,
+.home-recent-note { background: var(--surface-panel); }
+.home-phase-badge { color: var(--text-primary); background: var(--surface-selected); }
+.home-check,
+.library-status-dot.ready { color: var(--status-success); background: var(--status-success); }
+.library-status-dot.missing,
+.materials-ctx-item.danger { color: var(--status-danger); }
+
+.sidebar,
+.sidebar-bottom,
+.knowledge-panel,
+.knowledge-panel-collapsed,
+.knowledge-panel-header { background: var(--surface-panel); }
+
+.app-mark {
+  color: var(--text-on-accent);
+  background: transparent;
+  box-shadow: none;
+}
+
+.sidebar .sidebar-library-command,
+.sidebar .sidebar-library-command:hover,
+.sidebar .mantine-Button-root.sidebar-command:hover {
+  border-color: var(--border-subtle);
+  background: var(--surface-raised);
+  color: var(--text-primary);
+}
+
+.sidebar-tabs .mantine-Button-root[data-variant="light"],
+.sidebar .file-tree-row.selected,
+.sidebar .sidebar-item.selected,
+.knowledge-tabs .mantine-Tabs-tab[data-active] {
+  background: var(--surface-selected) !important;
+  color: var(--accent-primary) !important;
+}
+
+.sidebar .file-tree-row.selected,
+.sidebar .sidebar-item.selected { box-shadow: inset 2px 0 0 var(--accent-primary); }
+
+/* 收藏项是原生 button；显式归零默认边框，避免浏览器的厚黑描边。 */
+.sidebar button.favorite-item {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  width: calc(100% - 14px);
+  min-height: 30px;
+  padding: 3px 8px;
+  border: 1px solid transparent;
+  box-sizing: border-box;
+  background: transparent;
+  color: var(--text-primary);
+  font: inherit;
+  font-size: 13px;
+  line-height: 1.35;
+  text-align: left;
+  cursor: pointer;
+}
+
+.sidebar button.favorite-item:hover {
+  background: var(--surface-hover);
+}
+
+.sidebar button.favorite-item.selected {
+  border-color: color-mix(in srgb, var(--text-secondary) 48%, var(--surface-selected));
+  background: var(--surface-selected) !important;
+  box-shadow: none;
+}
+
+/* Filled legacy controls use the same brand accent as Mantine. */
+.welcome-screen button,
+.settings-content button.primary,
+.segmented-control button.active,
+.primary-button {
+  background: var(--accent-fill);
+  color: #ffffff;
+}
+
+.ProseMirror ul[data-type="taskList"] > li input[type="checkbox"]:checked,
+.ProseMirror li[data-type="taskItem"] input[type="checkbox"]:checked {
+  border-color: var(--accent-fill);
+  background-color: var(--accent-fill);
+}
+
+.node-dot,
+.legend-node { background: var(--graph-note); }
+.node-dot.tag,
+.legend-node.tag { background: var(--graph-tag); }
+.node-dot.entity,
+.legend-node.entity { background: var(--graph-entity); }
+.node-dot.concept,
+.legend-node.concept { background: var(--graph-concept); }
+.node-dot.project,
+.legend-node.project { background: var(--graph-project); }
+.legend-edge { border-top-color: var(--graph-edge); }
+.legend-edge.related { border-color: var(--graph-entity); }
+.legend-edge.contains { border-color: var(--graph-concept); }
+.legend-edge.evolves_from { border-color: var(--graph-project); }
+
+.node-type-badge,
+.ai-source-badge,
+.source-badge {
+  color: var(--graph-note);
+  background: color-mix(in srgb, var(--graph-note) 13%, var(--surface-canvas));
+}
+
+.node-type-badge.tag { color: var(--graph-tag); background: color-mix(in srgb, var(--graph-tag) 13%, var(--surface-canvas)); }
+.node-type-badge.entity { color: var(--graph-entity); background: color-mix(in srgb, var(--graph-entity) 13%, var(--surface-canvas)); }
+.node-type-badge.concept { color: var(--graph-concept); background: color-mix(in srgb, var(--graph-concept) 13%, var(--surface-canvas)); }
+.node-type-badge.project { color: var(--graph-project); background: color-mix(in srgb, var(--graph-project) 13%, var(--surface-canvas)); }
+.ai-source-badge { color: var(--graph-entity); background: color-mix(in srgb, var(--graph-entity) 13%, var(--surface-canvas)); }
+.source-badge { color: var(--text-secondary); background: var(--surface-hover); }
+
+.mantine-Modal-content,
+.mantine-Paper-root,
+.mantine-Popover-dropdown,
+.mantine-Menu-dropdown {
+  border-color: var(--border-subtle);
+}
+
+.mantine-Input-input,
+.mantine-Textarea-input,
+.mantine-Select-input {
+  background: var(--surface-raised);
+  border-color: var(--border-subtle);
+  color: var(--text-primary);
+}
+
+/* Small accents identify actions and AI tools without tinting document text. */
+.editor-pane,
+.editor-pane .preview-container {
+  background: var(--document-paper-background);
+}
+
+.mantine-Input-input:focus:not([data-error]),
+.mantine-Textarea-input:focus:not([data-error]),
+.mantine-Select-input:focus:not([data-error]) {
+  border-color: var(--accent-focus);
+}
+
+.note-info-content .knowledge-section-heading h4 > svg {
+  color: var(--accent-ai);
+}
+
+.note-info-content .knowledge-section-body {
+  border-color: color-mix(in srgb, var(--accent-ai) 16%, var(--border-subtle));
+  background: var(--surface-raised);
+}
+
+.note-info-tags .note-tag-button {
+  color: var(--accent-primary);
+  background: var(--surface-selected);
+}
+
+.materials-doc-item.active {
+  background: var(--surface-selected);
+  box-shadow: inset 3px 0 0 var(--accent-primary);
+}
+
+.qa-workspace {
+  background:
+    radial-gradient(ellipse at 43% 32%, color-mix(in srgb, var(--accent-primary) 10%, transparent), transparent 44%),
+    radial-gradient(ellipse at 68% 38%, color-mix(in srgb, var(--accent-ai) 7%, transparent), transparent 38%),
+    var(--surface-canvas);
+}
+
+.qa-workspace-readiness.ready {
+  border-color: color-mix(in srgb, var(--status-success) 24%, var(--border-subtle));
+  color: var(--status-success);
+  background: color-mix(in srgb, var(--status-success) 8%, var(--surface-raised));
+}
+
+.qa-workspace-new-session {
+  border-color: var(--accent-fill);
+  background: var(--accent-fill);
+  color: var(--text-on-accent);
+}
+
+.qa-workspace-new-session:hover {
+  border-color: color-mix(in srgb, var(--accent-fill) 88%, #000000);
+  background: color-mix(in srgb, var(--accent-fill) 88%, #000000);
+}
+
+.qa-workspace-stage .assistant-empty-state > svg {
+  border-color: color-mix(in srgb, var(--accent-ai) 28%, var(--border-subtle));
+  background: var(--accent-ai-soft);
+  color: var(--accent-ai);
+}
+
+.qa-workspace-stage .assistant-empty-state button {
+  border-color: color-mix(in srgb, var(--accent-ai) 24%, var(--border-subtle));
+  color: var(--accent-ai);
+  background: var(--accent-ai-soft);
+}
+
+.qa-workspace-stage .assistant-composer {
+  border-color: var(--border-strong);
+  background: var(--surface-raised);
+  box-shadow: 0 8px 24px color-mix(in srgb, var(--accent-primary) 10%, transparent);
+}
+
+.assistant-composer:focus-within,
+.qa-workspace-stage .assistant-composer:focus-within {
+  border-color: var(--accent-focus);
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--accent-focus) 12%, transparent);
+}
+
+.assistant-thinking-control.mantine-Button-root:not(:disabled) {
+  color: var(--accent-ai);
+}
+
+/* Chapter colours follow the tree; status badges keep their task meaning. */
+.wiki-workspace,
+.wiki-workspace[data-theme="dark"] {
+  --wiki-canvas: var(--surface-canvas);
+  --wiki-surface: var(--surface-raised);
+  --wiki-surface-subtle: var(--surface-panel);
+  --wiki-ink: var(--text-primary);
+  --wiki-muted: var(--text-secondary);
+  --wiki-border: var(--border-subtle);
+  --wiki-border-strong: var(--border-strong);
+  --wiki-accent: var(--accent-primary);
+  --wiki-accent-soft: var(--surface-selected);
+  --wiki-warning: var(--status-warning);
+  --wiki-danger: var(--status-danger);
+}
+
+.wiki-map-node {
+  border-left-color: var(--wiki-branch-color, var(--wiki-accent));
+  background: color-mix(in srgb, var(--wiki-branch-color, var(--wiki-accent)) 6%, var(--wiki-surface));
+}
+
+.wiki-map-node.status-complete {
+  border-left-color: var(--wiki-branch-color, var(--wiki-accent));
+}
+
+.wiki-map-node.status-complete .wiki-map-node-status {
+  background: color-mix(in srgb, var(--status-success) 10%, var(--wiki-surface));
+  color: var(--status-success);
+}
+
+.wiki-map-node:is(.status-running, .status-queued) .wiki-map-node-status {
+  background: var(--accent-ai-soft);
+  color: var(--accent-ai);
+}
+
+.wiki-map-node.status-failed .wiki-map-node-status {
+  background: color-mix(in srgb, var(--status-danger) 10%, var(--wiki-surface));
+  color: var(--status-danger);
+}
+
+.wiki-map-node.status-stale .wiki-map-node-status {
+  background: color-mix(in srgb, var(--status-warning) 10%, var(--wiki-surface));
+  color: var(--status-warning);
+}
+
+.wiki-map-node-icon {
+  color: var(--wiki-branch-color, var(--wiki-accent));
+}
+
+.wiki-map-edge {
+  stroke: color-mix(in srgb, var(--wiki-branch-color, var(--wiki-muted)) 68%, transparent);
+}
+
+.wiki-map-edge.highlighted {
+  stroke: var(--wiki-branch-color, var(--wiki-accent));
+}
+
+:focus-visible {
+  outline: 2px solid var(--accent-focus);
+  outline-offset: 2px;
+}
+
+.theme-toast {
+  position: fixed;
+  right: 20px;
+  bottom: 20px;
+  z-index: 200;
+  padding: 9px 12px;
+  border: 1px solid var(--border-strong);
+  border-radius: 8px;
+  background: var(--surface-raised);
+  color: var(--text-primary);
+  box-shadow: 0 10px 28px var(--shadow-overlay);
+  font-size: 13px;
+}
+
+/* 原生右键菜单保持中性层级；AI 编辑浮层由 Mantine Popover/Modal 承载。 */
+.selection-block-menu {
+  position: fixed;
+  z-index: 1500;
+  color: var(--text-primary);
+  font: inherit;
+}
+
+.selection-block-menu {
+  border: 1px solid var(--border-strong);
+  border-radius: 10px;
+  background: var(--surface-raised);
+  box-shadow: 0 14px 36px var(--shadow-overlay);
+}
+
+.selection-block-menu button {
+  border: 1px solid transparent;
+  border-radius: 6px;
+  background: transparent;
+  color: var(--text-primary);
+  font: inherit;
+  cursor: pointer;
+}
+
+.selection-block-menu button:hover:not(:disabled) {
+  background: var(--surface-selected);
+}
+
+.selection-block-menu {
+  width: 248px;
+  max-height: min(440px, calc(100vh - 16px));
+  overflow-y: auto;
+  padding: 7px;
+  animation: selection-block-menu-enter 120ms ease-out;
+}
+
+.selection-context-menu {
+  width: 248px;
+  max-height: min(620px, calc(100vh - 16px));
+  padding: 8px;
+}
+
+.selection-context-menu button > span {
+  flex: 1 1 auto;
+  min-width: 0;
+}
+
+.selection-context-menu kbd {
+  flex: 0 0 auto;
+  color: var(--text-tertiary);
+  font-family: inherit;
+  font-size: 10px;
+}
+
+.selection-block-menu button.active,
+.selection-context-format-grid button.active {
+  background: var(--surface-selected);
+}
+
+.selection-context-format-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 5px;
+  padding: 1px 0;
+}
+
+.selection-context-menu .selection-context-format-grid button {
+  display: grid;
+  width: 100%;
+  min-height: 43px;
+  place-items: center;
+  padding: 0;
+  border-color: var(--border-subtle);
+  background: color-mix(in srgb, var(--surface-hover) 70%, var(--surface-raised));
+  text-align: center;
+}
+
+.selection-context-menu .selection-context-format-grid button:hover:not(:disabled) {
+  border-color: var(--border-strong);
+}
+
+.selection-context-chevron {
+  margin-left: auto;
+  color: var(--text-tertiary);
+}
+
+.selection-context-submenu {
+  width: 204px;
+  max-height: min(390px, calc(100vh - 16px));
+}
+
+.selection-table-picker {
+  width: 276px;
+  padding: 10px;
+}
+
+.selection-table-picker-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  padding: 0 1px;
+}
+
+.selection-table-picker-header strong {
+  font-size: 13px;
+}
+
+.selection-table-picker .selection-table-picker-header button {
+  display: grid;
+  width: 26px;
+  min-height: 26px;
+  place-items: center;
+  padding: 0;
+}
+
+.selection-table-picker-size {
+  margin: 7px 1px;
+  color: var(--text-secondary);
+  font-size: 12px;
+}
+
+.selection-table-picker-grid {
+  display: grid;
+  grid-template-columns: repeat(10, minmax(0, 1fr));
+  gap: 3px;
+}
+
+.selection-table-picker .selection-table-picker-grid button {
+  display: block;
+  width: 100%;
+  min-height: 18px;
+  padding: 0;
+  border-color: var(--border-subtle);
+  border-radius: 3px;
+  background: var(--surface-hover);
+}
+
+.selection-table-picker .selection-table-picker-grid button.active,
+.selection-table-picker .selection-table-picker-grid button:hover,
+.selection-table-picker .selection-table-picker-grid button:focus-visible {
+  border-color: var(--accent-primary);
+  background: color-mix(in srgb, var(--accent-primary) 62%, var(--surface-raised));
+}
+
+.selection-table-picker small {
+  display: block;
+  margin: 8px 1px 0;
+  color: var(--text-tertiary);
+  font-size: 10px;
+}
+
+.selection-context-menu-status {
+  margin: 6px 2px 1px;
+  padding: 6px 7px;
+  border-radius: 6px;
+  color: var(--status-danger);
+  background: color-mix(in srgb, var(--status-danger) 10%, var(--surface-raised));
+  font-size: 11px;
+  line-height: 1.35;
+}
+
+.selection-context-menu .selection-context-ai-action {
+  align-items: flex-start;
+  padding-block: 7px;
+}
+
+.selection-context-ai-action > svg {
+  margin-top: 2px;
+}
+
+.selection-context-ai-action strong,
+.selection-context-ai-action small {
+  display: block;
+}
+
+.selection-context-ai-action strong {
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.selection-context-ai-action small {
+  margin-top: 2px;
+  color: var(--text-tertiary);
+  font-size: 10px;
+  line-height: 1.35;
+}
+
+.selection-block-menu button {
+  display: flex;
+  width: 100%;
+  min-height: 30px;
+  align-items: center;
+  gap: 8px;
+  padding: 5px 7px;
+  text-align: left;
+  font-size: 13px;
+}
+
+.selection-block-menu button:disabled {
+  cursor: default;
+  opacity: 0.56;
+}
+
+.selection-overlay-divider {
+  height: 1px;
+  margin: 6px 2px;
+  background: var(--border-subtle);
+}
+
+.ProseMirror .formula-block {
+  position: relative;
+  margin: 0.8em 0;
+  padding: 8px 12px;
+  border: 1px solid transparent;
+  border-radius: 6px;
+}
+
+.ProseMirror .formula-preview {
+  cursor: text;
+}
+
+.ProseMirror .formula-node .formula-source {
+  min-height: 1.4em;
+  padding: 2px 4px;
+  color: var(--text-primary);
+  font-family: var(--font-mono, 'Cascadia Code', Consolas, monospace);
+  white-space: pre-wrap;
+  background: var(--surface-hover);
+  border-radius: 4px;
+}
+
+.ProseMirror .formula-node[data-editing='false'] > .formula-source {
+  display: none;
+}
+
+.ProseMirror .formula-inline[data-editing='true'] > .formula-preview {
+  display: none;
+}
+
+.ProseMirror .formula-block[data-editing='true'] {
+  border-color: var(--border-subtle);
+}
+
+.ProseMirror .formula-block > .formula-source {
+  display: block;
+}
+
+.ProseMirror .formula-node .katex-display {
+  margin: 0.5em 0;
+  overflow-x: auto;
+  overflow-y: hidden;
+}
+
+.ProseMirror .formula-node .katex-error {
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+}
+
+@keyframes selection-block-menu-enter {
+  from {
+    opacity: 0;
+    transform: translateY(3px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .selection-block-menu {
+    animation: none;
+  }
+}

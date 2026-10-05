@@ -1,0 +1,21 @@
+{
+  "verifiedAt": "2026-10-04T08:28:35.820Z",
+  "method": "real Electron/main/preload/React and saved remote model; current-note-direct; release defaults without projection overrides; isolated workspace",
+  "checks": [
+    "release defaults enable the expected routes without environment overrides",
+    "exact Chinese explicit request commits a receipt in explicit_only; real settings button stops reads and writes, retains items and generation, then restores reads",
+    "chat and current-note-direct complete through real assistant IPC; owner/generation/eligibility verified",
+    "real provider consolidation reviewed 1 clusters and preserved finite expiry; merged 1",
+    "saved encrypted remote model completed normal chat and automatic extraction in isolated storage; original config unchanged",
+    "complete Electron exit/restart restores 2 receipts and item identity without replay; provider proof resets to unknown"
+  ],
+  "provider": "qwen",
+  "model": "qwen3.7-flash",
+  "receiptCount": 2,
+  "itemCount": 4,
+  "databaseIntegrity": "ok",
+  "originalUserDataModified": false,
+  "containsSecretsOrAnswers": false,
+  "screenshots": "E:\\AI-Project\\trellora\\output\\verification\\memory",
+  "descriptionCorrection": "Only the selected route plus the baseline chat were exercised; receiptCount and original verification time are unchanged."
+}

@@ -1,0 +1,30 @@
+{
+  "measuredAt": "2026-10-05T09:33:58.976Z",
+  "executable": "Trellora-1.0.0-portable-x64.exe",
+  "isolatedUserData": true,
+  "applicationPathExcludesPython": true,
+  "passed": [
+    "actual portable launcher and React/preload startup",
+    "STARTUP_READY",
+    "bundled Python Worker capability probe",
+    "versioned note save and current index",
+    "normal close and cold restart preserve note content"
+  ],
+  "notVerified": [
+    "clean Windows machine",
+    "NSIS install/upgrade/uninstall",
+    "real remote model and cloud services"
+  ],
+  "legacyChecks": [
+    {
+      "script": "verify-packaged-workspace.mjs",
+      "status": "failed",
+      "reason": "expected old UI text 近期索引状态"
+    },
+    {
+      "script": "verify-desktop-runtime.mjs",
+      "status": "failed",
+      "reason": "timed out waiting for document.hidden after minimizing window; remaining checks did not run"
+    }
+  ]
+}

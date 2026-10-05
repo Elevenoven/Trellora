@@ -1,0 +1,35 @@
+{
+  "scope": "Isolated real Electron/main/preload/React and SQLite; model responses use a local fixture",
+  "originalUserDataModified": false,
+  "registeredReference": 3,
+  "snapshotCount": 3,
+  "checks": [
+    "Prompt numbering matches emitted and stored snapshots",
+    "Inline capsule and source capsule toggle the same panel",
+    "Code markers remain code",
+    "Original source shown through the restricted production IPC",
+    "Memory deletion preserves the source",
+    "Source conversation deletion preserves the answer snapshot",
+    "Full Electron restart restores references and provenance",
+    "Dark/light and compact viewport"
+  ],
+  "modelRequests": [
+    {
+      "stream": true,
+      "reference": null
+    },
+    {
+      "stream": false,
+      "reference": null
+    },
+    {
+      "stream": true,
+      "reference": 3
+    },
+    {
+      "stream": false,
+      "reference": null
+    }
+  ],
+  "screenshots": "E:\\AI-Project\\trellora\\output\\verification\\memory-citations"
+}

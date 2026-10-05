@@ -1,0 +1,104 @@
+import assert from 'node:assert/strict';
+import fs from 'node:fs/promises';
+import path from 'node:path';
+import { createRequire } from 'node:module';
+import { build } from 'esbuild';
+
+const require = createRequire(import.meta.url), Database = require('better-sqlite3'), sqliteVec = require('sqlite-vec');
+const staging = path.resolve('.package-staging'); await fs.mkdir(staging, { recursive: true });
+const temporary = await fs.mkdtemp(path.join(staging, 'material-vector-generations-'));
+const library = path.join(temporary, '应收管理库'); await fs.mkdir(path.join(library, '.menghan-meta'), { recursive: true });
+try {
+  const bundle = path.join(temporary, 'fixture.cjs');
+  await build({ stdin: { contents: "export * from './electron/pipeline/materialVectorGenerationService'; export * from './electron/pipeline/materialVectorGenerationStore'; export * from './electron/pipeline/materialVectorCoordinator'; export * from './electron/pipeline/materialChunkSearch'; export { createMaterialEmbeddingAdapter } from './electron/pipeline/materialEmbeddingAdapters';", resolveDir: process.cwd(), loader: 'ts' }, bundle: true, platform: 'node', format: 'cjs', external: ['better-sqlite3', 'sqlite-vec'], outfile: bundle, logLevel: 'silent' });
+  const api = require(bundle);
+  const databasePath = path.join(library, '.menghan-meta/index.db');
+  const db = new Database(databasePath); sqliteVec.load(db); api.ensureMaterialChunkSearchSchema(db);
+  db.exec('CREATE TABLE chunk_keywords(document_id TEXT,chunk_id TEXT,surface_term TEXT,normalized_term TEXT,score REAL,kind TEXT,rank INTEGER);');
+  const clauses = ['应收账款超过三十天应进入催收清单。', '采购付款超过五万元须经财务负责人审批。', '供应商变更收款账户时应核验营业执照。'];
+  const texts = Array.from({ length: 35 }, (_, index) => `${clauses[index % clauses.length]}适用条款：第${index + 1}条。`);
+  api.replaceMaterialChunkProjection(db, { documentId: 'doc-accounts', sourceContentHash: 'fixture-source-v1', stageKey: 'fixture-stage-v1', keywords: [], chunks: texts.map((text, index) => ({ documentId: 'doc-accounts', chunkId: `chunk-${index}`, parentChunkId: null, ordinal: index, text, sourceText: text, sectionPath: [], sectionContext: '', sourceRefs: [{ page: index + 1 }], contentHash: `chunk-hash-${index}`, searchTokens: ['应收', '账款'] })) }); db.close();
+  const candidate = model => ({ schemaVersion: 1, sourceId: 'custom', transportKind: 'openai-compatible', endpointIdentity: 'https://fixture.example.com/v1', requestedModel: model, vectorType: 'float32', distanceMetric: 'cosine', encodingFormat: 'float', truncateInputs: false, documentInputVersion: 'material-chunk-text-v1', queryInputVersion: 'material-query-text-v1' });
+  let mode = 'normal', sourceVersion = 'v1', writeBusy = false, entered;
+  let calls = 0, cancellationBatches = 0;
+  const adapter = { probe: async value => ({ vectorDimension: value.requestedModel === 'model-a' ? 2 : 3, responseModel: value.requestedModel }), embedBatch: async ({ profile, texts: inputs, signal }) => {
+    calls++;
+    if (mode === 'cancel' && ++cancellationBatches > 1) { entered?.(); await new Promise((resolve, reject) => { if (signal.aborted) reject(new Error('cancelled')); else signal.addEventListener('abort', () => reject(new Error('cancelled')), { once: true }); }); }
+    if (mode === 'fail') throw new api.MaterialEmbeddingAdapterError('EMBEDDING_AUTH_FAILED', 'fixture service failure');
+    const dimension = profile.requestedModel === 'model-a' ? 2 : 3;
+    return { dimension, responseModel: profile.requestedModel, vectors: inputs.map(() => dimension === 2 ? [1, 0] : [0, 1, 0]) };
+  } };
+  const original = await api.lockMaterialEmbeddingProfile({ libraryPath: library, candidate: candidate('model-a'), probe: async () => ({ vectorDimension: 2, responseModel: 'model-a' }) });
+  const cachedAdapter = api.createMaterialEmbeddingAdapter({ kind: 'remote', endpoint: original.endpointIdentity, apiKey: 'fixture-not-used' });
+  await assert.rejects(() => cachedAdapter.embedBatch({ profile: { ...original, endpointIdentity: 'https://another.example.com/v1' }, texts: ['fixture'], timeoutMs: 100 }), error => error.code === 'EMBEDDING_PROFILE_MISMATCH');
+  await assert.rejects(() => cachedAdapter.probe({ ...candidate('model-a'), transportKind: 'ollama' }, new AbortController().signal), error => error.code === 'EMBEDDING_PROFILE_MISMATCH');
+  await api.synchronizeMaterialVectors({ libraryPath: library, profile: original, adapter });
+  const ports = { sourcesHash: () => sourceVersion, assertIdle: () => { if (writeBusy) throw new Error('fixture active writer'); }, adapter: () => adapter, appVersion: 'verify' };
+  let service = new api.MaterialVectorGenerationService(ports);
+  const readOriginal = () => { const db = new Database(databasePath); sqliteVec.load(db); try { return db.prepare('SELECT rowid,embedding FROM material_chunk_vectors ORDER BY rowid').all(); } finally { db.close(); } };
+  const before = readOriginal();
+  const built = await service.create(library, candidate('model-b'), async () => ({ vectorDimension: 3, responseModel: 'model-b' }));
+  await service.wait(library, built.id);
+  const buildResult = service.list(library).find(row => row.id === built.id);
+  assert.equal(buildResult.state, 'READY', buildResult.error);
+  assert.deepEqual(readOriginal(), before); assert.equal(open().profile.profileHash, original.profileHash);
+  sourceVersion = 'v2'; assert.throws(() => service.activate(library, built.id), /资料或切块已经变化/); sourceVersion = 'v1';
+  writeBusy = true; assert.throws(() => service.activate(library, built.id), /active writer/); writeBusy = false;
+  const shadowPath = path.join(library, '.menghan-meta/vector-generations', built.id, '.menghan-meta/index.db');
+  const corrupted = new Database(shadowPath); corrupted.prepare("UPDATE material_chunk_embedding_state SET profile_hash='corrupted' WHERE chunk_rowid=1").run(); corrupted.close();
+  assert.throws(() => service.activate(library, built.id), /块身份、模型或批次状态/);
+  const readback = new Database(databasePath); assert.equal(readback.prepare('SELECT 1 FROM sqlite_master WHERE name=?').get(api.generationVectorTable(built.id)), undefined); readback.close();
+  assert.equal(open().profile.profileHash, original.profileHash); assert.deepEqual(readOriginal(), before);
+  const repaired = new Database(shadowPath); repaired.prepare('UPDATE material_chunk_embedding_state SET profile_hash=? WHERE chunk_rowid=1').run(built.profile.profileHash); repaired.close();
+  const active = service.activate(library, built.id); assert.equal(active.profile.vectorDimension, 3); assert.deepEqual(readOriginal(), before);
+  const queryModels = [];
+  const queryAdapter = { ...adapter, embedBatch: input => { queryModels.push(input.profile.requestedModel); return adapter.embedBatch(input); } };
+  const search = await api.searchMaterialChunks({ libraryPath: library, query: '应收账款', mode: 'semantic', adapter: queryAdapter });
+  assert.equal(search.vectorIndexed, true); assert.ok(search.results.length); assert.deepEqual(queryModels, ['model-b']);
+  assert.equal(service.activate(library, 'original').profile.profileHash, original.profileHash);
+  assert.equal((await api.searchMaterialChunks({ libraryPath: library, query: '应收账款', mode: 'semantic', adapter: queryAdapter })).vectorIndexed, true);
+  assert.equal(service.activate(library, built.id).profile.requestedModel, 'model-b');
+  assert.throws(() => service.activate(library, '../outside'), /ID 无效/);
+  // 旧 query 返回期间发生切换：必须降级，不能向新维度表提交旧 query。
+  const raced = await api.searchMaterialChunks({ libraryPath: library, query: '应收账款', mode: 'hybrid', adapter: { ...adapter, embedBatch: async input => { const result = await adapter.embedBatch(input); service.activate(library, 'original'); return result; } } });
+  assert.equal(raced.vectorIndexed, false); assert.match(raced.notice, /索引代际已切换/);
+  mode = 'fail'; const failed = await service.create(library, candidate('model-c'), async () => ({ vectorDimension: 3, responseModel: 'model-c' })); await service.wait(library, failed.id);
+  assert.equal(service.list(library).find(row => row.id === failed.id).state, 'FAILED'); assert.deepEqual(readOriginal(), before);
+  mode = 'normal'; service.resume(library, failed.id); await service.wait(library, failed.id); const retried = service.list(library).find(row => row.id === failed.id); assert.equal(retried.state, 'READY', retried.error);
+  let resolveEntered; const enteredPromise = new Promise(resolve => { resolveEntered = resolve; }); entered = resolveEntered; mode = 'cancel';
+  const cancelled = await service.create(library, candidate('model-d'), async () => ({ vectorDimension: 3, responseModel: 'model-d' })); await enteredPromise; service.cancel(library, cancelled.id); await service.wait(library, cancelled.id);
+  assert.equal(service.list(library).find(row => row.id === cancelled.id).state, 'CANCELLED');
+  assert.equal(service.list(library).find(row => row.id === cancelled.id).completed, 16, '首批成功应成为持久 checkpoint');
+  mode = 'normal'; const mark = new Database(databasePath); mark.prepare("UPDATE material_vector_generations SET state='BUILDING' WHERE id=?").run(cancelled.id); mark.close();
+  service = new api.MaterialVectorGenerationService(ports); assert.equal(service.list(library).find(row => row.id === cancelled.id).state, 'INTERRUPTED');
+  const callsBeforeResume = calls;
+  service.resume(library, cancelled.id); await service.wait(library, cancelled.id); assert.equal(service.list(library).find(row => row.id === cancelled.id).state, 'READY');
+  assert.equal(calls - callsBeforeResume, 5, '只补齐剩余两批并验证三条查询，不重复首批 16 条');
+  // 快照检查失败不能影响当前 profile、向量和原文/关键词投影。
+  const changeDb = new Database(databasePath); changeDb.prepare("UPDATE material_chunks SET content_hash='changed' WHERE id=1").run(); changeDb.close();
+  assert.throws(() => service.activate(library, cancelled.id), /资料或切块已经变化/);
+  const activeProfile = open().profile;
+  assert.equal((await api.synchronizeMaterialVectors({ libraryPath: library, profile: activeProfile, adapter })).state, 'SUCCEEDED');
+  assert.deepEqual(readOriginal(), before);
+  assert.equal((await api.searchMaterialChunks({ libraryPath: library, query: '应收', mode: 'keyword' })).results.length > 0, true);
+  const incremental = new Database(databasePath); sqliteVec.load(incremental);
+  api.replaceMaterialChunkProjection(incremental, { documentId: 'doc-new', sourceContentHash: 'fixture-source-new', stageKey: 'fixture-stage-new', keywords: [], chunks: [{ documentId: 'doc-new', chunkId: 'chunk-new', parentChunkId: null, ordinal: 0, text: '新增采购合同必须登记。', sourceText: '新增采购合同必须登记。', sectionPath: [], sectionContext: '', sourceRefs: [{ line: 1 }], contentHash: 'chunk-new-hash', searchTokens: ['采购', '合同'] }] }); incremental.close();
+  await api.synchronizeMaterialVectors({ libraryPath: library, profile: activeProfile, adapter });
+  const expanded = await service.create(library, candidate('model-expanded'), async () => ({ vectorDimension: 3, responseModel: 'model-expanded' }));
+  await service.wait(library, expanded.id); assert.equal(service.list(library).find(row => row.id === expanded.id).state, 'READY');
+  service.activate(library, expanded.id);
+  assert.equal(service.list(library).find(row => row.id === 'original').total, 36, '保留旧代际时必须记录增量资料后的实际块数');
+  assert.equal(service.activate(library, 'original').profile.profileHash, original.profileHash, '增量索引完整时仍应允许回滚');
+  const exiting = new api.MaterialVectorGenerationService(ports);
+  const pendingProbe = exiting.create(library, candidate('model-exit'), ({ signal }) => new Promise((resolve, reject) => signal.addEventListener('abort', () => reject(new Error('fixture probe cancelled')), { once: true })));
+  assert.throws(() => exiting.create(library, candidate('model-other'), adapter.probe), /已有索引代际/);
+  const rejectedProbe = assert.rejects(pendingProbe, /fixture probe cancelled/);
+  await exiting.shutdown(); await rejectedProbe;
+  assert.equal(exiting.busy, false); assert.equal(open().profile.profileHash, original.profileHash);
+  assert.ok(calls >= 8);
+  console.log('verify-material-vector-generations: isolated rebuild, dimension change, atomic activation/rollback, stale snapshots, query races, cancellation/retry/restart and lexical preservation passed (real SQLite/sqlite-vec).');
+  function open() { const db = new Database(databasePath); sqliteVec.load(db); const profile = api.readMaterialEmbeddingProfileFromDatabase(db); db.close(); return profile; }
+} finally {
+  assert.equal(path.dirname(temporary), staging); assert.ok(path.basename(temporary).startsWith('material-vector-generations-'));
+  await fs.rm(temporary, { recursive: true, force: true });
+}

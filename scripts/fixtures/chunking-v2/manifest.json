@@ -1,0 +1,106 @@
+{
+  "schemaVersion": 1,
+  "fixtureVersion": "chunking-v2-stage0-2026-08-20",
+  "encoding": "utf-8",
+  "lineEnding": "LF",
+  "sourceOfTruth": "本目录中的输入文件与本清单；expectedAssertions 供后续 v2 测试实现使用",
+  "fixtures": [
+    {
+      "id": "structure-sections",
+      "path": "structure-sections.md",
+      "format": "markdown",
+      "strategies": ["STRUCTURE", "RECURSIVE"],
+      "expectedAssertions": [
+        "同一 sectionId 的相邻 blocks 可以聚合",
+        "同名但非连续章节不得全局合并",
+        "每个结构 Parent 只能含一个 sectionId",
+        "长章节可以拆成同 sectionId 的多个 part",
+        "前言和章节间未归属正文不能跨真实章节桥接"
+      ]
+    },
+    {
+      "id": "no-valid-headings",
+      "path": "no-valid-headings.md",
+      "format": "markdown",
+      "strategies": ["STRUCTURE", "RECURSIVE"],
+      "expectedAssertions": [
+        "validHeadingCount 等于 0",
+        "requested STRUCTURE 的 effective strategy 是大窗口 RECURSIVE",
+        "实际 Parent 使用 parentMinChars/parentTargetChars/parentMaxChars",
+        "降级 Parent 和 Child 携带 DOCUMENT_FALLBACK 文档上下文",
+        "正文不足 parentMaxChars 时不按自然段碎成多个 Parent"
+      ]
+    },
+    {
+      "id": "recursive-boundaries",
+      "path": "recursive-boundaries.md",
+      "format": "markdown",
+      "strategies": ["RECURSIVE"],
+      "expectedAssertions": [
+        "优先空行段落",
+        "没有空行时退到普通换行",
+        "没有换行时退到中英文句末标点",
+        "没有自然边界时使用固定窗口并保证 cursor 至少前进 1",
+        "分隔符和句末标点不丢失"
+      ]
+    },
+    {
+      "id": "single-long-block",
+      "path": "single-long-block.txt",
+      "format": "text",
+      "strategies": ["RECURSIVE", "FIXED"],
+      "expectedAssertions": [
+        "单个 SourceBlock 超过 Child hard max 时先封口已有窗口再递归",
+        "没有自然边界时固定窗口 cursor 至少前进 1",
+        "固定窗口 overlap 不造成死循环或正文丢失"
+      ]
+    },
+    {
+      "id": "overlap-boundaries",
+      "path": "overlap-boundaries.md",
+      "format": "markdown",
+      "strategies": ["RECURSIVE", "FIXED", "STRUCTURE"],
+      "expectedAssertions": [
+        "overlap 优先从自然边界开始",
+        "没有自然边界时允许精确字符后缀",
+        "overlapText 和 overlapSourceRanges 可互相校验",
+        "去除 overlap 后 sourceText 与输入完全守恒",
+        "overlap 不得跨 sectionId"
+      ]
+    },
+    {
+      "id": "regex-and-markup",
+      "path": "regex-and-markup.md",
+      "format": "markdown",
+      "strategies": ["REGEX", "FIXED", "RECURSIVE"],
+      "expectedAssertions": [
+        "正则只定义边界，不替换正文",
+        "表格、列表和代码片段的内容不得丢失",
+        "不安全正则由主进程和 Worker 双重拒绝"
+      ]
+    },
+    {
+      "id": "ocr-low-quality",
+      "path": "ocr-low-quality.txt",
+      "format": "text",
+      "strategies": ["RECURSIVE", "SEMANTIC", "LLM"],
+      "expectedAssertions": [
+        "NOISE 不进入正文候选",
+        "低质量且 LLM 不可用时仍确定性执行 Recursive",
+        "低质量推荐不能绕过 llmEnabled 和模型能力校验"
+      ]
+    },
+    {
+      "id": "page-and-noise",
+      "path": "page-and-noise.jsonl",
+      "format": "source-block-jsonl",
+      "strategies": ["PAGE", "STRUCTURE", "RECURSIVE"],
+      "expectedAssertions": [
+        "已知页码按来源字符加权计算覆盖率",
+        "NOISE 不进入 PAGE 覆盖率分子和有效正文",
+        "未知页码不能伪造为已知页码",
+        "sourceRef、blockId 和 sectionPath 可恢复"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,163 @@
+.library-manager-view {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  background: var(--surface-canvas);
+}
+
+.library-manager-toolbar {
+  height: 60px;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-inline: 30px;
+  border-bottom: 1px solid var(--border-subtle);
+}
+
+.library-manager-content {
+  flex: 1;
+  min-height: 0;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  max-width: 1060px;
+  padding: 42px;
+  margin-inline: auto;
+}
+
+.library-manager-heading {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+  flex-shrink: 0;
+  margin-bottom: 30px;
+}
+
+.library-manager-heading h1 {
+  font-size: 25px;
+  font-weight: 650;
+  line-height: 1.4;
+}
+
+.library-manager-create { flex-shrink: 0; }
+.library-manager-error { margin-bottom: 20px; flex-shrink: 0; }
+.library-manager-filter { margin-bottom: 16px; flex-shrink: 0; }
+.library-manager-search { width: 230px; max-width: 100%; }
+
+.library-manager-scroll {
+  flex: 1;
+  min-height: 0;
+  min-width: 0;
+  background: transparent;
+  overflow-y: auto;
+  overflow-x: hidden;
+  overscroll-behavior: contain;
+  scrollbar-gutter: stable;
+  scrollbar-width: thin;
+  scrollbar-color: var(--text-tertiary) transparent;
+}
+
+.library-manager-scroll::-webkit-scrollbar { width: 8px; }
+.library-manager-scroll::-webkit-scrollbar-thumb { background: var(--text-tertiary); border-radius: 8px; }
+.library-manager-scroll::-webkit-scrollbar-track { background: transparent; }
+
+.library-manager-pagination {
+  flex-shrink: 0;
+  padding-top: 16px;
+}
+
+.library-manager-list {
+  overflow: hidden;
+  border-color: var(--border-subtle);
+  background: var(--surface-panel);
+}
+
+.library-manager-row {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  padding: 22px;
+  border-bottom: 1px solid var(--border-subtle);
+}
+
+.library-manager-row:last-child { border-bottom: 0; }
+.library-manager-row.is-current { box-shadow: inset 2px 0 var(--status-success); }
+
+.library-manager-icon {
+  width: 40px;
+  height: 40px;
+  display: grid;
+  place-items: center;
+  border: 1px solid var(--border-subtle);
+  border-radius: 7px;
+  flex-shrink: 0;
+  color: var(--text-secondary);
+}
+
+.library-manager-row.is-current .library-manager-icon {
+  color: var(--status-success);
+  background: color-mix(in srgb, var(--status-success) 12%, var(--surface-panel));
+  border-color: transparent;
+}
+
+.library-manager-details { flex: 1; min-width: 0; }
+.library-manager-name { min-width: 0; margin-bottom: 6px; }
+.library-manager-name > .mantine-Text-root { min-width: 0; }
+.library-manager-name > .mantine-Badge-root { flex-shrink: 0; }
+
+.library-manager-path {
+  display: block;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  margin-bottom: 8px;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  user-select: text;
+}
+
+.library-manager-metadata .mantine-Text-root { font-size: 11px; }
+.library-manager-actions { flex-shrink: 0; }
+
+.library-manager-hint {
+  flex-shrink: 0;
+  color: var(--text-tertiary);
+  margin-top: 20px;
+}
+
+.library-manager-hint svg { flex-shrink: 0; }
+.library-manager-hint .mantine-Text-root { font-size: 11px; }
+.library-manager-no-results { padding: 35px 20px; }
+
+.library-manager-empty {
+  min-height: 0;
+  overflow: auto;
+  padding: 40px 24px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 14px;
+  text-align: center;
+  background: var(--surface-panel);
+}
+
+.library-manager-empty-path { max-width: 100%; overflow-wrap: anywhere; }
+
+@media (max-width: 900px) {
+  .library-manager-content { padding: 30px 24px; }
+  .library-manager-toolbar { padding-inline: 24px; }
+}
+
+@media (max-width: 600px) {
+  .library-manager-content { padding: 24px 16px; }
+  .library-manager-heading { align-items: flex-start; gap: 12px; }
+  .library-manager-heading h1 { font-size: 21px; }
+  .library-manager-heading .mantine-Text-root { font-size: 12px; }
+  .library-manager-row { gap: 10px; padding: 16px 12px; }
+  .library-manager-icon { display: none; }
+  .library-manager-search { width: 100%; }
+  .library-manager-filter { align-items: stretch; }
+}

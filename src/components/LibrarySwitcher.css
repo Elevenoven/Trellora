@@ -1,0 +1,49 @@
+.sidebar-library-header {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  min-height: 60px;
+  padding: 10px 10px;
+  flex-shrink: 0;
+}
+
+.sidebar-library-header .library-switcher-shell {
+  flex: 1;
+  align-self: center;
+  min-width: 0;
+  width: auto;
+}
+
+.sidebar-library-header .library-switcher {
+  height: 38px;
+  width: 100%;
+  margin: 0;
+  padding-inline: 9px;
+  background: transparent;
+}
+
+.sidebar-library-header .library-switcher:hover,
+.sidebar-library-header .library-switcher[data-expanded] {
+  background: var(--surface-hover);
+}
+
+.sidebar-library-header .library-switcher .mantine-Button-label {
+  flex: 1;
+  min-width: 0;
+  justify-content: flex-start;
+}
+
+.sidebar-library-header .library-switcher-copy {
+  display: block;
+  font-size: 13px;
+  max-width: 100%;
+}
+
+.library-switcher-dropdown .mantine-Menu-itemLabel {
+  min-width: 0;
+}
+
+.library-switcher-dropdown .mantine-Stack-root {
+  flex: 1;
+  overflow: hidden;
+}

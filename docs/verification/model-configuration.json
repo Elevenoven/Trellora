@@ -1,0 +1,14 @@
+{
+  "verifiedAt": "2026-10-02T14:42:07.936Z",
+  "method": "isolated real Electron/main/preload/React with local fixture HTTP and real safeStorage; not live provider acceptance",
+  "checks": [
+    "real IPC draft catalog success and failure never save connection, key or slot",
+    "React settings shows affected library and cancel preserves the full configuration",
+    "React migration UI probes, rebuilds and validates a new dimension; cancelled activation preserves the old profile; activation and rollback update the real binding; connection guard reads the active generation",
+    "real Electron process terminates during an HTTP embedding request; restart preserves the active profile, marks the build interrupted and resumes it to READY",
+    "explicit confirmation commits the connection and keeps the locked profile",
+    "language-model synchronization and legacy save IPCs enforce the same confirmation; confirmed profiles commit together"
+  ],
+  "originalUserDataModified": false,
+  "screenshot": "E:\\AI-Project\\menghan-notes\\output\\verification\\model-configuration\\connection-impact.png"
+}

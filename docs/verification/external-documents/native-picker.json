@@ -1,0 +1,10 @@
+{
+  "date": "2026-10-03T03:58:03.185Z",
+  "electron": "31.7.7",
+  "nativePicker": true,
+  "passed": [
+    "native Windows picker, Chinese/space path, no registered library",
+    "unchanged Markdown mode switches preserve exact BOM/CRLF bytes"
+  ],
+  "kind": "real Electron development bundle"
+}

@@ -1,0 +1,306 @@
+{
+  "verifiedAt": "2026-10-04T14:10:20.015Z",
+  "method": "fresh real Electron/main/preload/React; isolated SQLite workspace; actual Mantine controls",
+  "checks": [
+    "release defaults enable the expected routes without environment overrides",
+    "first page contains only 10 rows; global pending badge remains 10 with no pending rows on this page",
+    "actual next-page control has no overlapping rows; manual refresh observes new data and preserves page 2",
+    "type filter resets to page 1 with filtered SQL totals; pending and all tabs show their own counts including archived records",
+    "topic and document pages load only the selected tab; last pages contain 6 of 26 topics and 4 of 24 documents",
+    "an actual IPC page response delayed by the isolated preload cannot overwrite a newer topic tab",
+    "deleting both records on the last page through row buttons automatically clamps page 5 to page 4"
+  ],
+  "pageSize": 10,
+  "pageRequests": [
+    {
+      "channel": "memory:list-item-page",
+      "query": {
+        "page": 1,
+        "pageSize": 10,
+        "statuses": [
+          "active",
+          "pending"
+        ]
+      },
+      "length": 0,
+      "total": 0,
+      "page": 1
+    },
+    {
+      "channel": "memory:list-item-page",
+      "query": {
+        "page": 1,
+        "pageSize": 10,
+        "statuses": [
+          "active",
+          "pending"
+        ]
+      },
+      "length": 10,
+      "total": 41,
+      "page": 1
+    },
+    {
+      "channel": "memory:list-item-page",
+      "query": {
+        "page": 1,
+        "pageSize": 10,
+        "statuses": [
+          "active",
+          "pending"
+        ]
+      },
+      "length": 10,
+      "total": 41,
+      "page": 1
+    },
+    {
+      "channel": "memory:list-item-page",
+      "query": {
+        "page": 2,
+        "pageSize": 10,
+        "statuses": [
+          "active",
+          "pending"
+        ]
+      },
+      "length": 10,
+      "total": 41,
+      "page": 2
+    },
+    {
+      "channel": "memory:list-item-page",
+      "query": {
+        "page": 2,
+        "pageSize": 10,
+        "statuses": [
+          "active",
+          "pending"
+        ]
+      },
+      "length": 10,
+      "total": 42,
+      "page": 2
+    },
+    {
+      "channel": "memory:list-item-page",
+      "query": {
+        "page": 3,
+        "pageSize": 10,
+        "statuses": [
+          "active",
+          "pending"
+        ]
+      },
+      "length": 10,
+      "total": 42,
+      "page": 3
+    },
+    {
+      "channel": "memory:list-item-page",
+      "query": {
+        "page": 1,
+        "pageSize": 10,
+        "statuses": [
+          "active",
+          "pending"
+        ],
+        "kinds": [
+          "profile"
+        ]
+      },
+      "length": 10,
+      "total": 26,
+      "page": 1
+    },
+    {
+      "channel": "memory:list-item-page",
+      "query": {
+        "page": 1,
+        "pageSize": 10,
+        "statuses": [
+          "active",
+          "pending"
+        ]
+      },
+      "length": 10,
+      "total": 42,
+      "page": 1
+    },
+    {
+      "channel": "memory:list-item-page",
+      "query": {
+        "page": 1,
+        "pageSize": 10,
+        "statuses": [
+          "pending"
+        ]
+      },
+      "length": 10,
+      "total": 10,
+      "page": 1
+    },
+    {
+      "channel": "memory:list-item-page",
+      "query": {
+        "page": 1,
+        "pageSize": 10
+      },
+      "length": 10,
+      "total": 44,
+      "page": 1
+    },
+    {
+      "channel": "memory:list-topic-page",
+      "query": {
+        "page": 1,
+        "pageSize": 10
+      },
+      "length": 10,
+      "total": 26,
+      "page": 1
+    },
+    {
+      "channel": "memory:list-topic-page",
+      "query": {
+        "page": 3,
+        "pageSize": 10
+      },
+      "length": 6,
+      "total": 26,
+      "page": 3
+    },
+    {
+      "channel": "memory:list-document-page",
+      "query": {
+        "page": 1,
+        "pageSize": 10
+      },
+      "length": 10,
+      "total": 24,
+      "page": 1
+    },
+    {
+      "channel": "memory:list-document-page",
+      "query": {
+        "page": 3,
+        "pageSize": 10
+      },
+      "length": 4,
+      "total": 24,
+      "page": 3
+    },
+    {
+      "channel": "memory:list-item-page",
+      "query": {
+        "page": 1,
+        "pageSize": 10,
+        "statuses": [
+          "active",
+          "pending"
+        ]
+      },
+      "length": 10,
+      "total": 42,
+      "page": 1
+    },
+    {
+      "channel": "memory:list-item-page",
+      "query": {
+        "page": 2,
+        "pageSize": 10,
+        "statuses": [
+          "active",
+          "pending"
+        ]
+      },
+      "length": 10,
+      "total": 42,
+      "page": 2
+    },
+    {
+      "channel": "memory:list-topic-page",
+      "query": {
+        "page": 1,
+        "pageSize": 10
+      },
+      "length": 10,
+      "total": 26,
+      "page": 1
+    },
+    {
+      "channel": "memory:list-item-page",
+      "query": {
+        "page": 1,
+        "pageSize": 10,
+        "statuses": [
+          "active",
+          "pending"
+        ]
+      },
+      "length": 10,
+      "total": 42,
+      "page": 1
+    },
+    {
+      "channel": "memory:list-item-page",
+      "query": {
+        "page": 5,
+        "pageSize": 10,
+        "statuses": [
+          "active",
+          "pending"
+        ]
+      },
+      "length": 2,
+      "total": 42,
+      "page": 5
+    },
+    {
+      "channel": "memory:list-item-page",
+      "query": {
+        "page": 5,
+        "pageSize": 10,
+        "statuses": [
+          "active",
+          "pending"
+        ]
+      },
+      "length": 1,
+      "total": 41,
+      "page": 5
+    },
+    {
+      "channel": "memory:list-item-page",
+      "query": {
+        "page": 5,
+        "pageSize": 10,
+        "statuses": [
+          "active",
+          "pending"
+        ]
+      },
+      "length": 10,
+      "total": 40,
+      "page": 4
+    },
+    {
+      "channel": "memory:list-item-page",
+      "query": {
+        "page": 4,
+        "pageSize": 10,
+        "statuses": [
+          "active",
+          "pending"
+        ]
+      },
+      "length": 10,
+      "total": 40,
+      "page": 4
+    }
+  ],
+  "maximumResponseItems": 10,
+  "databaseIntegrity": "ok",
+  "originalUserDataModified": false,
+  "screenshot": "E:\\AI-Project\\trellora\\output\\verification\\memory\\pagination\\memory-pagination-dark.png"
+}

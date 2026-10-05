@@ -1,0 +1,24 @@
+{
+  "generatedAt": "2026-09-30T12:02:05.293Z",
+  "boundary": "Electron dev runtime, production renderer build, local provider fixture",
+  "assertions": [
+    "actual repeated bold selection",
+    "cancel during preparation",
+    "workspace expansion and receipt",
+    "quick expansion and same target",
+    "no automatic writeback",
+    "replace second occurrence only",
+    "native long-note IPC and authenticated tool transport",
+    "formatted four-item list preview and replacement",
+    "Markdown persisted with bold and list markers",
+    "following heading and code unchanged"
+  ],
+  "longExecution": {
+    "path": "react",
+    "rounds": 2,
+    "modelCalls": 2,
+    "toolCalls": 2,
+    "repairAttempts": 0
+  },
+  "requestCount": 5
+}

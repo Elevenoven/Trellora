@@ -1,0 +1,2 @@
+# Direct dependency lock for the slim downstream-stage Worker runtime.
+jieba==0.42.1

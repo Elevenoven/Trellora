@@ -1,0 +1,22 @@
+{
+  "verifiedAt": "2026-10-04T11:21:27.660Z",
+  "method": "actual Electron/main/preload/React composer, explicit_only mode, isolated profile and full restart",
+  "checks": [
+    "release defaults enable the expected routes without environment overrides",
+    "exact five-rune statement saves through the real composer/send button; UI, item and durable turn receipt agree; existing Java profile remains",
+    "an independent conversation recalls the short occupation from long-term storage",
+    "two-rune explicit statements still satisfy the canonical minimum",
+    "a genuinely sensitive statement still fails without writing an item; the failure receipt remains truthful",
+    "the actual off/on button still gates short-statement writes and retains all items and generation",
+    "full Electron exit/restart retains both save/failure receipts and item identity; the next independent answer recalls the saved occupation"
+  ],
+  "provider": "qwen",
+  "model": "qwen3.7-flash",
+  "statementCodePoints": 5,
+  "savedStatus": "saved",
+  "sensitiveFailureCode": "MEMORY_SENSITIVE_CONTENT",
+  "databaseIntegrity": "ok",
+  "originalUserDataModified": false,
+  "containsSecretsOrAnswers": false,
+  "screenshot": "E:\\AI-Project\\trellora\\output\\verification\\memory\\short-statement\\real-short-statement-saved.png"
+}

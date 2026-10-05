@@ -1,0 +1,18 @@
+{
+  "verifiedAt": "2026-10-04T15:03:31.699Z",
+  "phase": "WK-M3 supplement",
+  "schemaVersion": 11,
+  "method": "isolated SQLite/native Electron Node; real central writer and durable journal; no user database changes",
+  "checks": [
+    "even inferred=false additions await review, stay out of resident memory and preserve Java/Agent",
+    "pending preserves active/embedding; confirmation and crash rollback are atomic",
+    "edits invalidate old reviews; proposal editing stays pending",
+    "retire is read-only; rejection preserves original; confirmation creates no active replacement",
+    "deleted target leaves audit snapshot; expired target cannot be replaced",
+    "duplicate proposal is idempotent; competing and cross-owner targets fail; DB guards enforce shape",
+    "model-free explicit journal, ambiguous pending receipt, source-specific dedup and negative/question boundary",
+    "stage capability pause preserves reads; background cannot merge user protection; import cannot activate proposals",
+    "pending does not evict active capacity; archived result is explicit; clear prevents old proposal activation",
+    "real v10 columns upgrade with backup and preserved data; reopen is idempotent; missing v11 guard fails"
+  ]
+}

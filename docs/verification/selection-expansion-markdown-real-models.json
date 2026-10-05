@@ -1,0 +1,68 @@
+{
+  "generatedAt": "2026-09-30T11:42:02.643Z",
+  "boundary": "real provider calls; current-note coordinator, not renderer acceptance",
+  "results": [
+    {
+      "model": "qwen3.8-flash",
+      "sample": "formatted-list",
+      "error": "模型服务请求失败（HTTP 403）：{\"error\":{\"message\":\"Free quota exhausted. To continue accessing the model on a paid basis, please add funds or disable the \\\"use free tier only\\\" mode in the management console.\",\"type\":\"AllocationQuota.FreeTierOnly\",\"param\":null,\"code\":\"A",
+      "elapsedMs": 275,
+      "trace": []
+    },
+    {
+      "model": "deepseek-v4-flash",
+      "sample": "formatted-list",
+      "fullNoteCharacters": 313,
+      "context": {
+        "planned": [
+          {
+            "sourceKind": "current-note",
+            "reason": "按扩写阈值纳入当前笔记全文。"
+          }
+        ],
+        "used": [
+          {
+            "sourceKind": "current-note",
+            "title": "解析流程",
+            "locator": "当前笔记 / L1-L13",
+            "characterCount": 313
+          }
+        ],
+        "skipped": [],
+        "candidates": [],
+        "conflicts": [],
+        "personalization": {
+          "requested": false,
+          "applied": false,
+          "itemCount": 0
+        },
+        "fullNoteMode": "not-requested",
+        "contextMode": "full-note",
+        "fullNoteIncluded": true,
+        "includedCharacters": 313,
+        "fullNoteCharacters": 313
+      },
+      "length": {
+        "originalCharacters": 104,
+        "targetCharacters": 188,
+        "minimumCharacters": 151,
+        "actualCharacters": 251,
+        "missingToMinimum": 0,
+        "missingToTarget": 0
+      },
+      "execution": {
+        "path": "direct",
+        "rounds": 1,
+        "modelCalls": 1,
+        "toolCalls": 0,
+        "repairAttempts": 0
+      },
+      "issues": [],
+      "passed": true,
+      "writebackKind": "inline-text",
+      "elapsedMs": 969,
+      "trace": [],
+      "text": "这份文档形成四层数据：\n\n1. **原始文档**与 Parent/Child Chunk：原始文档保存来源，父块提供上下文，子块用于检索定位；\n2. Chunk 向量和关键词索引：Chunk 向量支持语义查询，关键词索引用于精确字面定位；\n3. 实体、关系、Evidence、社区：实体与关系关联 Evidence 原文依据，社区组织相关实体；\n4. 跨文档 Canonical Entity、Relation Group 等派生索引：Canonical Entity 合并跨文档同一实体，Relation Group 组织规范实体之间的关系，这些派生索引仍保留原文依据。"
+    }
+  ]
+}

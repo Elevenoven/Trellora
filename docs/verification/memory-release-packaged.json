@@ -1,0 +1,20 @@
+{
+  "verifiedAt": "2026-10-04T13:14:39.242Z",
+  "executablePath": "E:\\AI-Project\\trellora\\trellora\\Trellora-1.0.0-portable-x64.exe",
+  "sha256": "f1398229b4e5ac1887f79b377f5c7d8a564bd591cebdaf1f86bb7b739ee986e1",
+  "method": "production portable/main/preload/React; local HTTP model fixture; no injected handlers; isolated profile; application PATH limited to Windows directories",
+  "checks": [
+    "production release enables all four memory routes without projection overrides; initial user switch remains off",
+    "internal observe rollback disables all four read/extraction routes",
+    "packaged main/preload/native SQLite extraction and consolidation preserve pending status and finite expiry",
+    "portable master switch disables reads and explicit saves while retaining data; exact Chinese request saves with a durable receipt and is read in the next independent chat",
+    "full portable restart keeps receipts and item identity; pending never enters prompt; explicit_only does not extract; clear does not replay old sources"
+  ],
+  "databaseIntegrity": "ok",
+  "schemaVersion": 11,
+  "cleanWindowsVm": false,
+  "originalUserDataModified": false,
+  "settingsRuntimeText": "自动提炼已生效\n\n问答：已开启\n知识库：已开启\n当前笔记直答：已开启\n当前笔记工具问答：已开启\n\n等待 0，运行中 0，失败 0",
+  "rendererMatchesCurrentBuild": true,
+  "screenshotStatus": "production CDP screenshot timed out on this machine; visual verification uses the isolated Electron source build with matching renderer assets"
+}

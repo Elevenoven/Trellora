@@ -1,0 +1,137 @@
+{
+  "verifiedAt": "2026-10-04T12:39:33.018Z",
+  "method": "real Electron/main/preload/React with local controlled HTTP provider; four-route persistence authority fixtures and normal chat IPC",
+  "checks": [
+    "release defaults enable the expected routes without environment overrides",
+    "normal composer/send button shows the main-process durable save receipt in the conversation",
+    "chat with a real PDF attachment projects active memory into the model user message and records use/save receipts",
+    "exact Chinese explicit request commits a receipt in explicit_only; real settings button stops reads and writes, retains items and generation, then restores reads",
+    "actual chat IPC completion plus four-route canonical persistence fixtures produce four once-only receipts; observe source stays excluded",
+    "real IPC/manual consolidation HTTP response preserves finite expiry",
+    "clear while a canonical explicit request is pending prevents both explicit and automatic resurrection"
+  ],
+  "provider": "ollama",
+  "model": "memory-fixture",
+  "receiptCount": 4,
+  "itemCount": 4,
+  "databaseIntegrity": "ok",
+  "originalUserDataModified": false,
+  "containsSecretsOrAnswers": false,
+  "cutover": {
+    "defaultMode": "canonical",
+    "observationCount": 5,
+    "hardViolations": {
+      "scopeLeaks": 0,
+      "duplicateCanonicalContent": 0,
+      "orphanCanonicalToolResults": 0,
+      "doubleProjection": 0
+    }
+  },
+  "requests": [
+    {
+      "stream": true,
+      "tokens": 4096,
+      "schema": false,
+      "memoryPrompt": false,
+      "memoryOccupation": true,
+      "systemOccupation": false
+    },
+    {
+      "stream": false,
+      "tokens": 256,
+      "schema": true,
+      "memoryPrompt": false,
+      "memoryOccupation": true,
+      "systemOccupation": false
+    },
+    {
+      "stream": true,
+      "tokens": 4096,
+      "schema": false,
+      "memoryPrompt": true,
+      "memoryOccupation": true,
+      "systemOccupation": false
+    },
+    {
+      "stream": false,
+      "tokens": 256,
+      "schema": true,
+      "memoryPrompt": false,
+      "memoryOccupation": false,
+      "systemOccupation": false
+    },
+    {
+      "stream": true,
+      "tokens": 4096,
+      "schema": false,
+      "memoryPrompt": true,
+      "memoryOccupation": true,
+      "systemOccupation": false
+    },
+    {
+      "stream": false,
+      "tokens": 256,
+      "schema": true,
+      "memoryPrompt": false,
+      "memoryOccupation": false,
+      "systemOccupation": false
+    },
+    {
+      "stream": true,
+      "tokens": 4096,
+      "schema": false,
+      "memoryPrompt": true,
+      "memoryOccupation": true,
+      "systemOccupation": false
+    },
+    {
+      "stream": true,
+      "tokens": 4096,
+      "schema": false,
+      "memoryPrompt": false,
+      "memoryOccupation": false,
+      "systemOccupation": false
+    },
+    {
+      "stream": false,
+      "tokens": 256,
+      "schema": true,
+      "memoryPrompt": false,
+      "memoryOccupation": false,
+      "systemOccupation": false
+    },
+    {
+      "stream": true,
+      "tokens": 4096,
+      "schema": false,
+      "memoryPrompt": true,
+      "memoryOccupation": true,
+      "systemOccupation": false
+    },
+    {
+      "stream": false,
+      "tokens": 256,
+      "schema": true,
+      "memoryPrompt": false,
+      "memoryOccupation": false,
+      "systemOccupation": false
+    },
+    {
+      "stream": false,
+      "tokens": 1200,
+      "schema": true,
+      "memoryPrompt": false,
+      "memoryOccupation": true,
+      "systemOccupation": false
+    },
+    {
+      "stream": false,
+      "tokens": 600,
+      "schema": true,
+      "memoryPrompt": false,
+      "memoryOccupation": false,
+      "systemOccupation": false
+    }
+  ],
+  "screenshots": "E:\\AI-Project\\trellora\\output\\verification\\memory"
+}

@@ -1,0 +1,81 @@
+.assistant-save-note-modal .mantine-Modal-content {
+  max-height: calc(100dvh - 48px);
+}
+
+.assistant-note-draft-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  gap: 12px;
+  min-width: 0;
+}
+
+.assistant-note-draft-pane {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  height: min(58dvh, 560px);
+  overflow: hidden;
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
+  background: var(--bg-primary);
+}
+
+.assistant-note-pane-label {
+  flex: 0 0 auto;
+  padding: 8px 12px;
+  border-bottom: 1px solid var(--border-color);
+  background: var(--bg-secondary);
+}
+
+.assistant-note-draft-pane > .cm-theme,
+.assistant-note-draft-pane > .cm-theme-none {
+  flex: 1;
+  min-height: 0;
+  overflow: hidden;
+}
+
+.assistant-note-draft-pane .cm-editor {
+  height: 100%;
+  background: var(--bg-primary);
+  color: var(--text-primary);
+}
+
+.assistant-note-draft-pane .cm-scroller {
+  overflow: auto;
+  font-size: 13px;
+  line-height: 1.65;
+}
+
+.assistant-note-draft-pane .cm-gutters {
+  border-right: 1px solid var(--border-color);
+  background: var(--bg-secondary);
+  color: var(--text-tertiary);
+}
+
+.assistant-note-preview-scroll {
+  flex: 1;
+  min-height: 0;
+  overflow: auto;
+  padding: 12px 16px;
+}
+
+.assistant-note-draft-preview {
+  min-width: 0;
+  color: var(--text-primary);
+  overflow-wrap: anywhere;
+}
+
+.assistant-note-draft-preview > :first-child { margin-top: 0; }
+.assistant-note-draft-preview table { display: block; max-width: 100%; overflow-x: auto; }
+.assistant-note-draft-preview pre { max-width: 100%; overflow-x: auto; }
+.assistant-note-draft-preview img,
+.assistant-note-draft-preview svg { max-width: 100%; }
+
+.assistant-message-copy-button:disabled { opacity: 0.45; cursor: not-allowed; }
+.assistant-message-title { flex-wrap: wrap; }
+.assistant-saved-note-receipt { font-size: 11px; color: var(--status-success); overflow-wrap: anywhere; }
+
+@media (max-width: 720px) {
+  .assistant-note-draft-grid { grid-template-columns: minmax(0, 1fr); }
+  .assistant-note-draft-pane { height: 32dvh; }
+}

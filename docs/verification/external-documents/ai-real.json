@@ -1,0 +1,19 @@
+{
+  "date": "2026-10-03T10:43:38.943Z",
+  "realModel": true,
+  "model": "qwen3.7-flash",
+  "electron": "31.7.7",
+  "checks": [
+    "real protocol displays inline, reference and HTML Chinese-space images without library assets",
+    "Chinese local text link enters ordinary open flow; closed session image token is rejected",
+    "actual source clipboard paste remains private until manual save and renders after publication",
+    "real save-as publishes copied image references and preserves original",
+    "real configured model produces a reviewed selection rewrite; explicit apply changes draft only",
+    "actual continued typing rejects old AI writeback and preserves readable suggestion",
+    "actual library transfer copies resource and current draft, opens original note editor and preserves external original",
+    "no automatic conversation or memory extraction; original model configuration unchanged"
+  ],
+  "originalConfigUnchanged": true,
+  "developmentBundle": true,
+  "packaged": false
+}

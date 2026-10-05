@@ -1,0 +1,99 @@
+.capability-panel {
+  container: capability-panel / inline-size;
+}
+
+.capability-panel-header {
+  min-height: 28px;
+  margin-bottom: 8px;
+}
+
+.capability-panel-row {
+  display: grid;
+  grid-template-columns: minmax(120px, 0.65fr) minmax(0, 2fr) 84px 128px;
+  grid-template-areas: 'name message state actions';
+  align-items: center;
+  gap: 8px 16px;
+  min-height: 52px;
+  padding: 12px 0;
+  border-top: 1px solid var(--border-subtle);
+}
+
+.capability-panel-name {
+  grid-area: name;
+  min-width: 0;
+  color: var(--text-primary);
+  line-height: 1.5;
+  overflow-wrap: anywhere;
+}
+
+.capability-panel-message {
+  grid-area: message;
+  min-width: 0;
+  color: var(--text-secondary);
+  line-height: 1.6;
+  overflow-wrap: anywhere;
+}
+
+.capability-panel-state {
+  grid-area: state;
+  justify-self: center;
+  max-width: 100%;
+  padding-inline: 8px;
+  color: var(--text-secondary);
+  background: var(--surface-hover);
+  font-weight: 600;
+  text-transform: none;
+}
+
+.capability-panel-state[data-state='available'] {
+  color: var(--status-success);
+  background: color-mix(in srgb, var(--status-success) 12%, transparent);
+}
+
+.capability-panel-state[data-state='processing'] {
+  color: var(--status-warning);
+  background: color-mix(in srgb, var(--status-warning) 12%, transparent);
+}
+
+.capability-panel-state[data-state='failed'],
+.capability-panel-state[data-state='unreachable'] {
+  color: var(--status-danger);
+  background: color-mix(in srgb, var(--status-danger) 12%, transparent);
+}
+
+.capability-panel-actions {
+  grid-area: actions;
+  display: flex;
+  justify-content: flex-end;
+  gap: 8px;
+}
+
+.capability-panel-actions .mantine-Button-root {
+  min-width: 56px;
+  padding-inline: 10px;
+}
+
+/* The same panel appears in wide settings and a narrower materials dialog. */
+@container capability-panel (max-width: 680px) {
+  .capability-panel-row {
+    grid-template-columns: minmax(0, 1fr) 84px 128px;
+    grid-template-areas: 'name state actions' 'message state actions';
+    row-gap: 2px;
+  }
+}
+
+@container capability-panel (max-width: 440px) {
+  .capability-panel-row {
+    grid-template-columns: minmax(0, 1fr) auto;
+    grid-template-areas: 'name state' 'message message' 'actions actions';
+    gap: 6px 12px;
+  }
+
+  .capability-panel-state {
+    justify-self: end;
+  }
+
+  .capability-panel-actions:empty {
+    display: none;
+  }
+}

@@ -1,0 +1,90 @@
+{
+  "checkedAt": "2026-10-03T01:22:47.860Z",
+  "method": "real Electron CDP, 1280x900 physical viewport simulated at 100/125/150%; not a Windows DPI-setting change",
+  "results": [
+    {
+      "language": "zh-CN",
+      "theme": "light",
+      "scale": 1,
+      "guideFitsViewport": true,
+      "guideScrolls": false
+    },
+    {
+      "language": "zh-CN",
+      "theme": "light",
+      "scale": 1.25,
+      "guideFitsViewport": true,
+      "guideScrolls": false
+    },
+    {
+      "language": "zh-CN",
+      "theme": "light",
+      "scale": 1.5,
+      "guideFitsViewport": true,
+      "guideScrolls": true
+    },
+    {
+      "language": "zh-CN",
+      "theme": "dark",
+      "scale": 1,
+      "guideFitsViewport": true,
+      "guideScrolls": false
+    },
+    {
+      "language": "zh-CN",
+      "theme": "dark",
+      "scale": 1.25,
+      "guideFitsViewport": true,
+      "guideScrolls": false
+    },
+    {
+      "language": "zh-CN",
+      "theme": "dark",
+      "scale": 1.5,
+      "guideFitsViewport": true,
+      "guideScrolls": true
+    },
+    {
+      "language": "en-US",
+      "theme": "light",
+      "scale": 1,
+      "guideFitsViewport": true,
+      "guideScrolls": false
+    },
+    {
+      "language": "en-US",
+      "theme": "light",
+      "scale": 1.25,
+      "guideFitsViewport": true,
+      "guideScrolls": false
+    },
+    {
+      "language": "en-US",
+      "theme": "light",
+      "scale": 1.5,
+      "guideFitsViewport": true,
+      "guideScrolls": true
+    },
+    {
+      "language": "en-US",
+      "theme": "dark",
+      "scale": 1,
+      "guideFitsViewport": true,
+      "guideScrolls": false
+    },
+    {
+      "language": "en-US",
+      "theme": "dark",
+      "scale": 1.25,
+      "guideFitsViewport": true,
+      "guideScrolls": false
+    },
+    {
+      "language": "en-US",
+      "theme": "dark",
+      "scale": 1.5,
+      "guideFitsViewport": true,
+      "guideScrolls": true
+    }
+  ]
+}

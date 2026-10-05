@@ -1,0 +1,10 @@
+{
+  "date": "2026-10-03T10:59:02.196Z",
+  "checks": [
+    "development entry and switch values excluded",
+    "relative Chinese-space paths use sender cwd",
+    "startup requests retained until service ready",
+    "stable ordered dedup and per-file failure isolation",
+    "picker/system/drop router share enqueue boundary"
+  ]
+}

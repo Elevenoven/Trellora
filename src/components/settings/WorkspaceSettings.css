@@ -1,0 +1,207 @@
+.workspace-settings-page {
+  container-type: inline-size;
+  width: min(100%, 1040px);
+  margin-inline: auto;
+}
+
+.workspace-settings-page .settings-section {
+  width: 100%;
+}
+
+.workspace-settings-backup-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 2fr) minmax(260px, 1fr);
+  align-items: start;
+  gap: 16px;
+}
+
+.workspace-settings-card {
+  min-width: 0;
+  padding: 20px;
+  border-color: var(--border-color);
+  background: var(--surface-raised);
+}
+
+.workspace-settings-heading {
+  color: var(--text-primary);
+}
+
+.workspace-settings-copy {
+  flex: 1;
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+
+.workspace-settings-location {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  min-width: 0;
+  margin-top: 14px;
+  padding: 10px 12px;
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
+  background: var(--bg-primary);
+}
+
+.workspace-settings-block .workspace-settings-location {
+  margin-top: 0;
+}
+
+.workspace-settings-location > .mantine-Button-root,
+.workspace-settings-restore-action {
+  flex: 0 0 auto;
+}
+
+.workspace-settings-path {
+  flex: 1;
+  min-width: 0;
+  padding: 0;
+  background: transparent;
+  color: var(--text-secondary);
+  font-family: var(--font-mono);
+  font-size: 11px;
+  line-height: 1.6;
+  white-space: normal;
+  overflow-wrap: anywhere;
+}
+
+.workspace-settings-retention,
+.workspace-settings-snapshot {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+  margin-top: 18px;
+  padding-top: 16px;
+  border-top: 1px solid var(--border-color);
+}
+
+.workspace-settings-retention > .mantine-Badge-root,
+.workspace-settings-snapshot > .mantine-Switch-root {
+  flex: 0 0 auto;
+}
+
+.workspace-settings-block {
+  margin-top: 18px;
+}
+
+.workspace-settings-sources {
+  max-height: 240px;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
+  background: var(--bg-primary);
+  scrollbar-width: thin;
+}
+
+.workspace-settings-source {
+  padding: 11px 12px;
+}
+
+.workspace-settings-source + .workspace-settings-source {
+  border-top: 1px solid var(--border-color);
+}
+
+.workspace-settings-source .mantine-Checkbox-body {
+  align-items: flex-start;
+}
+
+.workspace-settings-source .mantine-Checkbox-inner {
+  margin-top: 1px;
+}
+
+.workspace-settings-source .mantine-Checkbox-labelWrapper {
+  flex: 1;
+  min-width: 0;
+}
+
+.workspace-settings-source .mantine-Checkbox-label {
+  padding-inline-start: 10px;
+}
+
+.workspace-settings-source-name {
+  min-width: 0;
+  color: var(--text-primary);
+  overflow-wrap: anywhere;
+}
+
+.workspace-settings-source-badge {
+  flex: 0 0 auto;
+  margin-top: 1px;
+}
+
+.workspace-settings-source-path {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  line-height: 1.6;
+  overflow-wrap: anywhere;
+}
+
+.workspace-settings-actions {
+  margin-top: 18px;
+}
+
+.workspace-settings-feedback:not(:empty) {
+  margin-top: 16px;
+}
+
+.workspace-settings-restore-header {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  gap: 16px;
+}
+
+.workspace-settings-restore-action {
+  align-self: flex-start;
+}
+
+.workspace-settings-restore-preview {
+  min-width: 0;
+  padding-top: 16px;
+  border-top: 1px solid var(--border-color);
+}
+
+@container (max-width: 860px) {
+  .workspace-settings-backup-grid {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+@container (max-width: 620px) {
+  .workspace-settings-card {
+    padding: 16px;
+  }
+
+  .workspace-settings-location,
+  .workspace-settings-restore-header {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 12px;
+  }
+
+  .workspace-settings-location > .mantine-Button-root,
+  .workspace-settings-restore-action {
+    align-self: flex-start;
+  }
+
+  .workspace-settings-retention {
+    flex-wrap: wrap;
+    gap: 10px;
+  }
+
+  .workspace-settings-retention > .workspace-settings-copy {
+    flex-basis: 100%;
+  }
+
+  .workspace-settings-actions > .mantine-Group-root {
+    margin-inline-start: auto;
+  }
+
+  .workspace-settings-source .mantine-Group-root {
+    flex-wrap: wrap;
+    gap: 4px;
+  }
+}

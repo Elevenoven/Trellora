@@ -1,0 +1,32 @@
+{
+  "date": "2026-10-03T11:34:22.162Z",
+  "electronBuilder": "24.13.3",
+  "packaged": true,
+  "cleanMachine": false,
+  "identity": "isolated acceptance appId/name; production main/preload and NSIS macros; separate entry redirects userData to a temporary directory because host APPDATA same-directory rename fails EXDEV",
+  "checks": [
+    "real NSIS per-user install adds three optional types and quoted command; defaults and UserChoice unchanged",
+    "actual Windows ShellExecuteEx resolves registered ProgID and opens Chinese-space file in running packaged app",
+    "real 1.0.0 to 1.0.1 upgrade preserves settings and private data and refreshes optional registration",
+    "real uninstall removes owned optional registration and preserves defaults, UserChoice and user data"
+  ],
+  "pending": [
+    "Native Open With app selection not verified: host provided an empty interim picker window without actionable app controls. Verify on clean Windows."
+  ],
+  "allPassed": false,
+  "actualRecoverySurvivesUpgrade": true,
+  "defaultAppDataSentinelsSurviveUninstall": true,
+  "artifacts": {
+    "v1": {
+      "path": "output\\verification\\external-document-package\\v1\\Trellora External Acceptance-1.0.0-setup-x64.exe",
+      "sha256": "25e9b7a8c4bdbf75a050c3fb1ac62f5f6d4d61ca3fa0f3c528e47b025710ceab"
+    },
+    "v2": {
+      "path": "output\\verification\\external-document-package\\v2\\Trellora External Acceptance-1.0.1-setup-x64.exe",
+      "sha256": "3502a3a44ce3a43c1c0c2e5e41312df2815ce022062674ecd1ddcea92049f560"
+    }
+  },
+  "nativeOpenWithDialog": false,
+  "interactiveExplorerRightClick": false,
+  "userSelectedDefaultDoubleClick": false
+}

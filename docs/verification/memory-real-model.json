@@ -1,0 +1,19 @@
+{
+  "verifiedAt": "2026-10-03T02:30:42.194Z",
+  "method": "real Electron/main/preload/React and saved remote model; four assistant IPC routes; internal canonical override; isolated workspace",
+  "checks": [
+    "release observe remains unchanged; auto setting reports four ineligible routes and unknown model",
+    "all four routes complete through real assistant IPC, including short-note Direct and long-note ReAct; owner/generation/eligibility verified",
+    "real provider consolidation reviewed 1 clusters and preserved finite expiry; merged 1",
+    "saved encrypted remote model completed normal chat and automatic extraction in isolated storage; original config unchanged",
+    "complete Electron exit/restart restores four-route receipts and item identity without replay; provider proof resets to unknown"
+  ],
+  "provider": "qwen",
+  "model": "qwen3.7-flash",
+  "receiptCount": 4,
+  "itemCount": 3,
+  "databaseIntegrity": "ok",
+  "originalUserDataModified": false,
+  "containsSecretsOrAnswers": false,
+  "screenshots": "E:\\AI-Project\\menghan-notes\\output\\verification\\memory"
+}

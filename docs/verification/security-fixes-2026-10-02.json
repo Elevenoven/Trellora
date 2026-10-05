@@ -1,0 +1,71 @@
+{
+  "clientDate": "2026-10-02",
+  "scope": "Seven confirmed note-library defects and their runtime dependency advisories",
+  "status": "implemented and verified",
+  "fixed": [
+    "Executable frontmatter engines removed from indexing, analysis, tags and Wiki import; metadata size and complexity bounded",
+    "Library reads and mutations validate physical ancestors and reject descendant junctions and symbolic links",
+    "Backup directories include full filenames and extensions; ambiguous legacy histories are retained and excluded from restoration",
+    "File and folder moves migrate backup histories with a synced rollback journal and startup recovery; orphan destination histories are rejected",
+    "HTTP and HTTPS export images are embedded with size, time, MIME and redirect limits",
+    "Text import preflights and stages the entire batch; publish failures undo newly created files",
+    "Mermaid upgraded to 11.16.1 and verified against the actual equal-range XY chart parser"
+  ],
+  "windowsDirectoryMoves": {
+    "finding": "Recursive directory notifications can temporarily prevent backup directory renames; synchronous retry prevents notifications from settling",
+    "fix": "Asynchronous bounded retry within the existing note-writer and index publication queues; physical paths and destination ownership checked on every attempt",
+    "verified": [
+      "File and folder histories under a real recursive Windows watcher",
+      "Persistent backup rename failure restores the original note path and preserves histories",
+      "Failed tree-order publication restores note paths and histories",
+      "Injected interrupted move journal is recovered before startup indexing"
+    ]
+  },
+  "dependencies": {
+    "grayMatter": "removed",
+    "jsYaml": "4.3.2",
+    "jsYaml3Override": "3.15.2",
+    "mermaid": "11.16.1",
+    "auditBefore": { "total": 208, "critical": 2, "high": 105 },
+    "auditAfter": { "total": 197, "critical": 2, "high": 100, "moderate": 80, "low": 15 },
+    "remainingTargetAdvisories": [],
+    "remainingAdvisories": "Other dependencies were not comprehensively upgraded in this change; audit counts include build and development tooling"
+  },
+  "checks": {
+    "pnpm exec tsc -b --pretty false": "passed",
+    "focused strict Electron module typecheck": "passed",
+    "pnpm lint": "passed",
+    "git diff --check": "passed",
+    "moduleScriptsPassed": [
+      "verify-security-regressions.mjs",
+      "verify-file-tree.mjs",
+      "verify-note-save.mjs",
+      "verify-note-save-controller.mjs",
+      "verify-note-backups.mjs",
+      "verify-import-files.mjs",
+      "verify-markdown-export.mjs",
+      "verify-library-services.mjs",
+      "verify-editor-safety.mjs",
+      "verify-markdown.mjs",
+      "verify-note-index.mjs",
+      "verify-note-export.mjs",
+      "verify-editor-mermaid.mjs",
+      "verify-mermaid-rendering.mjs"
+    ],
+    "desktopScriptsPassed": [
+      "verify-note-backups-electron.mjs: real UI legacy migration, latest-three histories and restore/undo",
+      "verify-note-export-electron.mjs: real HTTP image and redirect download, embedded image PDF and no network access during printing",
+      "verify-note-save-electron.mjs: editor saves, switching, conflicts, restoration, close handshake and 1 MiB worker indexing"
+    ],
+    "packagedScriptPassed": "verify-security-electron.mjs --packaged: Windows x64 ASAR test package; real IPC, frontmatter, junctions, import failure, MD/TXT ownership, file/folder moves and startup recovery"
+  },
+  "verificationLimits": [
+    "Portable self-extracting executable and an independent clean Windows machine were not tested",
+    "Startup recovery used an injected interrupted-move journal; physical power loss was not tested",
+    "Python pipeline and external model/provider acceptance were outside this change"
+  ],
+  "cleanup": {
+    "retainedTemporaryDirectory": "E:/AI-Project/menghan-notes/.package-staging/verify-note-index",
+    "reason": "Automatic approval review rejected deletion with blocked by policy"
+  }
+}

@@ -1,0 +1,6 @@
+{
+  "fixtureVersion": 1,
+  "encoding": "utf-8",
+  "scenarioFile": "scenario.json",
+  "noteFile": "notes/all-evidence-baseline.md"
+}

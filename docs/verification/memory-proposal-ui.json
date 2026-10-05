@@ -1,0 +1,16 @@
+{
+  "verifiedAt": "2026-10-04T15:24:17.119Z",
+  "method": "actual Electron main/preload/React dialogs and buttons; isolated database; controlled proposal fixtures; model-reviewed manual consolidation",
+  "checks": [
+    "ambiguous explicit save is pending; real dialog shows original source and chosen cross-kind target; reviewed replacement is atomic",
+    "retire dialog is read-only; rejection preserves old active, confirmation retires without creating an active fact",
+    "an open stale review cannot replace an item edited in the meantime; real dialog displays main-process rejection",
+    "legacy active extracted memory is labelled active without a fictitious pending action; empty pending tab explains the consolidation entry",
+    "manual consolidation can be closed and reopened from a visible review button without a new model call or cooldown; originals remain active until confirmation",
+    "actual composer shows waiting then pending; review jumps to the exact source, and rejection updates the card to current archived state",
+    "failed correction shows real format/evidence reason, normalizes premature profile acknowledgement and preserves original memory rows"
+  ],
+  "originalUserDataModified": false,
+  "databaseIntegrity": "ok",
+  "screenshots": "E:\\AI-Project\\trellora\\output\\verification\\memory\\python-statement"
+}

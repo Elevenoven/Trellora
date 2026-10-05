@@ -1,0 +1,41 @@
+{
+  "schemaVersion": 1,
+  "documentId": "p6-stability-doc",
+  "contentHash": "6666666666666666666666666666666666666666666666666666666666666666",
+  "title": "P6 稳定性验收样例",
+  "signals": [
+    { "lineNo": 1, "type": "HEADING", "text": "# 第一章 稳定性", "ruleId": "markdown-heading" },
+    { "lineNo": 2, "type": "HEADING", "text": "1 范围", "ruleId": "numeric-heading" },
+    { "lineNo": 3, "type": "HEADING", "text": "1.1 解析流程", "ruleId": "numeric-heading" },
+    { "lineNo": 4, "type": "LIST_ITEM", "text": "- 原始文档", "ruleId": "unordered-list" },
+    { "lineNo": 5, "type": "LIST_ITEM", "text": "  - 本地缓存", "ruleId": "unordered-list" },
+    { "lineNo": 6, "type": "BODY", "text": "缓存必须支持断点恢复。", "ruleId": "fallback-body" },
+    { "lineNo": 7, "type": "TABLE_ROW", "text": "| 阶段 | 状态 |", "ruleId": "table-row" },
+    { "lineNo": 8, "type": "QUOTE", "text": "> 阶段产物是可验证的。", "ruleId": "quote" },
+    { "lineNo": 9, "type": "BLANK", "text": "", "ruleId": "blank" },
+    { "lineNo": 10, "type": "BODY", "text": "这是脱离列表后的正文。", "ruleId": "fallback-body" },
+    { "lineNo": 11, "type": "HEADING", "text": "1.2 输出", "ruleId": "numeric-heading" },
+    { "lineNo": 12, "type": "BODY", "text": "输出必须能够回溯到原始信号。", "ruleId": "fallback-body" },
+    { "lineNo": 13, "type": "NOISE", "text": "— 13 —", "ruleId": "page-number" },
+    { "lineNo": 14, "type": "HEADING", "text": "第二章 验收", "ruleId": "cn-chapter" },
+    { "lineNo": 15, "type": "BODY", "text": "验收结果应可重复。", "ruleId": "fallback-body" }
+  ],
+  "expectedTree": [
+    { "nodeId": "n-title", "parentId": "n-root", "type": "DOCUMENT_TITLE", "depth": 1, "path": "/0/" },
+    { "nodeId": "n-s-000001", "parentId": "n-title", "type": "HEADING", "depth": 2, "path": "/0/1-s-000001/" },
+    { "nodeId": "n-s-000002", "parentId": "n-title", "type": "HEADING", "depth": 2, "path": "/0/2-s-000002/" },
+    { "nodeId": "n-s-000003", "parentId": "n-s-000002", "type": "HEADING", "depth": 3, "path": "/0/2-s-000002/3-s-000003/" },
+    { "nodeId": "n-s-000004", "parentId": "n-s-000003", "type": "LIST_ITEM", "depth": 4, "path": "/0/2-s-000002/3-s-000003/4-s-000004/" },
+    { "nodeId": "n-s-000005", "parentId": "n-s-000004", "type": "LIST_ITEM", "depth": 5, "path": "/0/2-s-000002/3-s-000003/4-s-000004/5-s-000005/" },
+    { "nodeId": "n-s-000006", "parentId": "n-s-000005", "type": "BODY", "depth": 6, "path": "/0/2-s-000002/3-s-000003/4-s-000004/5-s-000005/6-s-000006/" },
+    { "nodeId": "n-s-000007", "parentId": "n-s-000003", "type": "TABLE_ROW", "depth": 4, "path": "/0/2-s-000002/3-s-000003/7-s-000007/" },
+    { "nodeId": "n-s-000008", "parentId": "n-s-000003", "type": "QUOTE", "depth": 4, "path": "/0/2-s-000002/3-s-000003/8-s-000008/" },
+    { "nodeId": "n-s-000009", "parentId": "n-s-000003", "type": "BLANK", "depth": 4, "path": "/0/2-s-000002/3-s-000003/9-s-000009/" },
+    { "nodeId": "n-s-000010", "parentId": "n-s-000003", "type": "BODY", "depth": 4, "path": "/0/2-s-000002/3-s-000003/10-s-000010/" },
+    { "nodeId": "n-s-000011", "parentId": "n-s-000002", "type": "HEADING", "depth": 3, "path": "/0/2-s-000002/11-s-000011/" },
+    { "nodeId": "n-s-000012", "parentId": "n-s-000011", "type": "BODY", "depth": 4, "path": "/0/2-s-000002/11-s-000011/12-s-000012/" },
+    { "nodeId": "n-s-000013", "parentId": "n-root", "type": "NOISE", "depth": 1, "path": "/13-s-000013/" },
+    { "nodeId": "n-s-000014", "parentId": "n-title", "type": "HEADING", "depth": 2, "path": "/0/14-s-000014/" },
+    { "nodeId": "n-s-000015", "parentId": "n-s-000014", "type": "BODY", "depth": 3, "path": "/0/14-s-000014/15-s-000015/" }
+  ]
+}

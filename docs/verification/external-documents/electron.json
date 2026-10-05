@@ -1,0 +1,31 @@
+{
+  "date": "2026-10-03T10:45:37.164Z",
+  "electron": "31.7.7",
+  "kind": "real Electron development bundle",
+  "nativePicker": false,
+  "nativePickerEvidence": "native-picker.json",
+  "injected": [
+    "subsequent picker selections",
+    "overwrite confirmation target change"
+  ],
+  "passed": [
+    "picker selection fixture, Chinese/space path, no registered library",
+    "unchanged Markdown mode switches preserve exact BOM/CRLF bytes",
+    "real backup maintenance persists recovery only and preserves external original bytes",
+    "real physical workspace restore coexists with external draft and preserves original bytes",
+    "real workspace migration worker preserves external draft and original bytes",
+    "manual save, private recovery, close choice waits beyond ten seconds, cancel retains draft",
+    "switch cancel/discard, TXT capabilities, CRLF manual save",
+    "external modification/deletion, no recreation, save-as changes active session",
+    "overwrite confirmation race preserves newer target and current draft",
+    "forced process termination and cold restart recovery never overwrite original",
+    "renderer reload releases old main sessions and restores persisted draft",
+    "unauthorized local reference preview placeholders, no library asset requests",
+    "join current draft through original note editor/index; original unchanged; transfer terminal recovery",
+    "active library same-name attachment isolation and main-process image write rejection",
+    "registered library source switches to existing note chain",
+    "normal close discard leaves original bytes intact and prevents recovery revival"
+  ],
+  "packaged": false,
+  "cleanMachine": false
+}

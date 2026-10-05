@@ -1,0 +1,45 @@
+{
+  "date": "2026-10-03T11:35:33.119Z",
+  "sourceSha": "7df214d65fa9017d675adbeffd60ebe4f8c7835f",
+  "requiresCurrentDirtyWorktree": true,
+  "publicRelease": false,
+  "cleanMachine": false,
+  "artifacts": [
+    {
+      "path": "trellora/Trellora-1.0.0-portable-x64.exe",
+      "byteLength": 92865022,
+      "sha256": "8ecc27cff612f5f774757cac142eeb50faa2508967eef7d6dd5e6d464e9ca94f",
+      "signature": {
+        "status": "NotSigned",
+        "signer": null
+      }
+    },
+    {
+      "path": "trellora/Trellora-1.0.0-setup-x64.exe",
+      "byteLength": 93118290,
+      "sha256": "98fe06809e500f7e9e6879fcf1d15e38856ca65860c43aafcbc6712f02eedffe",
+      "signature": {
+        "status": "NotSigned",
+        "signer": null
+      }
+    },
+    {
+      "path": "output/verification/external-document-package/v1/Trellora External Acceptance-1.0.0-setup-x64.exe",
+      "byteLength": 106442897,
+      "sha256": "25e9b7a8c4bdbf75a050c3fb1ac62f5f6d4d61ca3fa0f3c528e47b025710ceab",
+      "signature": {
+        "status": "NotSigned",
+        "signer": null
+      }
+    },
+    {
+      "path": "output/verification/external-document-package/v2/Trellora External Acceptance-1.0.1-setup-x64.exe",
+      "byteLength": 106443056,
+      "sha256": "3502a3a44ce3a43c1c0c2e5e41312df2815ce022062674ecd1ddcea92049f560",
+      "signature": {
+        "status": "NotSigned",
+        "signer": null
+      }
+    }
+  ]
+}

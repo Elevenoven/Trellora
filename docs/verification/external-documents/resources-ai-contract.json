@@ -1,0 +1,14 @@
+{
+  "verifiedAt": "2026-10-03T13:55:35.123Z",
+  "checks": [
+    "AST inline/reference/HTML images and quoted Chinese-space paths; GET-only opaque resource tokens",
+    "parent escape and junction escape denied; explicit extra root is read-only and session-specific",
+    "private image before save, cold recovery of draft assets, publication only on save, stale token revoked",
+    "cross-directory save and library transfer copy all referenced resources without rewriting code or titles; idempotent degraded indexing",
+    "second resource copy and body replacement failures roll back only owned files; original document and user resource survive",
+    "rollback preserves resources already referenced by another writer in UTF-8 and UTF-16 LE/BE bodies",
+    "AI freezes authorized draft, no implicit library context or original save, sender/version/selection guarded apply, late suggestion retained, whole-document budget enforced"
+  ],
+  "model": "controlled callback",
+  "realModel": false
+}

@@ -1,0 +1,13 @@
+{
+  "date": "2026-10-03T10:53:45.425Z",
+  "packaged": false,
+  "cleanMachine": false,
+  "checks": [
+    "first launch opens Chinese-space path and retains deduplicated additional file",
+    "second instance preserves draft; visible queue and cancel remove only selected request",
+    "new delivery during decision remains queued and never overwrites current draft",
+    "same real file focuses existing document and preserves its newer draft",
+    "Chromium native file drop resolves genuine File path through Electron webUtils and normal transition",
+    "one missing file is reported while other files still open"
+  ]
+}

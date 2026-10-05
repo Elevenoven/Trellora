@@ -1,0 +1,12 @@
+.editor-word-count {
+    margin-left: auto;
+    flex-shrink: 0;
+    color: var(--text-secondary);
+    font-size: 12px;
+    white-space: nowrap;
+    font-variant-numeric: tabular-nums;
+}
+
+.editor-mode-bar .editor-word-count + .note-save-notice {
+    margin-left: 0;
+}

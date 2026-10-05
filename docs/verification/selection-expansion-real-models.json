@@ -1,0 +1,723 @@
+{
+  "generatedAt": "2026-09-30T11:01:25.428Z",
+  "boundary": "real provider calls; current-note coordinator, not renderer acceptance",
+  "results": [
+    {
+      "model": "qwen3.8-flash",
+      "sample": "boundary-11999",
+      "fullNoteCharacters": 11999,
+      "context": {
+        "planned": [
+          {
+            "sourceKind": "current-note",
+            "reason": "按扩写阈值纳入当前笔记全文。"
+          }
+        ],
+        "used": [
+          {
+            "sourceKind": "current-note",
+            "title": "解析流程",
+            "locator": "当前笔记 / L1-L1315",
+            "characterCount": 11999
+          }
+        ],
+        "skipped": [],
+        "candidates": [],
+        "conflicts": [],
+        "personalization": {
+          "requested": false,
+          "applied": false,
+          "itemCount": 0
+        },
+        "fullNoteMode": "not-requested",
+        "contextMode": "full-note",
+        "fullNoteIncluded": true,
+        "includedCharacters": 11999,
+        "fullNoteCharacters": 11999
+      },
+      "length": {
+        "originalCharacters": 24,
+        "targetCharacters": 180,
+        "minimumCharacters": 144,
+        "actualCharacters": 189,
+        "missingToMinimum": 0,
+        "missingToTarget": 0
+      },
+      "execution": {
+        "path": "direct",
+        "rounds": 2,
+        "modelCalls": 2,
+        "toolCalls": 0,
+        "repairAttempts": 1
+      },
+      "issues": [],
+      "passed": true,
+      "writebackKind": "inline-text",
+      "elapsedMs": 3744,
+      "trace": [],
+      "text": "解析文本上传到 MinIO，元数据写入 MySQL。具体而言，artifact、block 及 table 等结构化元数据存入 MySQL，而 base64 图片与产物文件则落在 MinIO，MySQL 仅保留引用和 hash。结构节点写入后，可选同步至 Elasticsearch 导航索引和 Neo4j 图投影。此外，索引任务需验证解析任务 lineage 存在且已成功，以确保索引仅基于冻结的解析版本生成。"
+    },
+    {
+      "model": "qwen3.8-flash",
+      "sample": "boundary-12000",
+      "fullNoteCharacters": 12000,
+      "context": {
+        "planned": [
+          {
+            "sourceKind": "current-note",
+            "reason": "按扩写阈值纳入当前笔记全文。"
+          }
+        ],
+        "used": [
+          {
+            "sourceKind": "current-note",
+            "title": "解析流程",
+            "locator": "当前笔记 / L1-L1315",
+            "characterCount": 12000
+          }
+        ],
+        "skipped": [],
+        "candidates": [],
+        "conflicts": [],
+        "personalization": {
+          "requested": false,
+          "applied": false,
+          "itemCount": 0
+        },
+        "fullNoteMode": "not-requested",
+        "contextMode": "full-note",
+        "fullNoteIncluded": true,
+        "includedCharacters": 12000,
+        "fullNoteCharacters": 12000
+      },
+      "length": {
+        "originalCharacters": 24,
+        "targetCharacters": 180,
+        "minimumCharacters": 144,
+        "actualCharacters": 124,
+        "missingToMinimum": 20,
+        "missingToTarget": 56
+      },
+      "execution": {
+        "path": "direct",
+        "rounds": 2,
+        "modelCalls": 2,
+        "toolCalls": 0,
+        "repairAttempts": 1
+      },
+      "issues": [
+        {
+          "code": "TARGET_LENGTH_MISSED",
+          "message": "扩写未达到目标长度",
+          "retryable": true
+        }
+      ],
+      "passed": false,
+      "writebackKind": "copy-only",
+      "elapsedMs": 6708,
+      "trace": [],
+      "text": "解析文本上传到 MinIO，artifact、block、table 元数据写入 MySQL。base64 图片与产物落在 MinIO，MySQL 只保留引用和 hash。结构节点写入 MySQL 后，可选同步到 Elasticsearch 导航索引和 Neo4j 图投影。"
+    },
+    {
+      "model": "qwen3.8-flash",
+      "sample": "boundary-12001-tail",
+      "fullNoteCharacters": 12001,
+      "context": {
+        "planned": [
+          {
+            "sourceKind": "current-note",
+            "reason": "通过 ReAct 定位并深读当前笔记相关原文。"
+          },
+          {
+            "sourceKind": "current-note",
+            "reason": "先搜索当前笔记候选，再受限深读候选范围。"
+          },
+          {
+            "sourceKind": "current-note",
+            "reason": "先读取当前笔记地图或搜索候选，再按候选受限深读原文。"
+          }
+        ],
+        "used": [
+          {
+            "sourceKind": "current-note",
+            "title": "解析流程",
+            "locator": "当前笔记 / L2625-L2625 / 起始字符 1",
+            "characterCount": 178
+          }
+        ],
+        "skipped": [],
+        "candidates": [
+          {
+            "candidateId": "current-note:snapshot-e39975234da46351891086ff:block-a28472df2472c3a644b57cc4",
+            "sourceKind": "current-note",
+            "title": "解析流程",
+            "locator": "当前笔记 / L1-L1",
+            "queryTerms": [
+              "解析",
+              "析文",
+              "文本",
+              "本上",
+              "上传",
+              "传到",
+              "MinIO",
+              "MySQL",
+              "解析任务",
+              "lineage",
+              "Elasticsearch",
+              "artifact",
+              "block",
+              "table",
+              "元数据",
+              "hash"
+            ],
+            "retrievalMethod": "search_note（候选仅用于定位）",
+            "readState": "skipped",
+            "score": 0.36,
+            "sourceContentHash": "2f93815437e47bad65a82c57bb9e7e01c9c79fd44788f602a2bf196eb4da5ce0",
+            "reason": "候选未完成本轮受限深读或网页全文核验，不能作为事实证据。"
+          },
+          {
+            "candidateId": "current-note:snapshot-e39975234da46351891086ff:block-37dcf7075a0e9a47cbc6ae95",
+            "sourceKind": "current-note",
+            "title": "解析流程",
+            "locator": "当前笔记 / L2625-L2625",
+            "queryTerms": [
+              "解析",
+              "析文",
+              "文本",
+              "本上",
+              "上传",
+              "传到",
+              "MinIO",
+              "MySQL",
+              "解析任务",
+              "lineage",
+              "Elasticsearch",
+              "artifact",
+              "block",
+              "table",
+              "元数据",
+              "hash"
+            ],
+            "retrievalMethod": "search_note（候选仅用于定位）",
+            "readState": "deep-read",
+            "score": 0.44,
+            "sourceContentHash": "2f93815437e47bad65a82c57bb9e7e01c9c79fd44788f602a2bf196eb4da5ce0"
+          }
+        ],
+        "conflicts": [],
+        "personalization": {
+          "requested": false,
+          "applied": false,
+          "itemCount": 0
+        },
+        "fullNoteMode": "not-requested",
+        "contextMode": "related-original",
+        "fullNoteIncluded": false,
+        "includedCharacters": 178,
+        "fullNoteCharacters": 12001
+      },
+      "length": {
+        "originalCharacters": 24,
+        "targetCharacters": 180,
+        "minimumCharacters": 144,
+        "actualCharacters": 202,
+        "missingToMinimum": 0,
+        "missingToTarget": 0
+      },
+      "execution": {
+        "path": "react",
+        "rounds": 4,
+        "modelCalls": 5,
+        "toolCalls": 5,
+        "repairAttempts": 0
+      },
+      "issues": [],
+      "passed": true,
+      "writebackKind": "inline-text",
+      "elapsedMs": 9049,
+      "trace": [
+        {
+          "toolsEnabled": true,
+          "promptCharacters": 2306,
+          "toolNames": [
+            "read_note_range"
+          ]
+        },
+        {
+          "toolsEnabled": true,
+          "promptCharacters": 2986,
+          "toolNames": [
+            "search_note"
+          ]
+        },
+        {
+          "toolsEnabled": true,
+          "promptCharacters": 3932,
+          "toolNames": [
+            "search_note"
+          ]
+        },
+        {
+          "toolsEnabled": true,
+          "promptCharacters": 4869,
+          "toolNames": [
+            "get_note_map"
+          ]
+        },
+        {
+          "toolsEnabled": false,
+          "promptCharacters": 2088,
+          "toolNames": []
+        }
+      ],
+      "text": "解析文本上传到 MinIO，元数据写入 MySQL。具体而言，artifact、block 及 table 等结构化元数据均持久化至 MySQL；base64 图片与产物文件存储于 MinIO，MySQL 仅保留引用路径和 hash 值以维持轻量级索引。结构节点入库后，可选同步至 Elasticsearch 导航索引及 Neo4j 图投影。此外，索引任务需验证解析任务 lineage 存在且已成功，确保索引严格基于冻结的解析版本构建。"
+    },
+    {
+      "model": "qwen3.8-flash",
+      "sample": "multiline-10000",
+      "fullNoteCharacters": 9816,
+      "context": {
+        "planned": [
+          {
+            "sourceKind": "current-note",
+            "reason": "按扩写阈值纳入当前笔记全文。"
+          }
+        ],
+        "used": [
+          {
+            "sourceKind": "current-note",
+            "title": "解析流程",
+            "locator": "当前笔记 / L1-L507",
+            "characterCount": 9816
+          }
+        ],
+        "skipped": [],
+        "candidates": [],
+        "conflicts": [],
+        "personalization": {
+          "requested": false,
+          "applied": false,
+          "itemCount": 0
+        },
+        "fullNoteMode": "not-requested",
+        "contextMode": "full-note",
+        "fullNoteIncluded": true,
+        "includedCharacters": 9816,
+        "fullNoteCharacters": 9816
+      },
+      "length": {
+        "originalCharacters": 24,
+        "targetCharacters": 180,
+        "minimumCharacters": 144,
+        "actualCharacters": 163,
+        "missingToMinimum": 0,
+        "missingToTarget": 17
+      },
+      "execution": {
+        "path": "direct",
+        "rounds": 2,
+        "modelCalls": 2,
+        "toolCalls": 0,
+        "repairAttempts": 1
+      },
+      "issues": [],
+      "passed": true,
+      "writebackKind": "inline-text",
+      "elapsedMs": 4140,
+      "trace": [],
+      "text": "解析文本上传到 MinIO，artifact、block、table 元数据写入 MySQL。base64 图片与产物落在 MinIO，MySQL 只保留引用和 hash。结构节点写入 MySQL 后，可选同步到 Elasticsearch 导航索引和 Neo4j 图投影。索引任务验证解析任务 lineage 存在且已成功，保证索引只基于冻结的解析版本。"
+    },
+    {
+      "model": "qwen3.8-flash",
+      "sample": "technical-multi-paragraph",
+      "fullNoteCharacters": 3563,
+      "context": {
+        "planned": [
+          {
+            "sourceKind": "current-note",
+            "reason": "按扩写阈值纳入当前笔记全文。"
+          }
+        ],
+        "used": [
+          {
+            "sourceKind": "current-note",
+            "title": "解析流程",
+            "locator": "当前笔记 / L1-L611",
+            "characterCount": 3563
+          }
+        ],
+        "skipped": [],
+        "candidates": [],
+        "conflicts": [],
+        "personalization": {
+          "requested": false,
+          "applied": false,
+          "itemCount": 0
+        },
+        "fullNoteMode": "not-requested",
+        "contextMode": "full-note",
+        "fullNoteIncluded": true,
+        "includedCharacters": 3563,
+        "fullNoteCharacters": 3563
+      },
+      "length": {
+        "originalCharacters": 124,
+        "targetCharacters": 224,
+        "minimumCharacters": 180,
+        "actualCharacters": 124,
+        "missingToMinimum": 56,
+        "missingToTarget": 100
+      },
+      "execution": {
+        "path": "direct",
+        "rounds": 2,
+        "modelCalls": 2,
+        "toolCalls": 0,
+        "repairAttempts": 1
+      },
+      "issues": [
+        {
+          "code": "EXPAND_NOT_LONGER",
+          "message": "扩写未达到目标长度",
+          "retryable": true
+        }
+      ],
+      "passed": false,
+      "writebackKind": "copy-only",
+      "elapsedMs": 3336,
+      "trace": [],
+      "text": "解析文本上传到 MinIO，artifact、block、table 元数据写入 MySQL；base64 图片与产物落在 MinIO，MySQL 只保留引用和 hash。结构节点写入 MySQL 后，可选同步到 Elasticsearch 导航索引和 Neo4j 图投影。"
+    },
+    {
+      "model": "deepseek-v4-flash",
+      "sample": "boundary-11999",
+      "fullNoteCharacters": 11999,
+      "context": {
+        "planned": [
+          {
+            "sourceKind": "current-note",
+            "reason": "按扩写阈值纳入当前笔记全文。"
+          }
+        ],
+        "used": [
+          {
+            "sourceKind": "current-note",
+            "title": "解析流程",
+            "locator": "当前笔记 / L1-L1315",
+            "characterCount": 11999
+          }
+        ],
+        "skipped": [],
+        "candidates": [],
+        "conflicts": [],
+        "personalization": {
+          "requested": false,
+          "applied": false,
+          "itemCount": 0
+        },
+        "fullNoteMode": "not-requested",
+        "contextMode": "full-note",
+        "fullNoteIncluded": true,
+        "includedCharacters": 11999,
+        "fullNoteCharacters": 11999
+      },
+      "length": {
+        "originalCharacters": 24,
+        "targetCharacters": 180,
+        "minimumCharacters": 144,
+        "actualCharacters": 163,
+        "missingToMinimum": 0,
+        "missingToTarget": 17
+      },
+      "execution": {
+        "path": "direct",
+        "rounds": 1,
+        "modelCalls": 1,
+        "toolCalls": 0,
+        "repairAttempts": 0
+      },
+      "issues": [],
+      "passed": true,
+      "writebackKind": "inline-text",
+      "elapsedMs": 1121,
+      "trace": [],
+      "text": "解析文本上传到 MinIO，artifact、block、table 元数据写入 MySQL。base64 图片与产物落在 MinIO，MySQL 只保留引用和 hash。结构节点写入 MySQL 后，可选同步到 Elasticsearch 导航索引和 Neo4j 图投影。索引任务验证解析任务 lineage 存在且已成功，保证索引只基于冻结的解析版本。"
+    },
+    {
+      "model": "deepseek-v4-flash",
+      "sample": "boundary-12000",
+      "fullNoteCharacters": 12000,
+      "context": {
+        "planned": [
+          {
+            "sourceKind": "current-note",
+            "reason": "按扩写阈值纳入当前笔记全文。"
+          }
+        ],
+        "used": [
+          {
+            "sourceKind": "current-note",
+            "title": "解析流程",
+            "locator": "当前笔记 / L1-L1315",
+            "characterCount": 12000
+          }
+        ],
+        "skipped": [],
+        "candidates": [],
+        "conflicts": [],
+        "personalization": {
+          "requested": false,
+          "applied": false,
+          "itemCount": 0
+        },
+        "fullNoteMode": "not-requested",
+        "contextMode": "full-note",
+        "fullNoteIncluded": true,
+        "includedCharacters": 12000,
+        "fullNoteCharacters": 12000
+      },
+      "length": {
+        "originalCharacters": 24,
+        "targetCharacters": 180,
+        "minimumCharacters": 144,
+        "actualCharacters": 163,
+        "missingToMinimum": 0,
+        "missingToTarget": 17
+      },
+      "execution": {
+        "path": "direct",
+        "rounds": 1,
+        "modelCalls": 1,
+        "toolCalls": 0,
+        "repairAttempts": 0
+      },
+      "issues": [],
+      "passed": true,
+      "writebackKind": "inline-text",
+      "elapsedMs": 935,
+      "trace": [],
+      "text": "解析文本上传到 MinIO，artifact、block、table 元数据写入 MySQL。base64 图片与产物落在 MinIO，MySQL 只保留引用和 hash。结构节点写入 MySQL 后，可选同步到 Elasticsearch 导航索引和 Neo4j 图投影。索引任务验证解析任务 lineage 存在且已成功，保证索引只基于冻结的解析版本。"
+    },
+    {
+      "model": "deepseek-v4-flash",
+      "sample": "boundary-12001-tail",
+      "fullNoteCharacters": 12001,
+      "context": {
+        "planned": [
+          {
+            "sourceKind": "current-note",
+            "reason": "通过 ReAct 定位并深读当前笔记相关原文。"
+          },
+          {
+            "sourceKind": "current-note",
+            "reason": "先搜索当前笔记候选，再受限深读候选范围。"
+          }
+        ],
+        "used": [
+          {
+            "sourceKind": "current-note",
+            "title": "解析流程",
+            "locator": "当前笔记 / L2625-L2625 / 起始字符 1",
+            "characterCount": 178
+          }
+        ],
+        "skipped": [],
+        "candidates": [
+          {
+            "candidateId": "current-note:snapshot-e39975234da46351891086ff:block-a28472df2472c3a644b57cc4",
+            "sourceKind": "current-note",
+            "title": "解析流程",
+            "locator": "当前笔记 / L1-L1",
+            "queryTerms": [
+              "解析",
+              "析文",
+              "文本",
+              "本上",
+              "上传",
+              "传到"
+            ],
+            "retrievalMethod": "search_note（候选仅用于定位）",
+            "readState": "skipped",
+            "score": 0.36,
+            "sourceContentHash": "2f93815437e47bad65a82c57bb9e7e01c9c79fd44788f602a2bf196eb4da5ce0",
+            "reason": "候选未完成本轮受限深读或网页全文核验，不能作为事实证据。"
+          },
+          {
+            "candidateId": "current-note:snapshot-e39975234da46351891086ff:block-37dcf7075a0e9a47cbc6ae95",
+            "sourceKind": "current-note",
+            "title": "解析流程",
+            "locator": "当前笔记 / L2625-L2625",
+            "queryTerms": [
+              "解析",
+              "析文",
+              "文本",
+              "本上",
+              "上传",
+              "传到"
+            ],
+            "retrievalMethod": "search_note（候选仅用于定位）",
+            "readState": "deep-read",
+            "score": 0.3103,
+            "sourceContentHash": "2f93815437e47bad65a82c57bb9e7e01c9c79fd44788f602a2bf196eb4da5ce0"
+          }
+        ],
+        "conflicts": [],
+        "personalization": {
+          "requested": false,
+          "applied": false,
+          "itemCount": 0
+        },
+        "fullNoteMode": "not-requested",
+        "contextMode": "related-original",
+        "fullNoteIncluded": false,
+        "includedCharacters": 178,
+        "fullNoteCharacters": 12001
+      },
+      "length": {
+        "originalCharacters": 24,
+        "targetCharacters": 180,
+        "minimumCharacters": 144,
+        "actualCharacters": 180,
+        "missingToMinimum": 0,
+        "missingToTarget": 0
+      },
+      "execution": {
+        "path": "react",
+        "rounds": 2,
+        "modelCalls": 2,
+        "toolCalls": 2,
+        "repairAttempts": 0
+      },
+      "issues": [],
+      "passed": true,
+      "writebackKind": "inline-text",
+      "elapsedMs": 1944,
+      "trace": [
+        {
+          "toolsEnabled": true,
+          "promptCharacters": 2306,
+          "toolNames": [
+            "read_note_range"
+          ]
+        },
+        {
+          "toolsEnabled": true,
+          "promptCharacters": 2992,
+          "toolNames": []
+        }
+      ],
+      "text": "解析文本上传到 MinIO，artifact、block、table 元数据写入 MySQL。其中 base64 图片与产物同样落在 MinIO，MySQL 只保留引用和 hash，不直接存储二进制内容。结构节点写入 MySQL 后，可选同步到 Elasticsearch 导航索引和 Neo4j 图投影。索引任务会验证解析任务 lineage 存在且已成功，以保证索引只基于冻结的解析版本。"
+    },
+    {
+      "model": "deepseek-v4-flash",
+      "sample": "multiline-10000",
+      "fullNoteCharacters": 9816,
+      "context": {
+        "planned": [
+          {
+            "sourceKind": "current-note",
+            "reason": "按扩写阈值纳入当前笔记全文。"
+          }
+        ],
+        "used": [
+          {
+            "sourceKind": "current-note",
+            "title": "解析流程",
+            "locator": "当前笔记 / L1-L507",
+            "characterCount": 9816
+          }
+        ],
+        "skipped": [],
+        "candidates": [],
+        "conflicts": [],
+        "personalization": {
+          "requested": false,
+          "applied": false,
+          "itemCount": 0
+        },
+        "fullNoteMode": "not-requested",
+        "contextMode": "full-note",
+        "fullNoteIncluded": true,
+        "includedCharacters": 9816,
+        "fullNoteCharacters": 9816
+      },
+      "length": {
+        "originalCharacters": 24,
+        "targetCharacters": 180,
+        "minimumCharacters": 144,
+        "actualCharacters": 163,
+        "missingToMinimum": 0,
+        "missingToTarget": 17
+      },
+      "execution": {
+        "path": "direct",
+        "rounds": 1,
+        "modelCalls": 1,
+        "toolCalls": 0,
+        "repairAttempts": 0
+      },
+      "issues": [],
+      "passed": true,
+      "writebackKind": "inline-text",
+      "elapsedMs": 746,
+      "trace": [],
+      "text": "解析文本上传到 MinIO，artifact、block、table 元数据写入 MySQL。base64 图片与产物落在 MinIO，MySQL 只保留引用和 hash。结构节点写入 MySQL 后，可选同步到 Elasticsearch 导航索引和 Neo4j 图投影。索引任务验证解析任务 lineage 存在且已成功，保证索引只基于冻结的解析版本。"
+    },
+    {
+      "model": "deepseek-v4-flash",
+      "sample": "technical-multi-paragraph",
+      "fullNoteCharacters": 3563,
+      "context": {
+        "planned": [
+          {
+            "sourceKind": "current-note",
+            "reason": "按扩写阈值纳入当前笔记全文。"
+          }
+        ],
+        "used": [
+          {
+            "sourceKind": "current-note",
+            "title": "解析流程",
+            "locator": "当前笔记 / L1-L611",
+            "characterCount": 3563
+          }
+        ],
+        "skipped": [],
+        "candidates": [],
+        "conflicts": [],
+        "personalization": {
+          "requested": false,
+          "applied": false,
+          "itemCount": 0
+        },
+        "fullNoteMode": "not-requested",
+        "contextMode": "full-note",
+        "fullNoteIncluded": true,
+        "includedCharacters": 3563,
+        "fullNoteCharacters": 3563
+      },
+      "length": {
+        "originalCharacters": 124,
+        "targetCharacters": 224,
+        "minimumCharacters": 180,
+        "actualCharacters": 221,
+        "missingToMinimum": 0,
+        "missingToTarget": 3
+      },
+      "execution": {
+        "path": "direct",
+        "rounds": 1,
+        "modelCalls": 1,
+        "toolCalls": 0,
+        "repairAttempts": 0
+      },
+      "issues": [],
+      "passed": true,
+      "writebackKind": "inline-text",
+      "elapsedMs": 996,
+      "trace": [],
+      "text": "解析文本上传到 MinIO，artifact、block、table 元数据写入 MySQL；base64 图片与产物落在 MinIO，MySQL 只保留引用和 hash。结构节点写入 MySQL 后，可选同步到 Elasticsearch 导航索引和 Neo4j 图投影。索引任务验证解析任务 lineage 存在且已成功，保证索引只基于冻结的解析版本。管理员确认策略后创建 BUILD_INDEX 任务，并冻结 sourceParseTaskId；解析和索引是两个独立阶段。"
+    }
+  ]
+}

@@ -1,0 +1,182 @@
+[
+  {
+    "id": "q01",
+    "category": "single-fact",
+    "question": "当前项目的数据库迁移工具是什么？",
+    "expectedRoute": "react-search",
+    "expectedGoalShape": { "goalCount": 1, "evidenceKind": "fact", "requirementCount": 1 },
+    "allowedCompleteness": ["complete"],
+    "requiredEvidenceSlots": ["migration-tool"]
+  },
+  {
+    "id": "q02",
+    "category": "single-fact",
+    "question": "当前笔记索引版本是什么？",
+    "expectedRoute": "react-search",
+    "expectedGoalShape": { "goalCount": 1, "evidenceKind": "fact", "requirementCount": 1 },
+    "allowedCompleteness": ["complete"],
+    "requiredEvidenceSlots": ["index-version"]
+  },
+  {
+    "id": "q03",
+    "category": "single-fact",
+    "question": "SpringBoot 服务的默认端口是多少？",
+    "expectedRoute": "react-search",
+    "expectedGoalShape": { "goalCount": 1, "evidenceKind": "fact", "requirementCount": 1 },
+    "allowedCompleteness": ["complete"],
+    "requiredEvidenceSlots": ["springboot-port"]
+  },
+  {
+    "id": "q04",
+    "category": "single-fact",
+    "question": "NER 代表什么？",
+    "expectedRoute": "react-search",
+    "expectedGoalShape": { "goalCount": 1, "evidenceKind": "definition", "requirementCount": 1 },
+    "allowedCompleteness": ["complete"],
+    "requiredEvidenceSlots": ["ner-definition"]
+  },
+  {
+    "id": "q05",
+    "category": "single-fact",
+    "question": "发布版本号是什么？",
+    "expectedRoute": "react-search",
+    "expectedGoalShape": { "goalCount": 1, "evidenceKind": "fact", "requirementCount": 1 },
+    "allowedCompleteness": ["complete"],
+    "requiredEvidenceSlots": ["release-version"]
+  },
+  {
+    "id": "q06",
+    "category": "comparison",
+    "question": "比较 Alpha 和 Beta 的缓存策略与失败重试次数。",
+    "expectedRoute": "react-search",
+    "expectedGoalShape": { "goalCount": 1, "evidenceKind": "comparison", "requirementCount": 2 },
+    "allowedCompleteness": ["complete"],
+    "requiredEvidenceSlots": ["alpha", "beta"]
+  },
+  {
+    "id": "q07",
+    "category": "comparison",
+    "question": "比较 Atlas 和 Beacon 的重试策略。",
+    "expectedRoute": "react-search",
+    "expectedGoalShape": { "goalCount": 1, "evidenceKind": "comparison", "requirementCount": 2 },
+    "allowedCompleteness": ["complete"],
+    "requiredEvidenceSlots": ["atlas", "beacon"]
+  },
+  {
+    "id": "q08",
+    "category": "comparison",
+    "question": "比较 Mercury 和 Venus 的请求超时与日志粒度。",
+    "expectedRoute": "react-search",
+    "expectedGoalShape": { "goalCount": 1, "evidenceKind": "comparison", "requirementCount": 2 },
+    "allowedCompleteness": ["complete"],
+    "requiredEvidenceSlots": ["mercury", "venus"]
+  },
+  {
+    "id": "q09",
+    "category": "comparison",
+    "question": "比较 Index-A 和 Index-B 的索引更新周期。",
+    "expectedRoute": "react-search",
+    "expectedGoalShape": { "goalCount": 1, "evidenceKind": "comparison", "requirementCount": 2 },
+    "allowedCompleteness": ["complete"],
+    "requiredEvidenceSlots": ["index-a", "index-b"]
+  },
+  {
+    "id": "q10",
+    "category": "comparison",
+    "question": "比较 Blue 和 Green 的发布与回滚策略。",
+    "expectedRoute": "react-search",
+    "expectedGoalShape": { "goalCount": 1, "evidenceKind": "comparison", "requirementCount": 2 },
+    "allowedCompleteness": ["complete"],
+    "requiredEvidenceSlots": ["blue", "green"]
+  },
+  {
+    "id": "q11",
+    "category": "lexical-variation",
+    "question": "Ner 在笔记中代表什么？",
+    "expectedRoute": "react-search",
+    "expectedGoalShape": { "goalCount": 1, "evidenceKind": "definition", "requirementCount": 1 },
+    "allowedCompleteness": ["complete"],
+    "requiredEvidenceSlots": ["ner-case-fold"]
+  },
+  {
+    "id": "q12",
+    "category": "lexical-variation",
+    "question": "Spingboot 服务的默认端口是多少？",
+    "expectedRoute": "react-search",
+    "expectedGoalShape": { "goalCount": 1, "evidenceKind": "fact", "requirementCount": 1 },
+    "allowedCompleteness": ["complete"],
+    "requiredEvidenceSlots": ["springboot-typo"]
+  },
+  {
+    "id": "q13",
+    "category": "lexical-variation",
+    "question": "Spring 服务的启动端口是什么？",
+    "expectedRoute": "react-search",
+    "expectedGoalShape": { "goalCount": 1, "evidenceKind": "fact", "requirementCount": 1 },
+    "allowedCompleteness": ["complete"],
+    "requiredEvidenceSlots": ["spring-prefix"]
+  },
+  {
+    "id": "q14",
+    "category": "lexical-variation",
+    "question": "RBG 检索链路的配置是什么？",
+    "expectedRoute": "react-search",
+    "expectedGoalShape": { "goalCount": 1, "evidenceKind": "fact", "requirementCount": 1 },
+    "allowedCompleteness": ["not-found", "partial"],
+    "requiredEvidenceSlots": []
+  },
+  {
+    "id": "q15",
+    "category": "lexical-variation",
+    "question": "命名实体识别对应哪个缩写？",
+    "expectedRoute": "react-search",
+    "expectedGoalShape": { "goalCount": 1, "evidenceKind": "definition", "requirementCount": 1 },
+    "allowedCompleteness": ["complete"],
+    "requiredEvidenceSlots": ["chinese-synonym"]
+  },
+  {
+    "id": "q16",
+    "category": "no-answer-or-conflict",
+    "question": "Kafka 的默认端口是多少？",
+    "expectedRoute": "react-search",
+    "expectedGoalShape": { "goalCount": 1, "evidenceKind": "fact", "requirementCount": 1 },
+    "allowedCompleteness": ["not-found", "partial"],
+    "requiredEvidenceSlots": []
+  },
+  {
+    "id": "q17",
+    "category": "no-answer-or-conflict",
+    "question": "版本 1.2.4 的发布日期是什么？",
+    "expectedRoute": "react-search",
+    "expectedGoalShape": { "goalCount": 1, "evidenceKind": "fact", "requirementCount": 1 },
+    "allowedCompleteness": ["not-found", "partial"],
+    "requiredEvidenceSlots": []
+  },
+  {
+    "id": "q18",
+    "category": "no-answer-or-conflict",
+    "question": "RBG 是不是 RAG 的别名？",
+    "expectedRoute": "react-search",
+    "expectedGoalShape": { "goalCount": 1, "evidenceKind": "fact", "requirementCount": 1 },
+    "allowedCompleteness": ["not-found", "partial"],
+    "requiredEvidenceSlots": []
+  },
+  {
+    "id": "q19",
+    "category": "no-answer-or-conflict",
+    "question": "Alpha 的超时是 30 秒还是 45 秒？",
+    "expectedRoute": "react-search",
+    "expectedGoalShape": { "goalCount": 1, "evidenceKind": "fact", "requirementCount": 1, "requiresConflict": true },
+    "allowedCompleteness": ["partial"],
+    "requiredEvidenceSlots": ["supporting", "contradicting"]
+  },
+  {
+    "id": "q20",
+    "category": "no-answer-or-conflict",
+    "question": "发布负责人是林青还是周宁？",
+    "expectedRoute": "react-search",
+    "expectedGoalShape": { "goalCount": 1, "evidenceKind": "fact", "requirementCount": 1, "requiresConflict": true },
+    "allowedCompleteness": ["partial"],
+    "requiredEvidenceSlots": ["supporting", "contradicting"]
+  }
+]

@@ -1,0 +1,120 @@
+.qa-workspace-stage .assistant-message-scroll-shell.has-conversation-nav {
+  gap: 18px;
+}
+
+.qa-workspace-stage .has-conversation-nav .assistant-message-list {
+  min-width: 0;
+  width: auto;
+}
+
+.assistant-conversation-nav {
+  display: flex;
+  min-height: 0;
+  flex: 0 0 32px;
+  padding: 44px 0 18px;
+}
+
+.assistant-conversation-nav-list {
+  width: 32px;
+  min-height: 0;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  scrollbar-width: none;
+}
+
+.assistant-conversation-nav-list::-webkit-scrollbar {
+  display: none;
+}
+
+.assistant-conversation-nav-item {
+  display: flex;
+  width: 32px;
+  height: 22px;
+  align-items: center;
+  padding: 0 2px;
+  border: 0;
+  border-radius: 5px;
+  background: transparent;
+  cursor: pointer;
+}
+
+.assistant-conversation-nav-item > span {
+  width: 16px;
+  height: 3px;
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--text-tertiary) 52%, transparent);
+  transition: width 140ms ease, background-color 140ms ease;
+}
+
+.assistant-conversation-nav-item:hover > span,
+.assistant-conversation-nav-item:focus-visible > span {
+  width: 24px;
+  background: var(--text-secondary);
+}
+
+.assistant-conversation-nav-item[aria-current='location'] > span {
+  width: 28px;
+  background: var(--text-primary);
+}
+
+.assistant-conversation-nav-item:focus-visible {
+  outline: 2px solid var(--accent-blue);
+  outline-offset: 1px;
+}
+
+.assistant-conversation-nav-preview.mantine-Tooltip-tooltip {
+  width: min(340px, calc(100vw - 32px));
+  padding: 13px 15px 11px;
+  border: 1px solid var(--border-color);
+  border-radius: 12px;
+  background: var(--surface-raised);
+  box-shadow: 0 8px 28px color-mix(in srgb, #0b1420 20%, transparent);
+  color: var(--text-primary);
+  font-family: var(--font-main);
+  white-space: normal;
+  pointer-events: none;
+}
+
+.assistant-conversation-nav-question,
+.assistant-conversation-nav-answer {
+  display: -webkit-box;
+  overflow: hidden;
+  overflow-wrap: anywhere;
+  -webkit-box-orient: vertical;
+}
+
+.assistant-conversation-nav-question {
+  font-size: 13px;
+  font-weight: 650;
+  line-height: 1.55;
+  -webkit-line-clamp: 2;
+}
+
+.assistant-conversation-nav-answer {
+  margin: 7px 0 10px;
+  color: var(--text-secondary);
+  font-size: 12px;
+  line-height: 1.6;
+  -webkit-line-clamp: 3;
+}
+
+.assistant-conversation-nav-preview-footer {
+  display: flex;
+  justify-content: space-between;
+  gap: 8px;
+  color: var(--text-tertiary);
+  font-size: 10px;
+  line-height: 1.4;
+}
+
+@media (max-width: 720px) {
+  .qa-workspace-stage .assistant-message-scroll-shell.has-conversation-nav { gap: 8px; }
+  .assistant-conversation-nav { flex-basis: 24px; }
+  .assistant-conversation-nav-list,
+  .assistant-conversation-nav-item { width: 24px; }
+  .assistant-conversation-nav-item[aria-current='location'] > span { width: 20px; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .assistant-conversation-nav-item > span { transition: none; }
+}

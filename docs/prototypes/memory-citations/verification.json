@@ -1,0 +1,195 @@
+{
+  "scope": "Standalone prototype with example data; production citation flow is not implemented here",
+  "checks": [
+    {
+      "theme": "dark",
+      "palette": "gray",
+      "width": 1280,
+      "overflow": false
+    },
+    {
+      "theme": "dark",
+      "palette": "gray",
+      "width": 760,
+      "overflow": false
+    },
+    {
+      "theme": "dark",
+      "palette": "gray",
+      "width": 390,
+      "overflow": false
+    },
+    {
+      "theme": "dark",
+      "palette": "green",
+      "width": 1280,
+      "overflow": false
+    },
+    {
+      "theme": "dark",
+      "palette": "green",
+      "width": 760,
+      "overflow": false
+    },
+    {
+      "theme": "dark",
+      "palette": "green",
+      "width": 390,
+      "overflow": false
+    },
+    {
+      "theme": "dark",
+      "palette": "blue",
+      "width": 1280,
+      "overflow": false
+    },
+    {
+      "theme": "dark",
+      "palette": "blue",
+      "width": 760,
+      "overflow": false
+    },
+    {
+      "theme": "dark",
+      "palette": "blue",
+      "width": 390,
+      "overflow": false
+    },
+    {
+      "theme": "dark",
+      "palette": "orange",
+      "width": 1280,
+      "overflow": false
+    },
+    {
+      "theme": "dark",
+      "palette": "orange",
+      "width": 760,
+      "overflow": false
+    },
+    {
+      "theme": "dark",
+      "palette": "orange",
+      "width": 390,
+      "overflow": false
+    },
+    {
+      "theme": "dark",
+      "palette": "pink",
+      "width": 1280,
+      "overflow": false
+    },
+    {
+      "theme": "dark",
+      "palette": "pink",
+      "width": 760,
+      "overflow": false
+    },
+    {
+      "theme": "dark",
+      "palette": "pink",
+      "width": 390,
+      "overflow": false
+    },
+    {
+      "theme": "light",
+      "palette": "gray",
+      "width": 1280,
+      "overflow": false
+    },
+    {
+      "theme": "light",
+      "palette": "gray",
+      "width": 760,
+      "overflow": false
+    },
+    {
+      "theme": "light",
+      "palette": "gray",
+      "width": 390,
+      "overflow": false
+    },
+    {
+      "theme": "light",
+      "palette": "green",
+      "width": 1280,
+      "overflow": false
+    },
+    {
+      "theme": "light",
+      "palette": "green",
+      "width": 760,
+      "overflow": false
+    },
+    {
+      "theme": "light",
+      "palette": "green",
+      "width": 390,
+      "overflow": false
+    },
+    {
+      "theme": "light",
+      "palette": "blue",
+      "width": 1280,
+      "overflow": false
+    },
+    {
+      "theme": "light",
+      "palette": "blue",
+      "width": 760,
+      "overflow": false
+    },
+    {
+      "theme": "light",
+      "palette": "blue",
+      "width": 390,
+      "overflow": false
+    },
+    {
+      "theme": "light",
+      "palette": "orange",
+      "width": 1280,
+      "overflow": false
+    },
+    {
+      "theme": "light",
+      "palette": "orange",
+      "width": 760,
+      "overflow": false
+    },
+    {
+      "theme": "light",
+      "palette": "orange",
+      "width": 390,
+      "overflow": false
+    },
+    {
+      "theme": "light",
+      "palette": "pink",
+      "width": 1280,
+      "overflow": false
+    },
+    {
+      "theme": "light",
+      "palette": "pink",
+      "width": 760,
+      "overflow": false
+    },
+    {
+      "theme": "light",
+      "palette": "pink",
+      "width": 390,
+      "overflow": false
+    }
+  ],
+  "interactions": [
+    "Knowledge-base capsule shape is reused",
+    "Source details are collapsed initially",
+    "Inline citation and source capsule toggle the same source panel",
+    "Expanded capsule state matches source panel visibility",
+    "Original conversation opens a modal",
+    "Escape closes the modal",
+    "Deleted original hides navigation and preserves the memory snapshot"
+  ],
+  "runtimeErrors": []
+}

@@ -1,0 +1,1 @@
+export interface ReleaseCheckResult { state: 'current' | 'available' | 'unavailable'; currentVersion: string; latestVersion?: string; releaseUrl?: string; checkedAt: string; code?: 'NO_RELEASE' | 'RATE_LIMITED' | 'TIMEOUT' | 'INVALID_RELEASE' | 'NETWORK_ERROR'; cached?: boolean }

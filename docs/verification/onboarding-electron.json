@@ -1,0 +1,121 @@
+{
+  "verifiedAt": "2026-10-02T11:14:01.499Z",
+  "method": "real Electron/main/preload/React; local controlled provider; not remote model acceptance",
+  "checks": [
+    "fresh menus, stable anchors, no automatic calls; skip preview; pause/restart/resume; stale test invalidation; test/save proof; draft collision; error and cancel; paused successful persistence; finish, restart and review",
+    "saved model directly enters Q&A without retesting; Send lazily binds an empty session and preserves the question; skipped setup survives restart with Send enabled; double-click submits one request; real QA persistence completes both steps",
+    "English/dark at actual Electron zoom 125%; failed catalog saves and offers explicit question bypass without claiming tested",
+    "legacy completed/skipped preserve sample flag and do not force guide; missing registered library counts as prior usage",
+    "real saved remote model directly generated an answer without retest/save or separate practice creation; normal QA persistence completed the guide"
+  ],
+  "requests": [
+    {
+      "url": "/api/tags"
+    },
+    {
+      "url": "/api/tags"
+    },
+    {
+      "url": "/api/tags"
+    },
+    {
+      "url": "/api/tags"
+    },
+    {
+      "url": "/api/tags"
+    },
+    {
+      "url": "/api/tags"
+    },
+    {
+      "url": "/api/ps"
+    },
+    {
+      "url": "/api/show",
+      "model": "onboarding-model"
+    },
+    {
+      "url": "/api/generate",
+      "model": "onboarding-model",
+      "stream": true
+    },
+    {
+      "url": "/api/tags"
+    },
+    {
+      "url": "/api/ps"
+    },
+    {
+      "url": "/api/show",
+      "model": "onboarding-model"
+    },
+    {
+      "url": "/api/generate",
+      "model": "onboarding-model",
+      "stream": true
+    },
+    {
+      "url": "/api/tags"
+    },
+    {
+      "url": "/api/ps"
+    },
+    {
+      "url": "/api/show",
+      "model": "onboarding-model"
+    },
+    {
+      "url": "/api/generate",
+      "model": "onboarding-model",
+      "stream": true
+    },
+    {
+      "url": "/api/tags"
+    },
+    {
+      "url": "/api/tags"
+    },
+    {
+      "url": "/api/tags"
+    },
+    {
+      "url": "/api/ps"
+    },
+    {
+      "url": "/api/show",
+      "model": "onboarding-model"
+    },
+    {
+      "url": "/api/generate",
+      "model": "onboarding-model",
+      "stream": true
+    },
+    {
+      "url": "/api/tags"
+    },
+    {
+      "url": "/api/ps"
+    },
+    {
+      "url": "/api/show",
+      "model": "onboarding-model"
+    },
+    {
+      "url": "/api/generate",
+      "model": "onboarding-model",
+      "stream": true
+    },
+    {
+      "url": "/api/tags"
+    },
+    {
+      "url": "/v1/models"
+    }
+  ],
+  "screenshots": "E:\\AI-Project\\menghan-notes\\output\\verification\\onboarding",
+  "viewportAndZoom": [
+    "1200x800 @100%",
+    "1024x768 @100%",
+    "1200x800 @125%"
+  ]
+}

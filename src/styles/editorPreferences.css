@@ -1,0 +1,35 @@
+/* Preferences only affect the active note's document surfaces. */
+.note-document-surface { --editor-font-size: 16px; --editor-line-height: 1.7; --editor-paragraph-spacing: 12px; --editor-content-width: 900px; }
+.editor-viewport { flex: 1 1 0; min-height: 0; overflow: auto; }
+.note-document-surface .editor-container,
+.note-document-surface .preview-content { max-width: var(--editor-content-width); width: 100%; box-sizing: border-box; margin: 0 auto; padding: 40px 40px 300px; }
+.note-document-surface .editor-container.with-line-numbers { max-width: calc(var(--editor-content-width) + 40px); padding-left: 80px; }
+.note-document-surface .ProseMirror,
+.note-document-surface .preview-content { font-size: var(--editor-font-size); line-height: var(--editor-line-height); }
+.note-document-surface :is(.ProseMirror,.preview-content) p { margin-top: 0; margin-bottom: var(--editor-paragraph-spacing); }
+.note-document-surface :is(.ProseMirror,.preview-content) :is(li,td,th,blockquote) p { margin: 0; }
+.note-document-surface :is(.ProseMirror,.preview-content) :is(h1,h2,h3,h4,h5,h6) { line-height: 1.3; }
+.note-document-surface :is(.ProseMirror,.preview-content) h1 { font-size: 2em; }
+.note-document-surface :is(.ProseMirror,.preview-content) h2 { font-size: 1.5em; }
+.note-document-surface :is(.ProseMirror,.preview-content) h3 { font-size: 1.25em; }
+.note-document-surface :is(.ProseMirror,.preview-content) :is(pre,.code-block-node-view,.formula-source,.mermaid-editor-node-view) { font-size: 14px; line-height: 1.6; }
+.note-document-surface :is(.ProseMirror,.preview-content) table { display: block; max-width: 100%; overflow-x: auto; }
+.note-document-surface .source-editor-zoom { max-width: var(--editor-content-width); width: calc(100% / var(--editor-zoom, 1)); margin: 0 auto; display: flex; flex-direction: column; }
+.note-document-surface .source-editor > .cm-editor { font-size: var(--editor-font-size); }
+.note-document-surface .source-editor > .cm-editor .cm-line { line-height: var(--editor-line-height); }
+.note-document-surface > .editor-mode-bar { flex: 0 0 auto; flex-wrap: wrap; min-height: 40px; height: auto; }
+.editor-writing-toggle { border: 1px solid var(--border-subtle); background: transparent; color: var(--text-secondary); border-radius: 5px; padding: 4px 7px; cursor: pointer; font: inherit; font-size: 12px; }
+.editor-writing-toggle[aria-pressed='true'] { color: var(--accent-primary); background: var(--surface-selected); }
+.editor-writing-toggle:focus-visible { outline: 2px solid var(--accent-focus); outline-offset: 2px; }
+.app-shell.note-focus-active > .app-nav-rail,
+.note-focus-active .notes-main-view > .sidebar,
+.note-focus-active .notes-main-view > .sidebar-collapsed,
+.note-focus-active .notes-main-view > aside,
+.note-focus-active .notes-main-view .workspace > .knowledge-panel,
+.note-focus-active .notes-main-view .workspace > .knowledge-panel-collapsed { display: none; }
+.selection-floating-toolbar { position: fixed; z-index: 1490; display: flex; gap: 2px; padding: 5px; border: 1px solid var(--border-subtle); border-radius: 8px; background: var(--surface-raised); box-shadow: 0 4px 18px #0002; }
+.selection-floating-toolbar button { border: 0; background: transparent; color: var(--text-primary); border-radius: 4px; padding: 0; width: 36px; height: 30px; display: grid; place-items: center; cursor: pointer; }
+.selection-floating-toolbar button:hover,.selection-floating-toolbar button[aria-pressed='true'] { background: var(--surface-selected); }
+.selection-floating-toolbar button:focus-visible { outline: 2px solid var(--accent-focus); }
+.selection-floating-toolbar button:disabled { opacity: .4; cursor: not-allowed; }
+@media (max-width: 1100px) { .note-document-surface .editor-container,.note-document-surface .preview-content { padding-left: 20px; padding-right: 20px; } .note-document-surface .editor-container.with-line-numbers { padding-left: 60px; } }

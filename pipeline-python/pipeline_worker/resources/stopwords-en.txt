@@ -1,0 +1,22 @@
+# Base English stopwords for the deterministic keyword candidate layer.
+a
+an
+and
+are
+as
+at
+be
+by
+for
+from
+in
+is
+it
+of
+on
+or
+that
+the
+this
+to
+with

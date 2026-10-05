@@ -1,0 +1,289 @@
+<!doctype html>
+<html lang="zh-CN" data-theme="dark" data-palette="gray">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Trellora · 编辑区交互原型</title>
+  <script src="theme-tokens.js"></script>
+  <style>
+    :root { --canvas:#1C1F24; --panel:#252A32; --paper:#303640; --text:#EBEEF3; --secondary:#BAC3D0; --muted:#9AA7BA; --border:#3D4551; --accent:#B6C0D0; --selected:#414D60; --focus:#D0D9E6; --hover:#3B4350; }
+    * { box-sizing:border-box; }
+    body { margin:0; background:var(--canvas); color:var(--text); font-family:"Segoe UI","Microsoft YaHei",sans-serif; font-size:14px; -webkit-font-smoothing:antialiased; }
+    button,select { font:inherit; color:inherit; }
+    button { cursor:pointer; }
+    button:focus-visible,select:focus-visible { outline:2px solid var(--focus); outline-offset:3px; }
+    button { border:0; }
+    svg { width:19px; height:19px; fill:none; stroke:currentColor; stroke-width:1.65; stroke-linecap:round; stroke-linejoin:round; flex-shrink:0; }
+    .design { max-width:1600px; margin:0 auto; padding:28px 34px 24px; }
+    .design-head { display:flex; align-items:flex-end; justify-content:space-between; gap:20px; margin-bottom:24px; }
+    .eyebrow { font-size:11px; letter-spacing:.12em; color:var(--muted); margin-bottom:9px; }
+    h1 { font-size:25px; line-height:1.3; font-weight:600; margin:0 0 8px; letter-spacing:.015em; }
+    .subtitle { color:var(--secondary); margin:0; font-size:13px; line-height:1.7; }
+    .prototype-controls { display:flex; align-items:center; flex-wrap:wrap; justify-content:flex-end; gap:12px; }
+    .states { display:flex; padding:4px; border:1px solid var(--border); border-radius:7px; background:var(--panel); }
+    .states button { font-size:12px; padding:7px 12px; background:transparent; border-radius:4px; color:var(--secondary); white-space:nowrap; }
+    .states button[aria-pressed="true"] { background:var(--selected); color:var(--text); }
+    .appearance { display:flex; align-items:center; gap:8px; }
+    .appearance select { background:var(--panel); padding:8px 9px; border:1px solid var(--border); border-radius:5px; font-size:12px; }
+    .swatches { display:flex; gap:7px; }
+    .swatch { width:16px; height:16px; border-radius:50%; background:var(--swatch); box-shadow:0 0 0 2px var(--canvas); padding:0; }
+    .swatch[aria-pressed="true"] { outline:1px solid var(--secondary); outline-offset:3px; }
+    .desktop { height:748px; border:1px solid var(--border); border-radius:10px; overflow:hidden; box-shadow:0 18px 50px #0002; background:var(--panel); display:flex; flex-direction:column; }
+    .titlebar { height:39px; flex:0 0 39px; display:flex; align-items:center; gap:12px; padding:0 14px; border-bottom:1px solid var(--border); font-size:12px; }
+    .titlebar img { width:20px; height:20px; }
+    .brand { font-weight:600; letter-spacing:.03em; }
+    .menu { display:flex; gap:18px; margin-left:20px; color:var(--secondary); }
+    .window-actions { margin-left:auto; display:flex; gap:23px; color:var(--muted); }
+    .window-actions svg { width:14px; height:14px; }
+    .app { display:flex; flex:1; min-height:0; }
+    .rail { width:52px; flex:0 0 52px; border-right:1px solid var(--border); display:flex; align-items:center; flex-direction:column; gap:16px; padding-top:17px; background:var(--canvas); color:var(--muted); }
+    .rail-item { width:33px; height:33px; display:grid; place-items:center; border-radius:6px; }
+    .rail-item.active { background:var(--selected); color:var(--accent); }
+    .rail-bottom { margin-top:auto; margin-bottom:19px; }
+    .sidebar { width:210px; flex:0 0 210px; padding:21px 12px; border-right:1px solid var(--border); }
+    .sidebar-title { display:flex; align-items:center; justify-content:space-between; font-size:14px; font-weight:600; padding:0 6px; }
+    .search { margin:19px 4px 24px; padding:9px 10px; display:flex; align-items:center; gap:8px; color:var(--muted); border:1px solid var(--border); border-radius:5px; font-size:12px; }
+    .search svg { width:15px; height:15px; }
+    .tree-group { color:var(--muted); font-size:11px; margin:22px 9px 9px; }
+    .tree-row { display:flex; align-items:center; gap:9px; min-height:35px; border-radius:5px; padding:7px 9px; font-size:12px; color:var(--secondary); }
+    .tree-row svg { width:15px; height:15px; }
+    .tree-row.selected { color:var(--text); background:var(--selected); }
+    .tree-row.nested { padding-left:28px; }
+    .workspace { min-width:0; flex:1; display:flex; flex-direction:column; background:var(--canvas); }
+    .note-header { height:48px; flex:0 0 48px; display:flex; align-items:center; justify-content:space-between; padding:0 22px; background:var(--panel); border-bottom:1px solid var(--border); }
+    .filename { display:flex; align-items:center; gap:9px; font-size:13px; }
+    .filename svg { width:15px; height:15px; color:var(--muted); }
+    .mode-tabs { display:flex; gap:17px; font-size:12px; color:var(--muted); }
+    .mode-tabs .active { color:var(--accent); }
+    .editor-modes { height:40px; flex:0 0 40px; padding:0 20px; display:flex; align-items:center; gap:8px; background:var(--panel); }
+    .mode-button { display:flex; align-items:center; gap:5px; padding:5px 8px; border:1px solid var(--border); background:transparent; border-radius:5px; font-size:11px; color:var(--secondary); }
+    .mode-button svg { width:13px; height:13px; }
+    .mode-button[aria-pressed="true"] { color:var(--accent); background:var(--selected); }
+    .count { margin-left:auto; color:var(--muted); font-size:11px; }
+    .toolbar { flex:0 0 auto; background:var(--panel); border-bottom:1px solid var(--border); padding:9px 18px; display:flex; gap:3px; align-items:center; flex-wrap:wrap; min-height:50px; }
+    .tool { width:31px; height:30px; display:grid; place-items:center; color:var(--secondary); border-radius:4px; background:transparent; }
+    .tool:hover { background:var(--hover); }
+    .tool.bold { font-size:19px; font-weight:600; }
+    .tool.italic { font-style:italic; font-size:20px; }
+    .tool.heading { font-size:14px; }
+    .tool.heading sub { font-size:9px; }
+    .tool svg { width:18px; height:18px; }
+    .sep { width:1px; height:20px; margin:0 6px; background:var(--border); }
+    .tool-select { border:1px solid var(--border); border-radius:4px; padding:5px 8px; background:var(--canvas); color:var(--secondary); font-size:11px; min-width:95px; }
+    .canvas { flex:1; min-height:0; padding:18px 20px; display:flex; }
+    .paper { position:relative; min-width:0; flex:1; overflow:auto; border:1px solid var(--border); border-radius:6px; background:var(--paper); cursor:text; transition:border-color .18s; }
+    .paper:hover { border-color:color-mix(in srgb,var(--accent) 50%,var(--border)); }
+    .paper:focus-within { border-color:color-mix(in srgb,var(--accent) 62%,var(--border)); }
+    .paper-inner { position:relative; min-height:100%; padding:42px 40px 150px; }
+    .paper.typewriter .paper-inner { padding-top:var(--typewriter-padding,220px); padding-bottom:240px; }
+    .line-band { position:absolute; top:var(--line-top,42px); left:26px; right:26px; height:40px; background:color-mix(in srgb,var(--accent) 7%,transparent); border-radius:3px; pointer-events:none; opacity:1; }
+    .line-band::before { content:""; position:absolute; top:7px; bottom:7px; left:0; width:2px; background:var(--accent); border-radius:2px; }
+    #note-editor { position:relative; width:100%; min-height:34px; font-family:"Segoe UI","Microsoft YaHei",sans-serif; font-size:16px; line-height:1.85; outline:none; color:var(--text); caret-color:var(--focus); overflow-wrap:anywhere; }
+    #note-editor p { margin:0 0 14px; min-height:29.6px; }
+    #note-editor h2 { font-size:23px; line-height:1.4; font-weight:600; margin:0 0 22px; }
+    #note-editor[data-empty="true"]::before { content:"点击这里，开始记录…"; position:absolute; left:0; top:0; color:var(--secondary); pointer-events:none; }
+    #note-editor[data-empty="true"]:focus::before { content:"开始记录…"; }
+    .empty-help { position:absolute; top:calc(var(--line-top,42px) + 51px); left:40px; right:30px; color:var(--muted); font-size:12px; line-height:1.65; pointer-events:none; }
+    .paper:focus-within .empty-help { visibility:hidden; }
+    .continue-row { position:absolute; top:var(--tail-top,42px); left:40px; height:40px; display:flex; align-items:center; pointer-events:none; }
+    .continue-row span { color:var(--muted); font-size:13px; }
+    .paper:focus-within .continue-row { visibility:hidden; }
+    .paper:not([data-empty="true"]):not(:focus-within) .line-band { opacity:.65; }
+    .paper[data-empty="true"] .continue-row,.paper[data-empty="false"] .empty-help,.paper[data-blank-tail="false"] .continue-row { display:none; }
+    .editor-status { flex:0 0 35px; height:35px; padding:0 23px; display:flex; align-items:center; gap:8px; color:var(--muted); font-size:11px; border-top:1px solid var(--border); background:var(--panel); }
+    .status-dot { width:5px; height:5px; border-radius:50%; background:var(--muted); }
+    .editor-status.writing .status-dot { background:var(--accent); }
+    .resume { background:transparent; color:var(--accent); margin-left:auto; padding:4px 5px; display:flex; align-items:center; gap:5px; font-size:11px; }
+    .resume svg { width:13px; height:13px; }
+    .zoom { margin-left:auto; display:flex; align-items:center; gap:11px; }
+    .resume:not([hidden]) + .zoom { margin-left:14px; }
+    [hidden] { display:none!important; }
+    .knowledge { width:220px; flex:0 0 220px; padding:22px 17px; border-left:1px solid var(--border); }
+    .knowledge h3 { font-size:14px; margin:0 0 12px; font-weight:600; }
+    .knowledge .metadata { font-size:11px; line-height:2.1; color:var(--muted); }
+    .tags { display:flex; gap:7px; align-items:center; font-size:11px; color:var(--secondary); margin:13px 0 24px; }
+    .tags svg { width:14px; height:14px; }
+    .knowledge-divider { height:1px; background:var(--border); margin:0 -17px 23px; }
+    .knowledge-label { display:flex; gap:7px; align-items:center; font-size:12px; color:var(--secondary); margin:20px 0 10px; }
+    .knowledge-label svg { width:16px; height:16px; color:var(--accent); }
+    .knowledge-card { font-size:11px; line-height:1.9; padding:11px 12px; color:var(--muted); background:var(--canvas); border:1px solid var(--border); border-radius:6px; }
+    .notes { display:grid; grid-template-columns:repeat(3,1fr); gap:28px; margin-top:24px; }
+    .design-note { display:flex; gap:11px; align-items:flex-start; }
+    .note-icon { width:28px; height:28px; background:var(--selected); color:var(--accent); border-radius:5px; display:grid; place-items:center; flex-shrink:0; }
+    .note-icon svg { width:16px; height:16px; }
+    .design-note strong { display:block; font-size:13px; font-weight:600; margin:1px 0 7px; }
+    .design-note p { margin:0; font-size:12px; line-height:1.8; color:var(--secondary); }
+    .prototype-foot { margin-top:20px; color:var(--muted); font-size:10px; }
+    @media(min-height:1040px) { .desktop { height:calc(100vh - 292px); min-height:748px; } }
+    @media(max-width:1250px) { .design { padding:24px; } .sidebar { width:175px; flex-basis:175px; } .knowledge { width:190px; flex-basis:190px; padding:22px 14px; } .paper-inner { padding-left:30px; padding-right:30px; } .empty-help,.continue-row { left:30px; } .line-band { left:18px; right:18px; } .toolbar { padding:8px 12px; } .tool { width:28px; } .design-head { align-items:flex-start; } .prototype-controls { max-width:470px; } }
+    @media(max-width:1000px) { .knowledge { display:none; } .design-head { flex-direction:column; } .prototype-controls { max-width:none; justify-content:flex-start; } .notes { gap:16px; } }
+    @media(max-width:680px) { .design { padding:18px 12px; } h1 { font-size:21px; } .sidebar,.rail { display:none; } .desktop { height:670px; } .menu { display:none; } .canvas { padding:12px; } .notes { grid-template-columns:1fr; } .paper-inner { padding-left:24px; padding-right:24px; } .empty-help,.continue-row { left:24px; } .prototype-controls { gap:16px; } }
+    @media(prefers-reduced-motion:reduce) { * { transition:none!important; } }
+  </style>
+</head>
+<body>
+  <svg style="display:none" aria-hidden="true"><defs>
+    <symbol id="file" viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8Z"/><path d="M14 2v6h6M8 13h8M8 17h6"/></symbol>
+    <symbol id="folder" viewBox="0 0 24 24"><path d="M3 6a2 2 0 0 1 2-2h5l2 3h7a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2Z"/></symbol>
+    <symbol id="search" viewBox="0 0 24 24"><circle cx="10.5" cy="10.5" r="6.5"/><path d="m16 16 5 5"/></symbol>
+    <symbol id="plus" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></symbol>
+    <symbol id="pencil" viewBox="0 0 24 24"><path d="m16 3 5 5-12 12-6 1 1-6Z M13 6l5 5"/></symbol>
+    <symbol id="sparkles" viewBox="0 0 24 24"><path d="m12 3 2.5 6.5L21 12l-6.5 2.5L12 21l-2.5-6.5L3 12l6.5-2.5Z M20 2v4M18 4h4"/></symbol>
+    <symbol id="grid" viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M9 3v18"/></symbol>
+    <symbol id="book" viewBox="0 0 24 24"><path d="M12 5v16M12 5C8 2 3 3 3 3v16s5-1 9 2c4-3 9-2 9-2V3s-5-1-9 2Z"/></symbol>
+    <symbol id="gear" viewBox="0 0 24 24"><circle cx="12" cy="12" r="4"/><path d="m9 3 6 0 1 3 3 1 2 5-2 5-3 1-1 3H9l-1-3-3-1-2-5 2-5 3-1Z"/></symbol>
+    <symbol id="code" viewBox="0 0 24 24"><path d="m8 5-7 7 7 7m8-14 7 7-7 7"/></symbol>
+    <symbol id="link" viewBox="0 0 24 24"><path d="m10 13 4-4M8 16l-2 2a4 4 0 0 1-6-6l6-6a4 4 0 0 1 6 0m0 2 2-2a4 4 0 0 1 6 6l-6 6a4 4 0 0 1-6 0" transform="translate(2 0)"/></symbol>
+    <symbol id="list" viewBox="0 0 24 24"><path d="M9 6h12M9 12h12M9 18h12M3 6h1M3 12h1M3 18h1"/></symbol>
+    <symbol id="quote" viewBox="0 0 24 24"><path d="M4 4h6v9c0 5-3 7-6 7v-3c2 0 3-2 3-4H4Zm10 0h6v9c0 5-3 7-6 7v-3c2 0 3-2 3-4h-3Z"/></symbol>
+    <symbol id="undo" viewBox="0 0 24 24"><path d="M3 10h11a6 6 0 0 1 6 6M3 10l5-5M3 10l5 5"/></symbol>
+    <symbol id="image" viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8" cy="8" r="1.5"/><path d="m21 16-6-6-12 11"/></symbol>
+    <symbol id="focus" viewBox="0 0 24 24"><path d="M8 3H3v5m13-5h5v5M3 16v5h5m13-5v5h-5"/></symbol>
+    <symbol id="cursor" viewBox="0 0 24 24"><path d="M8 3h8M12 3v18M8 21h8"/></symbol>
+    <symbol id="arrow" viewBox="0 0 24 24"><path d="M20 12H4m6-6-6 6 6 6"/></symbol>
+    <symbol id="min" viewBox="0 0 24 24"><path d="M4 12h16"/></symbol>
+    <symbol id="close" viewBox="0 0 24 24"><path d="m5 5 14 14M19 5 5 19"/></symbol>
+  </defs></svg>
+  <main class="design">
+    <header class="design-head">
+      <div><div class="eyebrow">TRELLORA / 编辑区交互原型</div><h1>看得见输入位置，点空白也能继续写</h1><p class="subtitle">保留打字机模式，用轻提示和清晰的写作区帮助用户找到入口。</p></div>
+      <div class="prototype-controls" aria-label="原型演示控制">
+        <div class="states" aria-label="编辑状态"><button data-state="empty" aria-pressed="true">空笔记</button><button data-state="resume" aria-pressed="false">继续编辑</button><button data-state="writing" aria-pressed="false">写作中</button></div>
+        <div class="appearance"><select id="theme" aria-label="外观"><option value="dark">深色</option><option value="light">浅色</option></select><div class="swatches" aria-label="主题配色"><button class="swatch" style="--swatch:#83C8A5" data-palette="green" aria-label="森林绿" aria-pressed="false"></button><button class="swatch" style="--swatch:#93B8E8" data-palette="blue" aria-label="雾蓝" aria-pressed="false"></button><button class="swatch" style="--swatch:#E5AE7E" data-palette="orange" aria-label="暖橙" aria-pressed="false"></button><button class="swatch" style="--swatch:#B6C0D0" data-palette="gray" aria-label="石墨灰" aria-pressed="true"></button><button class="swatch" style="--swatch:#DEA0BB" data-palette="pink" aria-label="玫瑰粉" aria-pressed="false"></button></div></div>
+      </div>
+    </header>
+    <section class="desktop" aria-label="Trellora 笔记区原型">
+      <div class="titlebar"><img src="../../../build/icon.svg" alt="Trellora"><span class="brand">Trellora</span><div class="menu"><span>文件</span><span>编辑</span><span>视图</span><span>帮助</span></div><div class="window-actions" aria-hidden="true"><svg><use href="#min"/></svg><svg><use href="#focus"/></svg><svg><use href="#close"/></svg></div></div>
+      <div class="app">
+        <nav class="rail" aria-label="应用导航"><div class="rail-item active"><svg><use href="#pencil"/></svg></div><div class="rail-item"><svg><use href="#folder"/></svg></div><div class="rail-item"><svg><use href="#sparkles"/></svg></div><div class="rail-item"><svg><use href="#book"/></svg></div><div class="rail-item rail-bottom"><svg><use href="#gear"/></svg></div></nav>
+        <aside class="sidebar"><div class="sidebar-title">笔记库 <svg><use href="#plus"/></svg></div><div class="search"><svg><use href="#search"/></svg>搜索笔记</div><div class="tree-group">我的笔记</div><div class="tree-row"><svg><use href="#folder"/></svg>日常记录</div><div class="tree-row nested selected"><svg><use href="#file"/></svg>1111</div><div class="tree-row nested"><svg><use href="#file"/></svg>产品想法</div><div class="tree-row"><svg><use href="#folder"/></svg>学习笔记</div><div class="tree-row nested"><svg><use href="#file"/></svg>Agent 工作流</div><div class="tree-group">最近打开</div><div class="tree-row"><svg><use href="#file"/></svg>使用指南</div></aside>
+        <section class="workspace">
+          <header class="note-header"><div class="filename"><svg><use href="#file"/></svg>1111.md</div><div class="mode-tabs"><span class="active">编辑</span><span>源码</span><span>预览</span></div></header>
+          <div class="editor-modes"><button class="mode-button" id="typewriter" aria-pressed="true"><svg><use href="#cursor"/></svg>打字机模式</button><span class="mode-button"><svg><use href="#focus"/></svg>专注模式</span><span class="count" id="word-count">0 字</span></div>
+          <div class="toolbar" aria-label="现有编辑工具栏"><button class="tool bold" data-format="bold" title="加粗">B</button><button class="tool italic" data-format="italic" title="斜体">I</button><button class="tool" data-format="strikeThrough" title="删除线"><s>S</s></button><span class="tool"><svg><use href="#code"/></svg></span><span class="tool"><svg><use href="#link"/></svg></span><span class="sep"></span><span class="tool heading">H<sub>1</sub></span><span class="tool heading">H<sub>2</sub></span><span class="tool heading">H<sub>3</sub></span><span class="sep"></span><span class="tool"><svg><use href="#list"/></svg></span><span class="tool"><svg><use href="#quote"/></svg></span><span class="tool"><svg><use href="#image"/></svg></span><span class="sep"></span><select class="tool-select" aria-label="代码语言"><option>纯文本</option></select><span class="tool"><svg><use href="#grid"/></svg></span><span class="tool"><svg><use href="#undo"/></svg></span></div>
+          <div class="canvas"><div class="paper typewriter" id="paper" data-empty="true"><div class="paper-inner" id="paper-inner"><div class="line-band" aria-hidden="true"></div><div id="note-editor" contenteditable="true" role="textbox" aria-label="笔记正文" aria-multiline="true" data-empty="true" spellcheck="false"><p><br></p></div><div class="empty-help">点击写作区任意空白处，也能开始输入</div><div class="continue-row"><span>点击空白处，继续记录…</span></div></div></div></div>
+          <footer class="editor-status" id="editor-status"><span class="status-dot"></span><span id="status-text">点击写作区，开始输入</span><button class="resume" id="resume" hidden><svg><use href="#arrow"/></svg>回到光标</button><span class="zoom">100% <span>⌄</span></span></footer>
+        </section>
+        <aside class="knowledge"><h3>1111</h3><div class="metadata">1111.md<br>Markdown · <span id="detail-count">0 字</span></div><div class="tags"><svg><use href="#plus"/></svg>添加标签</div><div class="knowledge-divider"></div><div class="knowledge-label"><svg><use href="#file"/></svg>概览</div><div class="knowledge-card">生成一次概览后，可在这里查看笔记摘要。</div><div class="knowledge-label"><svg><use href="#sparkles"/></svg>智能建议</div><div class="knowledge-card">生成概览后，会在这里显示相关建议。</div></aside>
+      </div>
+    </section>
+    <section class="notes" aria-label="设计说明"><div class="design-note"><div class="note-icon"><svg><use href="#cursor"/></svg></div><div><strong>输入位置更明显</strong><p>淡色输入行与清楚的占位文案，让空笔记也有可见的编辑入口。</p></div></div><div class="design-note"><div class="note-icon"><svg><use href="#focus"/></svg></div><div><strong>空白区域都能点击</strong><p>写作区有轻边界；点击外围空白，回到上次光标位置继续编辑。</p></div></div><div class="design-note"><div class="note-icon"><svg><use href="#pencil"/></svg></div><div><strong>写起来保持干净</strong><p>开始输入后收起辅助文案，只留下轻微的当前行提示。</p></div></div></section>
+    <div class="prototype-foot">交互原型 · 可切换状态、外观和配色，也可直接输入 · 输入仅保留在当前页面</div>
+  </main>
+  <script>
+    const root = document.documentElement;
+    const paper = document.getElementById('paper');
+    const inner = document.getElementById('paper-inner');
+    const editor = document.getElementById('note-editor');
+    let savedRange = null;
+    let composing = false;
+    const query = new URLSearchParams(location.search);
+    const sample = '<h2>让想法落在笔记里</h2><p>今天整理了几个产品想法，先把关键问题记下来，再逐步补充细节。</p><p>好的写作体验，是随时都能找到继续写的位置。</p><p><br></p>';
+
+    function applyTheme(theme, palette) {
+      theme = theme === 'light' ? 'light' : 'dark';
+      palette = ['green','blue','orange','gray','pink'].includes(palette) ? palette : 'gray';
+      root.dataset.theme = theme; root.dataset.palette = palette;
+      const colors = window.prototypeColors[theme][palette];
+      for (const [name, source] of Object.entries({canvas:'canvas',panel:'panel',paper:'raised',text:'text',secondary:'secondary',muted:'tertiary',border:'border',accent:'accent',selected:'selected',focus:'focus',hover:'hover'})) root.style.setProperty('--'+name,colors[source]);
+      document.getElementById('theme').value = theme;
+      document.querySelectorAll('[data-palette]').forEach(button => { if(button.tagName === 'BUTTON') button.setAttribute('aria-pressed',String(button.dataset.palette === palette)); });
+    }
+
+    function isEmpty() { return !editor.innerText.trim(); }
+
+    function measureLine() {
+      const selection = window.getSelection();
+      let rect = null;
+      if (selection?.rangeCount && editor.contains(selection.anchorNode)) rect = selection.getRangeAt(0).getClientRects()[0];
+      if (!rect || rect.height === 0) rect = editor.lastElementChild?.getBoundingClientRect() || editor.getBoundingClientRect();
+      const top = rect.top - inner.getBoundingClientRect().top - 5;
+      inner.style.setProperty('--line-top',Math.max(0,top)+'px');
+      const tail = editor.lastElementChild?.getBoundingClientRect() || editor.getBoundingClientRect();
+      inner.style.setProperty('--tail-top',Math.max(0,tail.top-inner.getBoundingClientRect().top-5)+'px');
+    }
+
+    function update() {
+      const empty = isEmpty();
+      const focused = document.activeElement === editor;
+      editor.dataset.empty = String(empty); paper.dataset.empty = String(empty);
+      paper.dataset.blankTail = String(!editor.lastElementChild?.innerText.trim());
+      const count = editor.innerText.replace(/\s/g,'').length;
+      document.getElementById('word-count').textContent = count+' 字';
+      document.getElementById('detail-count').textContent = count+' 字';
+      document.getElementById('status-text').textContent = focused ? '正在编辑' : empty ? '点击写作区，开始输入' : '点击空白处，回到上次编辑位置';
+      document.getElementById('editor-status').classList.toggle('writing',focused);
+      document.getElementById('resume').hidden = focused || empty;
+      const state = empty ? 'empty' : focused ? 'writing' : 'resume';
+      document.querySelectorAll('[data-state]').forEach(button => button.setAttribute('aria-pressed',String(button.dataset.state === state)));
+      measureLine();
+    }
+
+    function endRange() { const range = document.createRange(); range.selectNodeContents(editor.lastElementChild || editor); range.collapse(false); return range; }
+
+    function followCaret() {
+      if (!paper.classList.contains('typewriter') || composing) return;
+      const selection = window.getSelection();
+      if (document.activeElement === editor && selection && !selection.isCollapsed) return;
+      const range = savedRange && editor.contains(savedRange.startContainer) ? savedRange : endRange();
+      const rect = range.getClientRects()[0] || editor.lastElementChild.getBoundingClientRect();
+      const viewport = paper.getBoundingClientRect();
+      paper.scrollTop += (rect.top+rect.bottom-viewport.top-viewport.bottom)/2;
+    }
+
+    function resumeEditing() {
+      editor.focus({preventScroll:true});
+      const selection = window.getSelection();
+      const range = savedRange && editor.contains(savedRange.startContainer) ? savedRange : endRange();
+      selection.removeAllRanges(); selection.addRange(range);
+      requestAnimationFrame(() => { followCaret(); update(); });
+    }
+
+    function layout() {
+      inner.style.setProperty('--typewriter-padding',Math.max(60,(paper.clientHeight-40)/2)+'px');
+      requestAnimationFrame(measureLine);
+    }
+
+    function setState(state) {
+      editor.blur();
+      editor.innerHTML = state === 'empty' ? '<p><br></p>' : sample;
+      savedRange = endRange();
+      paper.scrollTop = 0;
+      if (state === 'writing') resumeEditing();
+      update(); layout();
+      requestAnimationFrame(() => { followCaret(); update(); });
+    }
+
+    // Blank paper restores the last selection; clicks and selections inside text stay native.
+    paper.addEventListener('pointerdown',event => {
+      if(editor.contains(event.target)) return;
+      event.preventDefault(); resumeEditing();
+    });
+    editor.addEventListener('focus',update);
+    editor.addEventListener('blur',update);
+    editor.addEventListener('compositionstart',() => { composing = true; });
+    editor.addEventListener('compositionend',() => { composing = false; followCaret(); update(); });
+    editor.addEventListener('input',() => { if(!composing) { followCaret(); update(); } });
+    document.addEventListener('selectionchange',() => {
+      const selection = window.getSelection();
+      if(selection?.rangeCount && editor.contains(selection.anchorNode) && editor.contains(selection.focusNode)) { savedRange = selection.getRangeAt(0).cloneRange(); measureLine(); }
+    });
+    document.getElementById('resume').addEventListener('click',resumeEditing);
+    document.getElementById('typewriter').addEventListener('click',event => {
+      const enabled = paper.classList.toggle('typewriter');
+      event.currentTarget.setAttribute('aria-pressed',String(enabled)); paper.scrollTop = 0; layout();
+    });
+    document.querySelectorAll('[data-state]').forEach(button => button.addEventListener('click',() => setState(button.dataset.state)));
+    document.querySelectorAll('.swatch').forEach(button => button.addEventListener('click',() => applyTheme(root.dataset.theme,button.dataset.palette)));
+    document.getElementById('theme').addEventListener('change',event => applyTheme(event.target.value,root.dataset.palette));
+    document.querySelectorAll('[data-format]').forEach(button => {
+      button.addEventListener('pointerdown',event => event.preventDefault());
+      button.addEventListener('click',() => { resumeEditing(); document.execCommand(button.dataset.format); update(); });
+    });
+    new ResizeObserver(layout).observe(paper);
+    applyTheme(query.get('theme'),query.get('palette'));
+    setState(query.get('state') || 'empty');
+    window.editorPrototype = {setState,applyTheme,resumeEditing,getState:() => ({theme:root.dataset.theme,palette:root.dataset.palette,empty:isEmpty(),focused:document.activeElement === editor,text:editor.innerText})};
+  </script>
+</body>
+</html>

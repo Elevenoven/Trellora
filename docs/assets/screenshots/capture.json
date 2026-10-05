@@ -1,0 +1,48 @@
+{
+  "schemaVersion": 2,
+  "selfCaptured": {
+    "capturedAt": "2026-10-05T08:04:20.860Z",
+    "viewport": {
+      "width": 1440,
+      "height": 960
+    },
+    "source": "Current Electron and React source, isolated demonstration workspace",
+    "aiRequests": false,
+    "data": "Fictional Chinese project notes and materials",
+    "graphProjection": "Not configured; screenshot shows actual empty state",
+    "files": [
+      "notes-zh-light.png",
+      "notes-en-dark.png",
+      "assistant-en-dark.png",
+      "materials-zh-light.png",
+      "map-zh-light.png",
+      "external-document-zh-light.png",
+      "libraries-zh-light.png",
+      "settings-zh-light.png",
+      "settings-en-dark.png"
+    ]
+  },
+  "userProvided": [
+    {
+      "file": "assistant-zh-light.png",
+      "source": "User-provided original screenshot",
+      "width": 1919,
+      "height": 1141,
+      "sha256": "dd58dfc8ab40f9339e10293104326195f371eca912c141dda1127431d672cbe1"
+    },
+    {
+      "file": "notes-assistant-zh-light.png",
+      "source": "User-provided original screenshot",
+      "width": 1919,
+      "height": 1129,
+      "sha256": "f7097bf00e4d428ba6d36be3efa68b0079fcefe9e5f6f10bcbb5aae9694d05c2"
+    },
+    {
+      "file": "wiki-zh-light.png",
+      "source": "User-provided original screenshot",
+      "width": 1919,
+      "height": 1137,
+      "sha256": "afcefb8857cc905515a64a118ec833af30a656a74dbed2a03e5d6a88bc61f8fd"
+    }
+  ]
+}

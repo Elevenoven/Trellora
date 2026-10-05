@@ -1,0 +1,101 @@
+{
+  "generatedAt": "2026-10-03T01:23:27.284Z",
+  "environment": "Windows Electron development binary with production renderer and isolated profiles",
+  "cases": [
+    {
+      "mode": "renderer-regressions",
+      "previewCancellationRetainsConversationAndComposer": true,
+      "previewCancellationDoesNotNotifyDataChange": true,
+      "cachedWikiRelocated": true,
+      "cachedGraphRelocated": true,
+      "consecutiveRefreshFailures": [
+        "get-workspace-path",
+        "notes:open"
+      ],
+      "retryRestoresOpenNote": true
+    },
+    {
+      "mode": "normal",
+      "nativeDirectoryPicker": "isolated stub",
+      "settingsEntry": true,
+      "visibleProgress": true,
+      "latestDraftSaved": true,
+      "relocatedOpenNote": true,
+      "selectedMaterialsLibraryRetained": true,
+      "activeConversationRetained": true,
+      "unsentQuestionRetained": true,
+      "subsequentSaveAtTarget": true,
+      "originalRetained": true,
+      "automaticUnlock": true
+    },
+    {
+      "interruption": "prepare",
+      "phases": [
+        "preparing",
+        "copying",
+        "mapping",
+        "validating",
+        "switching",
+        "completed"
+      ],
+      "progress": 100,
+      "recoveryModal": true,
+      "escapeBlocked": true,
+      "mainWriteLock": true,
+      "automaticUnlock": true,
+      "history": true,
+      "memory": true,
+      "externalLibrary": true,
+      "newWritesAtTarget": true,
+      "originalRetained": true
+    },
+    {
+      "interruption": "copy",
+      "phases": [
+        "preparing",
+        "copying",
+        "mapping",
+        "validating",
+        "switching",
+        "completed"
+      ],
+      "progress": 100,
+      "recoveryModal": true,
+      "escapeBlocked": true,
+      "mainWriteLock": true,
+      "automaticUnlock": true,
+      "history": true,
+      "memory": true,
+      "externalLibrary": true,
+      "newWritesAtTarget": true,
+      "originalRetained": true
+    },
+    {
+      "interruption": "commit",
+      "phases": [
+        "preparing",
+        "switching",
+        "completed"
+      ],
+      "progress": 100,
+      "recoveryModal": true,
+      "escapeBlocked": true,
+      "mainWriteLock": true,
+      "automaticUnlock": true,
+      "history": true,
+      "memory": true,
+      "externalLibrary": true,
+      "newWritesAtTarget": true,
+      "originalRetained": true
+    },
+    {
+      "interruption": "commit",
+      "decision": "use original",
+      "originalLeaseReclaimed": true,
+      "originalConfigurationRestored": true,
+      "writesAtOriginal": true,
+      "publishedTargetRetained": true,
+      "automaticUnlock": true
+    }
+  ]
+}

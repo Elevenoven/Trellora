@@ -1,0 +1,86 @@
+# Node dependencies and local package caches
+node_modules/
+.pnpm-store/
+
+# Build outputs
+dist/
+dist-electron/
+dist-app/
+dist-packager/
+dist-portable/
+trellora/
+menghan/
+menghan-dark-theme/
+menghan-dark-theme-update/
+release/
+*.exe
+# Published Windows packages (keep each file below GitHub's 100 MiB limit).
+!/downloads/*.exe
+.package-staging/
+output/verification/
+upload/
+
+# Stray tsc-compiled CommonJS artifacts that shadow .ts sources in Vite
+shared/*.js
+
+# Project-local verification outputs
+.keyword-*-verification/
+.pipeline-preview-test/
+.stage1-chunking-config/
+.p3/
+.p4/
+.p5/
+.p6/
+
+# Local backups and agent scratch data
+.cleanup-backup/
+.codex-untracked-backup-*/
+delete/
+.codex/
+
+# Logs and temporary files
+logs/
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+lerna-debug.log*
+_tmp_*
+*.tmp
+NUL.css
+*.local
+.env
+.env.*
+!.env.example
+
+# Editor and OS files
+.vscode/*
+!.vscode/extensions.json
+.idea/
+.DS_Store
+Thumbs.db
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+
+# Python caches and local pipeline runtime/dependencies
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.coverage
+htmlcov/
+jieba.cache
+pipeline-python/.venv/
+pipeline-python/.deps/
+pipeline-python/.tmp/
+pipeline-python/chunking-*-test-*/
+pipeline-python/keywords-*/
+build/pipeline-runtime/
+
+# Graphify local outputs and caches
+graphify-out/

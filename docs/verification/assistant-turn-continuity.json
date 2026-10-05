@@ -1,0 +1,14 @@
+{
+  "verifiedAt": "2026-10-04T08:24:28.509Z",
+  "method": "real Electron/main/preload/React, isolated workspace, local controlled HTTP model, delayed preload session return, full process restart",
+  "checks": [
+    "real DOCX/text attachment answer and descriptors persist in the original chat; plain follow-up receives that answer",
+    "current-note Direct follows the canonical completed history under the unchanged release observe default",
+    "current-note ReAct planner/decision receives canonical completed history under the release observe default",
+    "real React double Enter during delayed session creation produces exactly one canonical turn",
+    "new conversation invalidates delayed creation; its late result neither sends nor clears the newer request",
+    "full Electron exit/restart restores attachment chat and current-note Direct/ReAct follow-up; original files and SQLite integrity remain intact"
+  ],
+  "originalUserDataModified": false,
+  "containsSecretsOrAnswers": false
+}

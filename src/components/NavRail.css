@@ -1,0 +1,50 @@
+.app-shell .app-nav-rail {
+  width: 64px;
+  flex-basis: 64px;
+  padding: 16px 0 10px;
+}
+
+.app-shell .app-nav-item {
+  width: 44px;
+  min-height: 48px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+  border-radius: 7px;
+}
+
+.app-shell .app-nav-item-label {
+  font-size: 10px;
+  line-height: 1.2;
+  color: inherit;
+  max-width: 54px;
+  text-align: center;
+}
+
+.app-shell .app-nav-item.active {
+  color: var(--accent-primary);
+  background: var(--surface-selected);
+}
+
+.app-shell .app-nav-item.active::before {
+  left: -10px;
+  height: 22px;
+  background: var(--accent-primary);
+}
+
+.app-shell .app-nav-item:focus-visible {
+  outline: 2px solid var(--accent-focus);
+  outline-offset: 2px;
+}
+
+.app-shell .app-nav-divider {
+  margin: 8px 0 4px;
+}
+
+@media (max-height: 580px) {
+  .app-shell .app-nav-rail { padding-block: 8px; }
+  .app-shell .app-nav-item { min-height: 38px; gap: 3px; }
+  .app-shell .app-nav-divider { margin-block: 3px; }
+}

@@ -1,0 +1,114 @@
+{
+  "date": "2026-10-03T13:13:39.983Z",
+  "sourceSha": "7df214d65fa9017d675adbeffd60ebe4f8c7835f",
+  "sourceDescription": "AI-native local-first Markdown knowledge management for Windows",
+  "packagedDescription": "Trellora",
+  "peMetadataPassed": true,
+  "nativeOpenWithUiVerified": false,
+  "artifacts": [
+    {
+      "path": "trellora/win-unpacked/Trellora.exe",
+      "byteLength": 180860416,
+      "sha256": "872c96450733ed01088d021c6c6769fa63cb011325cee5a877fd8e8a6c2ddb3f",
+      "fileDescription": "Trellora",
+      "productName": "Trellora",
+      "productVersion": "1.0.0.0"
+    },
+    {
+      "path": "trellora/windows-name-fix/Trellora-1.0.0-portable-x64.exe",
+      "byteLength": 92865866,
+      "sha256": "15aeea10c0e577080a03ac2486c7469ec49064a626500684e9cfacb7c7fa9791",
+      "fileDescription": "Trellora",
+      "productName": "Trellora",
+      "productVersion": "1.0.0"
+    },
+    {
+      "path": "trellora/windows-name-fix/Trellora-1.0.0-setup-x64.exe",
+      "byteLength": 93119000,
+      "sha256": "37553b73d948159cec911fba7e5af3c66afff2e8de15c55bc18221fb417b1b66",
+      "fileDescription": "Trellora",
+      "productName": "Trellora",
+      "productVersion": "1.0.0"
+    }
+  ],
+  "packageMetadataPassed": true,
+  "runtimePayloadMatchesPriorAcceptedBuild": true,
+  "packages": [
+    {
+      "executable": "trellora/windows-name-fix/Trellora-1.0.0-portable-x64.exe",
+      "packagedName": "trellora",
+      "packagedDescription": "Trellora",
+      "version": "1.0.0",
+      "files": [
+        {
+          "file": "dist-electron/main.js",
+          "packagedSha256": "07a00b1a75cf6c8674fa0b677620959fae724c7d2c4a5c37157d0a938bc42541",
+          "currentSha256": "423de7889f0f04247dc39a4afd3e77a4955bf1c480d8417f2029b7945dcc10e4",
+          "matchesPriorAcceptedRuntime": true,
+          "matchesCurrentBuild": false,
+          "currentDifference": "Only the inlined build.extraMetadata.description configuration added by this fix; runtime behavior is unchanged"
+        },
+        {
+          "file": "dist-electron/preload.js",
+          "packagedSha256": "7b2bb7a747d82907ff3ff71ae0046a1fff9830e8724ea917ecf74c7e06564b71",
+          "currentSha256": "7b2bb7a747d82907ff3ff71ae0046a1fff9830e8724ea917ecf74c7e06564b71",
+          "matchesPriorAcceptedRuntime": true,
+          "matchesCurrentBuild": true
+        },
+        {
+          "file": "dist/index.html",
+          "packagedSha256": "8683fd5e2fd5910f1a01dea7cc5771cfb7ddcbe5e58ea2f5cf52bcb5600e6a08",
+          "currentSha256": "8683fd5e2fd5910f1a01dea7cc5771cfb7ddcbe5e58ea2f5cf52bcb5600e6a08",
+          "matchesPriorAcceptedRuntime": true,
+          "matchesCurrentBuild": true
+        },
+        {
+          "file": "dist/assets/index-C95e__De.js",
+          "packagedSha256": "db2786b0b93dd3befbea05b5fe7fc02045f2478531d7095a982d6edc1c4a5545",
+          "currentSha256": "db2786b0b93dd3befbea05b5fe7fc02045f2478531d7095a982d6edc1c4a5545",
+          "matchesPriorAcceptedRuntime": true,
+          "matchesCurrentBuild": true
+        }
+      ]
+    },
+    {
+      "executable": "trellora/windows-name-fix/Trellora-1.0.0-setup-x64.exe",
+      "packagedName": "trellora",
+      "packagedDescription": "Trellora",
+      "version": "1.0.0",
+      "files": [
+        {
+          "file": "dist-electron/main.js",
+          "packagedSha256": "07a00b1a75cf6c8674fa0b677620959fae724c7d2c4a5c37157d0a938bc42541",
+          "currentSha256": "423de7889f0f04247dc39a4afd3e77a4955bf1c480d8417f2029b7945dcc10e4",
+          "matchesPriorAcceptedRuntime": true,
+          "matchesCurrentBuild": false,
+          "currentDifference": "Only the inlined build.extraMetadata.description configuration added by this fix; runtime behavior is unchanged"
+        },
+        {
+          "file": "dist-electron/preload.js",
+          "packagedSha256": "7b2bb7a747d82907ff3ff71ae0046a1fff9830e8724ea917ecf74c7e06564b71",
+          "currentSha256": "7b2bb7a747d82907ff3ff71ae0046a1fff9830e8724ea917ecf74c7e06564b71",
+          "matchesPriorAcceptedRuntime": true,
+          "matchesCurrentBuild": true
+        },
+        {
+          "file": "dist/index.html",
+          "packagedSha256": "8683fd5e2fd5910f1a01dea7cc5771cfb7ddcbe5e58ea2f5cf52bcb5600e6a08",
+          "currentSha256": "8683fd5e2fd5910f1a01dea7cc5771cfb7ddcbe5e58ea2f5cf52bcb5600e6a08",
+          "matchesPriorAcceptedRuntime": true,
+          "matchesCurrentBuild": true
+        },
+        {
+          "file": "dist/assets/index-C95e__De.js",
+          "packagedSha256": "db2786b0b93dd3befbea05b5fe7fc02045f2478531d7095a982d6edc1c4a5545",
+          "currentSha256": "db2786b0b93dd3befbea05b5fe7fc02045f2478531d7095a982d6edc1c4a5545",
+          "matchesPriorAcceptedRuntime": true,
+          "matchesCurrentBuild": true
+        }
+      ]
+    }
+  ],
+  "priorFunctionalAcceptance": "docs/verification/external-documents/opening-packaged.json",
+  "publicRelease": false
+}

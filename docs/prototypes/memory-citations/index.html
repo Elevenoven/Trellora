@@ -1,0 +1,153 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Trellora · 记忆引用交互原型</title>
+  <script src="theme-tokens.js"></script>
+  <style>
+    * { box-sizing: border-box; }
+    :root { color-scheme: dark; font-family: "Segoe UI", "Microsoft YaHei", sans-serif; }
+    body { margin: 0; background: var(--canvas); color: var(--text); font-size: 14px; line-height: 1.65; }
+    button, select { font: inherit; color: inherit; }
+    button { cursor: pointer; }
+    button:disabled { cursor: default; opacity: .65; }
+    button:focus-visible, summary:focus-visible, select:focus-visible { outline: 2px solid var(--focus); outline-offset: 4px; }
+    [hidden] { display: none !important; }
+    .prototype-bar { display: flex; align-items: center; gap: 18px; padding: 12px 28px; border-bottom: 1px solid var(--border); color: var(--secondary); font-size: 12px; }
+    .prototype-bar strong { color: var(--text); font-weight: 600; }
+    .prototype-controls { margin-left: auto; display: flex; align-items: center; flex-wrap: wrap; gap: 12px; }
+    .prototype-controls label { display: inline-flex; align-items: center; gap: 5px; }
+    .prototype-controls select, .prototype-controls button { border: 1px solid var(--border); background: var(--panel); border-radius: 6px; padding: 3px 9px; }
+    main { max-width: 1450px; margin: 0 auto; padding: 26px 32px 32px; }
+    .question { margin: 0 0 34px auto; width: fit-content; background: var(--selected); border: 1px solid var(--border); border-radius: 13px; padding: 12px 16px; }
+    .question-meta, .message-meta { display: flex; align-items: center; gap: 13px; color: var(--secondary); font-size: 12px; }
+    .question-meta strong, .message-meta strong { color: var(--text); font-size: 13px; }
+    .question p { margin: 8px 0 0; font-size: 16px; }
+    article { padding: 16px 18px 18px; border: 1px solid var(--border); border-radius: 13px; background: var(--raised); }
+    .message-meta { flex-wrap: wrap; }
+    .message-meta time { margin-left: auto; }
+    .quiet-button { display: inline-flex; align-items: center; gap: 5px; padding: 0; background: transparent; border: 0; color: var(--secondary); font-size: 13px; }
+    .quiet-button:hover { color: var(--text); }
+    .receipt { border: 1px solid var(--borderStrong); border-radius: 20px; padding: 2px 9px; font-size: 12px; }
+    .memory-context { margin-top: 12px; color: var(--secondary); }
+    summary { display: flex; align-items: center; gap: 7px; cursor: pointer; list-style: none; }
+    summary::-webkit-details-marker { display: none; }
+    .chevron { transition: transform 160ms ease; }
+    details[open] > summary .chevron { transform: rotate(180deg); }
+    .memory-context ul { margin: 12px 0 0; padding-left: 28px; font-size: 13px; }
+    .memory-context li { padding: 3px 0; }
+    .context-hint { margin-left: 7px; font-size: 11px; color: var(--accent); }
+    .answer { margin-top: 25px; font-size: 16px; }
+    .answer p { margin: 0 0 8px; }
+    /* Match the existing knowledge-base citation capsules and expanded panel. */
+    .memory-marker { display: inline-flex; align-items: center; justify-content: center; min-width: 18px; height: 18px; margin: 0 2px; padding: 0 5px; border: 1px solid color-mix(in srgb, var(--accent) 38%, var(--border)); border-radius: 999px; background: color-mix(in srgb, var(--accent) 7%, var(--canvas)); color: var(--accent); font-size: 10px; font-weight: 700; line-height: 1; vertical-align: .18em; white-space: nowrap; }
+    .memory-marker:hover { border-color: color-mix(in srgb, var(--accent) 62%, var(--border)); background: color-mix(in srgb, var(--accent) 13%, var(--canvas)); }
+    .sources { display: grid; gap: 5px; margin-top: 10px; color: var(--secondary); font-size: 11px; }
+    .sources > strong { color: var(--text); font-weight: 600; }
+    .citation-list { display: flex; flex-wrap: wrap; gap: 5px; }
+    .source-pill { display: inline-flex; align-items: center; gap: 4px; padding: 3px 7px; border: 1px solid color-mix(in srgb, var(--accent) 36%, var(--border)); border-radius: 999px; color: var(--accent); background: color-mix(in srgb, var(--accent) 7%, var(--hover)); cursor: pointer; font: inherit; font-weight: 650; }
+    .source-pill svg { width: 11px; height: 11px; }
+    .source-pill[aria-expanded="true"] { border-color: var(--accent); background: color-mix(in srgb, var(--accent) 14%, var(--hover)); }
+    .source-card { display: grid; gap: 7px; margin-top: 2px; padding: 9px 10px 10px; border: 1px solid color-mix(in srgb, var(--accent) 24%, var(--border)); border-left: 3px solid var(--accent); border-radius: 6px; background: color-mix(in srgb, var(--accent) 4%, var(--panel)); scroll-margin: 24px; }
+    .source-header { display: flex; justify-content: space-between; gap: 8px; color: var(--text); }
+    .source-header span { color: var(--secondary); white-space: nowrap; }
+    blockquote { margin: 0; padding: 8px 9px; border: 1px solid var(--border); border-radius: 4px; color: var(--text); background: var(--canvas); font-size: 13px; }
+    .source-footer { display: flex; align-items: center; flex-wrap: wrap; gap: 10px; margin-top: 10px; color: var(--tertiary); font-size: 12px; }
+    .source-footer button { margin-left: auto; color: var(--accent); }
+    .source-card.highlight { border-color: var(--focus); box-shadow: 0 0 0 2px color-mix(in srgb, var(--focus) 17%, transparent); }
+    .suggestions { margin-top: 21px; font-size: 13px; color: var(--secondary); }
+    .suggestion-list { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 8px; }
+    .suggestion-list span { border: 1px solid var(--border); border-radius: 20px; padding: 7px 12px; color: var(--text); }
+    svg { width: 14px; height: 14px; flex-shrink: 0; fill: none; stroke: currentColor; stroke-width: 1.6; stroke-linecap: round; stroke-linejoin: round; }
+    dialog { width: min(580px, calc(100% - 40px)); background: var(--raised); color: var(--text); border: 1px solid var(--borderStrong); border-radius: 12px; padding: 23px; }
+    dialog::backdrop { background: rgb(0 0 0 / .5); }
+    .dialog-header { display: flex; align-items: center; justify-content: space-between; }
+    .dialog-header h2 { font-size: 16px; margin: 0; }
+    .dialog-label { margin: 12px 0; color: var(--tertiary); font-size: 12px; }
+    .original-message { background: var(--panel); border: 1px solid var(--border); padding: 14px; border-radius: 8px; }
+    .original-message strong { font-size: 12px; color: var(--secondary); }
+    .original-message p { margin: 7px 0 0; }
+    .dialog-note { margin-bottom: 0; color: var(--secondary); font-size: 12px; }
+    @media(max-width: 640px) { main { padding: 22px 16px; } .prototype-bar { padding: 11px 16px; flex-wrap: wrap; gap: 8px; } .prototype-controls { width: 100%; margin-left: 0; } .message-meta time { width: 100%; margin-left: 0; } .answer { font-size: 15px; } }
+    @media(prefers-reduced-motion: reduce) { .chevron { transition: none; } }
+  </style>
+</head>
+<body>
+  <svg style="display:none" aria-hidden="true"><defs>
+    <symbol id="database" viewBox="0 0 16 16"><ellipse cx="8" cy="3.5" rx="5.5" ry="2.2"/><path d="M2.5 3.5v8.7c0 1.2 2.5 2.2 5.5 2.2s5.5-1 5.5-2.2V3.5M2.5 8c0 1.2 2.5 2.2 5.5 2.2s5.5-1 5.5-2.2"/></symbol>
+    <symbol id="chevron" viewBox="0 0 16 16"><path d="m4 6 4 4 4-4"/></symbol>
+    <symbol id="copy" viewBox="0 0 16 16"><rect x="5" y="5" width="8" height="9" rx="1"/><path d="M10 3V2H2v9h1"/></symbol>
+    <symbol id="file" viewBox="0 0 16 16"><path d="M4 1.5h5l3 3v10H4zM9 1.5v3h3M6 8h4M6 11h4"/></symbol>
+    <symbol id="arrow" viewBox="0 0 16 16"><path d="M3 8h10M9 4l4 4-4 4"/></symbol>
+  </defs></svg>
+  <header class="prototype-bar">
+    <strong>记忆引用交互原型</strong><span>示例数据</span>
+    <div class="prototype-controls">
+      <label>配色 <select id="palette"><option value="gray">石墨灰</option><option value="green">森林绿</option><option value="blue">雾蓝</option><option value="orange">暖橙</option><option value="pink">玫瑰粉</option></select></label>
+      <button id="theme" type="button">切换浅色</button>
+      <label><input id="missing" type="checkbox"> 原始对话已删除</label>
+    </div>
+  </header>
+  <main>
+    <section class="question"><div class="question-meta"><strong>普通聊天</strong><time>2026/10/4 23:17:56</time></div><p>我现在的职业是什么</p></section>
+    <article>
+      <div class="message-meta"><strong>AI 助手</strong><span class="quiet-button"><svg><use href="#copy"/></svg>复制文本</span><span class="quiet-button"><svg><use href="#file"/></svg>保存笔记</span><span class="receipt">等待自动提炼</span><time>2026/10/4 23:17:56</time></div>
+      <details class="memory-context" id="memory-context"><summary><svg><use href="#database"/></svg><span>本次提供记忆 3 条</span><svg class="chevron"><use href="#chevron"/></svg></summary><ul>
+        <li>我是Java程序员</li><li>我是Python程序员</li><li>我不是Java程序员了，我现在是python程序员<span class="context-hint">正文已引用</span></li>
+      </ul></details>
+      <div class="answer">
+        <p>根据你之前的说明，你现在的职业是 <strong>Python 程序员</strong>。<button type="button" class="memory-marker" id="citation" aria-label="查看记忆来源 1" title="我不是Java程序员了，我现在是python程序员">记忆1</button></p>
+        <p>你曾明确说过：“我不是Java程序员了，我现在是python程序员。”</p>
+      </div>
+      <section class="sources" aria-label="回答引用">
+        <strong>回答引用</strong>
+        <div class="citation-list"><button id="source-pill" type="button" class="source-pill" aria-expanded="false" aria-controls="memory-source-1" title="展开这条记忆的内容"><svg><use href="#database"/></svg><span>记忆 1</span></button></div>
+        <section class="source-card" id="memory-source-1" hidden>
+          <header class="source-header"><strong>职业更新</strong><span>长期记忆</span></header>
+          <blockquote>我不是Java程序员了，我现在是python程序员</blockquote><div class="source-footer"><span id="source-caption">本次回答使用时的记忆内容</span><button id="open-original" class="quiet-button" type="button">查看原始对话<svg><use href="#arrow"/></svg></button></div>
+        </section>
+      </section>
+      <div class="suggestions"><span>你可以接着问：</span><div class="suggestion-list"><span>Python 程序员和 Java 相比，职业发展有哪些区别？</span><span>目前 Python 岗位更需要哪些技能？</span><span>从 Java 转到 Python，要注意什么？</span></div></div>
+    </article>
+  </main>
+  <dialog id="original-dialog" aria-labelledby="dialog-title"><div class="dialog-header"><h2 id="dialog-title">记忆的原始对话</h2><button class="quiet-button" id="close-dialog" type="button" aria-label="关闭原始对话">关闭</button></div><p class="dialog-label">职业更新 · 示例原始对话</p><div class="original-message"><strong>你</strong><p>我不是Java程序员了，我现在是python程序员</p></div><p class="dialog-note">正式界面应定位到这条记忆对应的原始消息。来源不存在时，保留当时的记忆内容并说明原因。</p></dialog>
+  <script>
+    const params = new URLSearchParams(location.search);
+    let theme = params.get('theme') === 'light' ? 'light' : 'dark';
+    const palette = document.querySelector('#palette');
+    palette.value = params.get('palette') || 'gray';
+    function applyTheme() {
+      const colors = window.prototypeColors[theme][palette.value];
+      for (const key of ['canvas','panel','raised','hover','selected','border','borderStrong','text','secondary','tertiary','accent','focus']) document.documentElement.style.setProperty('--' + key, colors[key]);
+      document.documentElement.style.colorScheme = theme;
+      document.querySelector('#theme').textContent = theme === 'dark' ? '切换浅色' : '切换深色';
+    }
+    document.querySelector('#theme').addEventListener('click', () => { theme = theme === 'dark' ? 'light' : 'dark'; applyTheme(); });
+    palette.addEventListener('change', applyTheme);
+    const source = document.querySelector('#memory-source-1');
+    const sourcePill = document.querySelector('#source-pill');
+    let highlightTimer;
+    function toggleSource() {
+      source.hidden = !source.hidden;
+      sourcePill.setAttribute('aria-expanded', String(!source.hidden));
+      source.classList.toggle('highlight', !source.hidden);
+      if (!source.hidden) source.scrollIntoView({ block: 'nearest', behavior: matchMedia('(prefers-reduced-motion: reduce)').matches ? 'instant' : 'smooth' });
+      clearTimeout(highlightTimer);
+      highlightTimer = setTimeout(() => source.classList.remove('highlight'), 2400);
+    }
+    document.querySelector('#citation').addEventListener('click', toggleSource);
+    sourcePill.addEventListener('click', toggleSource);
+    const dialog = document.querySelector('#original-dialog');
+    document.querySelector('#open-original').addEventListener('click', () => dialog.showModal());
+    document.querySelector('#close-dialog').addEventListener('click', () => dialog.close());
+    dialog.addEventListener('click', event => { if (event.target === dialog) { const bounds = dialog.getBoundingClientRect(); if (event.clientX < bounds.left || event.clientX > bounds.right || event.clientY < bounds.top || event.clientY > bounds.bottom) dialog.close(); } });
+    document.querySelector('#missing').addEventListener('change', event => {
+      document.querySelector('#open-original').hidden = event.target.checked;
+      document.querySelector('#source-caption').textContent = event.target.checked ? '原始对话已删除 · 已保留回答当时使用的记忆内容' : '本次回答使用时的记忆内容';
+    });
+    applyTheme();
+    window.memoryCitationPrototype = { ready: true };
+  </script>
+</body>
+</html>

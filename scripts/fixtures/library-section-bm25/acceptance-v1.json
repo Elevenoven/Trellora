@@ -1,0 +1,174 @@
+{
+  "fixtureVersion": 1,
+  "notes": [
+    {
+      "noteKey": "memory",
+      "title": "Memory Architecture",
+      "repeatedHeading": true,
+      "sections": [
+        ["memory-retention", "Memory Retention", "Memory Retention 保存已经核验的长期事实，并保留来源。"],
+        ["source-audit", "Source Audit", "Source Audit 记录事实来源、快照和核验时间。"],
+        ["session-recovery", "Session Recovery", "Session Recovery 在应用重启后恢复受控会话。"],
+        ["short-window", "Short Window", "Short Window 只保留最近几轮对话。"],
+        ["conflict-merge", "Conflict Merge", "Conflict Merge 合并互不矛盾的记忆条目。"],
+        ["expiry-policy", "Expiry Policy", "Expiry Policy 清理已经失效的临时信息。"]
+      ]
+    },
+    {
+      "noteKey": "tools",
+      "title": "Tool Control",
+      "repeatedHeading": true,
+      "sections": [
+        ["file-sandbox", "File Sandbox", "File Sandbox 限制工具只能读取允许目录。"],
+        ["command-timeout", "Command Timeout", "Command Timeout 在到达时间上限后停止命令。"],
+        ["result-observation", "Result Observation", "Result Observation 把工具结果变成受控观察。"],
+        ["argument-schema", "Argument Schema", "Argument Schema 拒绝工具参数中的额外字段。"],
+        ["retry-budget", "Retry Budget", "Retry Budget 限制失败后的重复执行次数。"],
+        ["process-cleanup", "Process Cleanup", "Process Cleanup 回收退出后的后台进程。"]
+      ]
+    },
+    {
+      "noteKey": "planning",
+      "title": "Planning Contract",
+      "repeatedHeading": true,
+      "sections": [
+        ["goal-decomposition", "Goal Decomposition", "Goal Decomposition 把复杂问题拆成可核验目标。"],
+        ["requirement-coverage", "Requirement Coverage", "Requirement Coverage 检查每项要求的证据数量。"],
+        ["query-variant", "Query Variant", "Query Variant 只能来自已经观察到的新术语。"],
+        ["active-goal", "Active Goal", "Active Goal 确定当前允许执行的唯一目标。"],
+        ["plan-patch", "Plan Patch", "Plan Patch 使用版本号原子更新计划。"],
+        ["completion-gate", "Completion Gate", "Completion Gate 阻止缺证据目标提前完成。"]
+      ]
+    },
+    {
+      "noteKey": "retrieval",
+      "title": "Retrieval Flow",
+      "repeatedHeading": true,
+      "sections": [
+        ["candidate-recall", "Candidate Recall", "Candidate Recall 从整库中召回候选笔记。"],
+        ["section-ranking", "Section Ranking", "Section Ranking 使用章节正文进行 BM25 排序。"],
+        ["evidence-read", "Evidence Read", "Evidence Read 读取原文后才创建可引用证据。"],
+        ["heading-suppression", "Heading Suppression", "Heading Suppression 消除高频同名标题加分。"],
+        ["semantic-support", "Semantic Support", "Semantic Support 作为关键词召回的补充通道。"],
+        ["cache-fingerprint", "Cache Fingerprint", "Cache Fingerprint 复用相同快照和查询结果。"]
+      ]
+    },
+    {
+      "noteKey": "security",
+      "title": "Security Boundaries",
+      "repeatedHeading": true,
+      "sections": [
+        ["path-boundary", "Path Boundary", "Path Boundary 防止工具读取资料库之外的文件。"],
+        ["snapshot-isolation", "Snapshot Isolation", "Snapshot Isolation 拒绝已经过期的内容哈希。"],
+        ["secret-redaction", "Secret Redaction", "Secret Redaction 从日志和轨迹中移除密钥。"],
+        ["session-scope", "Session Scope", "Session Scope 禁止跨会话使用证据标识。"],
+        ["library-scope", "Library Scope", "Library Scope 禁止跨资料库读取候选。"],
+        ["forged-id", "Forged Identifier", "Forged Identifier 校验模型提交的不透明标识。"]
+      ]
+    },
+    {
+      "noteKey": "compression",
+      "title": "Compression",
+      "repeatedHeading": false,
+      "sections": [
+        ["priority-retention", "Priority Retention", "Priority Retention 优先保留问题、协议和真实证据。"],
+        ["observation-demotion", "Observation Demotion", "Observation Demotion 先降级导航观察和旧工具输出。"],
+        ["summary-checkpoint", "Summary Checkpoint", "Summary Checkpoint 保存可恢复的结构化摘要。"],
+        ["token-ledger", "Token Ledger", "Token Ledger 记录每个上下文分区的用量。"],
+        ["pressure-level", "Pressure Level", "Pressure Level 按窗口比例触发渐进式降压。"],
+        ["overflow-stop", "Overflow Stop", "Overflow Stop 在重复压缩无收益时停止重试。"]
+      ]
+    },
+    {
+      "noteKey": "evaluation",
+      "title": "Evaluation",
+      "repeatedHeading": false,
+      "sections": [
+        ["fixed-question-set", "Fixed Question Set", "Fixed Question Set 冻结验收问题避免临时挑题。"],
+        ["hit-rate", "Hit Rate", "Hit Rate 统计明确相关章节是否进入前三名。"],
+        ["error-candidate", "Error Candidate", "Error Candidate 统计无关候选所占比例。"],
+        ["deterministic-run", "Deterministic Run", "Deterministic Run 检查相同输入的一致性。"],
+        ["cold-benchmark", "Cold Benchmark", "Cold Benchmark 测量首次构建和排序耗时。"],
+        ["hot-cache", "Hot Cache", "Hot Cache 测量相同指纹的复用耗时。"]
+      ]
+    },
+    {
+      "noteKey": "workflow",
+      "title": "Workflow",
+      "repeatedHeading": false,
+      "sections": [
+        ["task-queue", "Task Queue", "Task Queue 串行管理文档处理任务。"],
+        ["cancel-retry", "Cancel Retry", "Cancel Retry 支持取消失败任务并重新执行。"],
+        ["progress-event", "Progress Event", "Progress Event 把真实阶段进度发送给界面。"],
+        ["atomic-output", "Atomic Output", "Atomic Output 校验完成后原子发布阶段产物。"],
+        ["resume-stage", "Resume Stage", "Resume Stage 复用已经完成的上游阶段。"],
+        ["worker-restart", "Worker Restart", "Worker Restart 按退避策略恢复崩溃进程。"]
+      ]
+    },
+    {
+      "noteKey": "document",
+      "title": "Document Pipeline",
+      "repeatedHeading": false,
+      "sections": [
+        ["parse-layout", "Parse Layout", "Parse Layout 提取页面结构和文本块。"],
+        ["ocr-recovery", "OCR Recovery", "OCR Recovery 处理扫描件中的图像文字。"],
+        ["structure-signal", "Structure Signal", "Structure Signal 识别标题、列表和表格线索。"],
+        ["clean-text", "Clean Text", "Clean Text 去除重复页眉和无效空白。"],
+        ["chunk-parent", "Chunk Parent", "Chunk Parent 保存父块与子块的结构关系。"],
+        ["artifact-manifest", "Artifact Manifest", "Artifact Manifest 记录阶段产物的哈希和版本。"]
+      ]
+    },
+    {
+      "noteKey": "deployment",
+      "title": "Deployment",
+      "repeatedHeading": false,
+      "sections": [
+        ["embedded-runtime", "Embedded Runtime", "Embedded Runtime 随应用发布本地 Python 运行时。"],
+        ["portable-package", "Portable Package", "Portable Package 在未安装开发环境的机器运行。"],
+        ["crash-cleanup", "Crash Cleanup", "Crash Cleanup 在应用退出时结束遗留 Worker。"],
+        ["resource-manifest", "Resource Manifest", "Resource Manifest 列出发布包中的原生依赖。"],
+        ["protocol-version", "Protocol Version", "Protocol Version 在启动握手时校验兼容性。"],
+        ["windows-smoke", "Windows Smoke", "Windows Smoke 在干净 Windows x64 环境验收。"]
+      ]
+    }
+  ],
+  "questions": [
+    ["Q001", "memory", "memory-retention", ["Agent", "Memory Retention"]],
+    ["Q002", "memory", "source-audit", ["Agent", "Source Audit"]],
+    ["Q003", "memory", "session-recovery", ["Agent", "Session Recovery"]],
+    ["Q004", "tools", "file-sandbox", ["Agent", "File Sandbox"]],
+    ["Q005", "tools", "command-timeout", ["Agent", "Command Timeout"]],
+    ["Q006", "tools", "result-observation", ["Agent", "Result Observation"]],
+    ["Q007", "planning", "goal-decomposition", ["Agent", "Goal Decomposition"]],
+    ["Q008", "planning", "requirement-coverage", ["Agent", "Requirement Coverage"]],
+    ["Q009", "planning", "query-variant", ["Agent", "Query Variant"]],
+    ["Q010", "retrieval", "candidate-recall", ["Agent", "Candidate Recall"]],
+    ["Q011", "retrieval", "section-ranking", ["Agent", "Section Ranking"]],
+    ["Q012", "retrieval", "evidence-read", ["Agent", "Evidence Read"]],
+    ["Q013", "security", "path-boundary", ["Agent", "Path Boundary"]],
+    ["Q014", "security", "snapshot-isolation", ["Agent", "Snapshot Isolation"]],
+    ["Q015", "security", "secret-redaction", ["Agent", "Secret Redaction"]],
+    ["Q016", "compression", "priority-retention", ["Priority Retention"]],
+    ["Q017", "compression", "observation-demotion", ["Observation Demotion"]],
+    ["Q018", "compression", "summary-checkpoint", ["Summary Checkpoint"]],
+    ["Q019", "evaluation", "fixed-question-set", ["Fixed Question Set"]],
+    ["Q020", "evaluation", "hit-rate", ["Hit Rate"]],
+    ["Q021", "evaluation", "error-candidate", ["Error Candidate"]],
+    ["Q022", "workflow", "task-queue", ["Task Queue"]],
+    ["Q023", "workflow", "cancel-retry", ["Cancel Retry"]],
+    ["Q024", "workflow", "progress-event", ["Progress Event"]],
+    ["Q025", "document", "parse-layout", ["Parse Layout"]],
+    ["Q026", "document", "ocr-recovery", ["OCR Recovery"]],
+    ["Q027", "document", "structure-signal", ["Structure Signal"]],
+    ["Q028", "deployment", "embedded-runtime", ["Embedded Runtime"]],
+    ["Q029", "deployment", "portable-package", ["Portable Package"]],
+    ["Q030", "deployment", "crash-cleanup", ["Crash Cleanup"]]
+  ],
+  "ambiguousQuestions": [
+    ["A001", "memory", ["Agent"]],
+    ["A002", "tools", ["Agent"]],
+    ["A003", "planning", ["Agent"]],
+    ["A004", "retrieval", ["Agent"]],
+    ["A005", "security", ["Agent"]]
+  ]
+}

@@ -1,0 +1,44 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="icon" type="image/svg+xml" href="/build/icon.svg" />
+    <title>Trellora</title>
+    <script>
+      (() => {
+        const root = document.documentElement;
+        let mode = 'system';
+        const lightBackgrounds = { green: '#F5F8F6', blue: '#F5F8FC', orange: '#FCF8F3', gray: '#F7F8FA', pink: '#FCF7F9' };
+        const darkBackgrounds = { green: '#17201B', blue: '#181F2A', orange: '#241C18', gray: '#1C1F24', pink: '#251B22' };
+        let lightColorScheme = 'green';
+        const startup = window.electronAPI?.startupAppearance;
+        try {
+          const stored = window.localStorage.getItem('trellora-theme-mode');
+          if (stored === 'light' || stored === 'dark' || stored === 'system') mode = stored;
+          const storedColor = window.localStorage.getItem('trellora-light-color-scheme');
+          if (Object.hasOwn(lightBackgrounds, storedColor)) lightColorScheme = storedColor;
+        } catch {
+          // Electron Store will reconcile the setting once the renderer is ready.
+        }
+        if (startup) {
+          mode = startup.themeMode;
+          lightColorScheme = startup.lightColorScheme;
+          root.lang = startup.language;
+        }
+        const resolved = startup?.theme ?? (mode === 'system'
+          ? (window.matchMedia?.('(prefers-color-scheme: dark)').matches ? 'dark' : 'light')
+          : mode);
+        root.dataset.theme = resolved;
+        root.dataset.mantineColorScheme = resolved;
+        root.dataset.lightColorScheme = lightColorScheme;
+        root.style.colorScheme = resolved;
+        root.style.backgroundColor = (resolved === 'dark' ? darkBackgrounds : lightBackgrounds)[lightColorScheme];
+      })();
+    </script>
+  </head>
+  <body>
+    <div id="root" inert></div>
+    <script type="module" src="/src/main.tsx"></script>
+  </body>
+</html>

@@ -1,0 +1,283 @@
+{
+  "scope": "Standalone Chrome prototype; production editor unchanged",
+  "checks": [
+    {
+      "theme": "dark",
+      "palette": "green",
+      "width": 1540,
+      "overflow": false,
+      "editorInside": true,
+      "placeholderColor": "rgb(178, 197, 184)",
+      "paperColor": "rgb(37, 52, 43)"
+    },
+    {
+      "theme": "dark",
+      "palette": "green",
+      "width": 1183,
+      "overflow": false,
+      "editorInside": true,
+      "placeholderColor": "rgb(178, 197, 184)",
+      "paperColor": "rgb(37, 52, 43)"
+    },
+    {
+      "theme": "dark",
+      "palette": "green",
+      "width": 1024,
+      "overflow": false,
+      "editorInside": true,
+      "placeholderColor": "rgb(178, 197, 184)",
+      "paperColor": "rgb(37, 52, 43)"
+    },
+    {
+      "theme": "dark",
+      "palette": "blue",
+      "width": 1540,
+      "overflow": false,
+      "editorInside": true,
+      "placeholderColor": "rgb(182, 196, 217)",
+      "paperColor": "rgb(41, 54, 73)"
+    },
+    {
+      "theme": "dark",
+      "palette": "blue",
+      "width": 1183,
+      "overflow": false,
+      "editorInside": true,
+      "placeholderColor": "rgb(182, 196, 217)",
+      "paperColor": "rgb(41, 54, 73)"
+    },
+    {
+      "theme": "dark",
+      "palette": "blue",
+      "width": 1024,
+      "overflow": false,
+      "editorInside": true,
+      "placeholderColor": "rgb(182, 196, 217)",
+      "paperColor": "rgb(41, 54, 73)"
+    },
+    {
+      "theme": "dark",
+      "palette": "orange",
+      "width": 1540,
+      "overflow": false,
+      "editorInside": true,
+      "placeholderColor": "rgb(208, 186, 167)",
+      "paperColor": "rgb(59, 46, 36)"
+    },
+    {
+      "theme": "dark",
+      "palette": "orange",
+      "width": 1183,
+      "overflow": false,
+      "editorInside": true,
+      "placeholderColor": "rgb(208, 186, 167)",
+      "paperColor": "rgb(59, 46, 36)"
+    },
+    {
+      "theme": "dark",
+      "palette": "orange",
+      "width": 1024,
+      "overflow": false,
+      "editorInside": true,
+      "placeholderColor": "rgb(208, 186, 167)",
+      "paperColor": "rgb(59, 46, 36)"
+    },
+    {
+      "theme": "dark",
+      "palette": "gray",
+      "width": 1540,
+      "overflow": false,
+      "editorInside": true,
+      "placeholderColor": "rgb(186, 195, 208)",
+      "paperColor": "rgb(48, 54, 64)"
+    },
+    {
+      "theme": "dark",
+      "palette": "gray",
+      "width": 1183,
+      "overflow": false,
+      "editorInside": true,
+      "placeholderColor": "rgb(186, 195, 208)",
+      "paperColor": "rgb(48, 54, 64)"
+    },
+    {
+      "theme": "dark",
+      "palette": "gray",
+      "width": 1024,
+      "overflow": false,
+      "editorInside": true,
+      "placeholderColor": "rgb(186, 195, 208)",
+      "paperColor": "rgb(48, 54, 64)"
+    },
+    {
+      "theme": "dark",
+      "palette": "pink",
+      "width": 1540,
+      "overflow": false,
+      "editorInside": true,
+      "placeholderColor": "rgb(210, 180, 196)",
+      "paperColor": "rgb(62, 45, 57)"
+    },
+    {
+      "theme": "dark",
+      "palette": "pink",
+      "width": 1183,
+      "overflow": false,
+      "editorInside": true,
+      "placeholderColor": "rgb(210, 180, 196)",
+      "paperColor": "rgb(62, 45, 57)"
+    },
+    {
+      "theme": "dark",
+      "palette": "pink",
+      "width": 1024,
+      "overflow": false,
+      "editorInside": true,
+      "placeholderColor": "rgb(210, 180, 196)",
+      "paperColor": "rgb(62, 45, 57)"
+    },
+    {
+      "theme": "light",
+      "palette": "green",
+      "width": 1540,
+      "overflow": false,
+      "editorInside": true,
+      "placeholderColor": "rgb(85, 103, 92)",
+      "paperColor": "rgb(255, 255, 255)"
+    },
+    {
+      "theme": "light",
+      "palette": "green",
+      "width": 1183,
+      "overflow": false,
+      "editorInside": true,
+      "placeholderColor": "rgb(85, 103, 92)",
+      "paperColor": "rgb(255, 255, 255)"
+    },
+    {
+      "theme": "light",
+      "palette": "green",
+      "width": 1024,
+      "overflow": false,
+      "editorInside": true,
+      "placeholderColor": "rgb(85, 103, 92)",
+      "paperColor": "rgb(255, 255, 255)"
+    },
+    {
+      "theme": "light",
+      "palette": "blue",
+      "width": 1540,
+      "overflow": false,
+      "editorInside": true,
+      "placeholderColor": "rgb(88, 106, 129)",
+      "paperColor": "rgb(255, 255, 255)"
+    },
+    {
+      "theme": "light",
+      "palette": "blue",
+      "width": 1183,
+      "overflow": false,
+      "editorInside": true,
+      "placeholderColor": "rgb(88, 106, 129)",
+      "paperColor": "rgb(255, 255, 255)"
+    },
+    {
+      "theme": "light",
+      "palette": "blue",
+      "width": 1024,
+      "overflow": false,
+      "editorInside": true,
+      "placeholderColor": "rgb(88, 106, 129)",
+      "paperColor": "rgb(255, 255, 255)"
+    },
+    {
+      "theme": "light",
+      "palette": "orange",
+      "width": 1540,
+      "overflow": false,
+      "editorInside": true,
+      "placeholderColor": "rgb(120, 101, 85)",
+      "paperColor": "rgb(255, 255, 255)"
+    },
+    {
+      "theme": "light",
+      "palette": "orange",
+      "width": 1183,
+      "overflow": false,
+      "editorInside": true,
+      "placeholderColor": "rgb(120, 101, 85)",
+      "paperColor": "rgb(255, 255, 255)"
+    },
+    {
+      "theme": "light",
+      "palette": "orange",
+      "width": 1024,
+      "overflow": false,
+      "editorInside": true,
+      "placeholderColor": "rgb(120, 101, 85)",
+      "paperColor": "rgb(255, 255, 255)"
+    },
+    {
+      "theme": "light",
+      "palette": "gray",
+      "width": 1540,
+      "overflow": false,
+      "editorInside": true,
+      "placeholderColor": "rgb(91, 101, 115)",
+      "paperColor": "rgb(255, 255, 255)"
+    },
+    {
+      "theme": "light",
+      "palette": "gray",
+      "width": 1183,
+      "overflow": false,
+      "editorInside": true,
+      "placeholderColor": "rgb(91, 101, 115)",
+      "paperColor": "rgb(255, 255, 255)"
+    },
+    {
+      "theme": "light",
+      "palette": "gray",
+      "width": 1024,
+      "overflow": false,
+      "editorInside": true,
+      "placeholderColor": "rgb(91, 101, 115)",
+      "paperColor": "rgb(255, 255, 255)"
+    },
+    {
+      "theme": "light",
+      "palette": "pink",
+      "width": 1540,
+      "overflow": false,
+      "editorInside": true,
+      "placeholderColor": "rgb(121, 96, 109)",
+      "paperColor": "rgb(255, 255, 255)"
+    },
+    {
+      "theme": "light",
+      "palette": "pink",
+      "width": 1183,
+      "overflow": false,
+      "editorInside": true,
+      "placeholderColor": "rgb(121, 96, 109)",
+      "paperColor": "rgb(255, 255, 255)"
+    },
+    {
+      "theme": "light",
+      "palette": "pink",
+      "width": 1024,
+      "overflow": false,
+      "editorInside": true,
+      "placeholderColor": "rgb(121, 96, 109)",
+      "paperColor": "rgb(255, 255, 255)"
+    }
+  ],
+  "interaction": [
+    "Blank paper focuses editor",
+    "Typing removes placeholder",
+    "Blank paper restores previous caret without appending text",
+    "Focused helper is hidden",
+    "Typewriter toggle works"
+  ],
+  "runtimeErrors": []
+}

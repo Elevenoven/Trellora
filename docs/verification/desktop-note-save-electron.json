@@ -1,0 +1,21 @@
+{
+  "date": "2026-10-02T06:29:19.881Z",
+  "kind": "Electron development bundle",
+  "pythonInAppPath": "host default",
+  "passed": [
+    "real CodeMirror input",
+    "note and library switch flush",
+    "versioned tags",
+    "versioned backup restoration",
+    "clean external refresh",
+    "dirty conflict retention",
+    "external deletion retains draft without recreating old path",
+    "blocked close",
+    "save-copy UI",
+    "immediate normal close",
+    "1 MiB worker indexing and version wait",
+    "cold restart and search",
+    "1 MiB source editor load",
+    "worker exit"
+  ]
+}

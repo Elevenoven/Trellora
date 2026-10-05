@@ -1,0 +1,137 @@
+.note-library-menu-anchor {
+    position: fixed;
+    width: 1px;
+    height: 1px;
+    pointer-events: none;
+}
+
+.note-library-context-menu.mantine-Menu-dropdown {
+    padding: 5px;
+    border-radius: 10px;
+    background: var(--surface-raised);
+    color: var(--text-primary);
+}
+
+.note-library-context-menu .mantine-Menu-item {
+    min-height: 33px;
+    font-size: 12px;
+    border-radius: 6px;
+}
+
+.note-library-context-menu .mantine-Menu-item:not([data-disabled]):hover {
+    background: var(--surface-hover);
+}
+
+.note-library-menu-title {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    max-width: 198px;
+    padding: 6px 10px 8px;
+    color: var(--text-tertiary);
+    font-size: 11px;
+}
+
+.tree-pin-icon {
+    flex-shrink: 0;
+    margin-left: auto;
+    color: var(--text-tertiary);
+}
+
+.note-overview-modal.mantine-Modal-content {
+    border: 1px solid var(--border-subtle);
+    border-radius: 14px;
+    background: var(--surface-canvas);
+    color: var(--text-primary);
+}
+
+.note-overview-modal-header.mantine-Modal-header {
+    padding: 16px 24px 12px;
+    background: var(--surface-canvas);
+    border-bottom: 1px solid var(--border-subtle);
+    color: var(--text-secondary);
+}
+
+.note-overview-modal-body {
+    padding: 0;
+}
+
+.note-overview-heading {
+    padding: 24px 28px 22px;
+    background: var(--surface-raised);
+    border-bottom: 1px solid var(--border-subtle);
+}
+
+.note-overview-title.mantine-Title-root {
+    margin: 0 0 18px;
+    font-family: var(--font-main);
+    font-size: 24px;
+    font-weight: 650;
+    line-height: 1.4;
+    letter-spacing: -0.3px;
+    overflow-wrap: anywhere;
+}
+
+.note-overview-tags {
+    display: grid;
+    grid-template-columns: 56px minmax(0, 1fr);
+    gap: 10px;
+    align-items: start;
+}
+
+.note-overview-section-label {
+    display: flex;
+    align-items: center;
+    gap: 7px;
+    min-height: 24px;
+    margin-bottom: 10px;
+    color: var(--text-secondary);
+    font-size: 12px;
+    font-weight: 600;
+}
+
+.note-overview-tags .note-overview-section-label { margin-bottom: 0; }
+.note-overview-tags > .mantine-Text-root { line-height: 24px; }
+.note-overview-tag-list { min-width: 0; }
+
+.note-overview-tag.mantine-Badge-root {
+    height: auto;
+    min-height: 24px;
+    padding: 4px 8px;
+    max-width: 100%;
+    color: var(--text-secondary);
+    background: var(--surface-hover);
+    font-size: 11px;
+    font-weight: 500;
+    text-transform: none;
+}
+
+.note-overview-tag .mantine-Badge-label {
+    white-space: normal;
+    overflow-wrap: anywhere;
+    line-height: 1.4;
+}
+
+.note-overview-sections { padding: 24px 28px; }
+.note-overview-stale { margin-bottom: 20px; font-size: 12px; }
+.note-overview-description { white-space: pre-wrap; line-height: 1.85; overflow-wrap: anywhere; }
+.note-overview-points-section { margin-top: 24px; padding-top: 20px; border-top: 1px solid var(--border-subtle); }
+
+.note-overview-points {
+    display: grid;
+    gap: 12px;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+
+.note-overview-points li { display: grid; grid-template-columns: 10px minmax(0, 1fr); gap: 10px; align-items: start; }
+.note-overview-points .mantine-Text-root { line-height: 1.75; white-space: pre-wrap; overflow-wrap: anywhere; }
+.note-overview-point-marker { width: 5px; height: 5px; margin-top: 10px; border-radius: 50%; background: var(--text-tertiary); }
+.note-overview-footer { padding: 14px 28px; border-top: 1px solid var(--border-subtle); }
+
+@media (max-width: 520px) {
+    .note-overview-heading, .note-overview-sections { padding: 20px; }
+    .note-overview-modal-header.mantine-Modal-header, .note-overview-footer { padding: 12px 20px; }
+    .note-overview-title.mantine-Title-root { font-size: 21px; }
+}

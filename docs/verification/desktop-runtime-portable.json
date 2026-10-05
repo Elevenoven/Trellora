@@ -1,0 +1,25 @@
+{
+  "measuredAt": "2026-10-02T07:48:55.657Z",
+  "executablePath": "E:\\AI-Project\\menghan-notes\\trellora\\Trellora-1.0.0-portable-x64.exe",
+  "artifactSha256": "a0e783d83bf71c562233e1e9bf6426d5c3efd913e5f254a31ccf0087fa758510",
+  "isolatedUserData": true,
+  "isolatedWorkspaceAndLibraries": true,
+  "applicationPathExcludesPython": true,
+  "passed": [
+    "duplicate launch restores and focuses the existing window",
+    "one STARTUP_READY per instance",
+    "actual Worker hello/shutdown after duplicate launch",
+    "persistent safe diagnostics",
+    "unreachable configured model",
+    "idempotent samples preserve user changes",
+    "native backup and restore file/directory selection",
+    "full backup",
+    "main-process restore into a new directory",
+    "restored and original libraries both registered",
+    "restored workspace switch and persistent processing pause",
+    "safe connection hints exclude keys",
+    "onboarding skip persists",
+    "normal close and cold reopening",
+    "original note content preserved"
+  ]
+}

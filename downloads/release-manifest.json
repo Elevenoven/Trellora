@@ -1,0 +1,66 @@
+{
+  "schemaVersion": 1,
+  "productName": "Trellora",
+  "appVersion": "1.0.0",
+  "platform": "win32",
+  "arch": "x64",
+  "createdAt": "2026-10-05T09:34:07.9794856Z",
+  "sourceRevision": null,
+  "sourceRevisionNote": "Built from local workspace; no Git metadata available in this checkout",
+  "nodeVersion": "v24.13.0",
+  "runtime": {
+    "schemaVersion": 1,
+    "createdAt": "2026-10-05T09:25:52.055Z",
+    "python": {
+      "implementation": "CPython",
+      "version": "3.13.2",
+      "executableName": "python-worker.exe",
+      "standardLibrary": "Lib",
+      "dependencyDirectory": ".deps"
+    },
+    "worker": {
+      "protocolVersion": 1,
+      "engineVersion": "p5",
+      "version": "0.3.0",
+      "jiebaVersion": "0.42.1",
+      "capabilities": [
+        "hello",
+        "runStage:lines",
+        "runStage:signals",
+        "runStage:tree",
+        "runStage:chunks",
+        "runStage:chunks-v2",
+        "runStage:chunks-llm-v1",
+        "runStage:keywords",
+        "runStage:entities-v1",
+        "runStage:graph-v1",
+        "tokenizeSearch:jieba-v1",
+        "cancel",
+        "shutdown"
+      ]
+    }
+  },
+  "artifacts": [
+    {
+      "name": "Trellora-1.0.0-setup-x64.exe",
+      "byteLength": 92977801,
+      "sha256": "96e934b8d92bb4ac236e9660a646090fb05d8db146c8ca314342da5e85423b64",
+      "signatureStatus": "NotSigned"
+    },
+    {
+      "name": "Trellora-1.0.0-portable-x64.exe",
+      "byteLength": 92724675,
+      "sha256": "8164237fefae848b6dc93164806cd6a01c67b3c0b00ec0984730ad4514972537",
+      "signatureStatus": "NotSigned"
+    }
+  ],
+  "checks": {
+    "typeScript": "passed",
+    "eslint": "passed",
+    "pythonUnitTests": "passed: 91 tests, 1 skipped",
+    "packageStructureAndWorkerHandshake": "passed",
+    "runtimeReport": "package-verification.json",
+    "cleanWindowsMachine": "not verified",
+    "nsisInstallUpgradeUninstall": "not verified"
+  }
+}

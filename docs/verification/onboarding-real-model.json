@@ -1,0 +1,14 @@
+{
+  "verifiedAt": "2026-10-02T11:14:01.497Z",
+  "method": "real Electron/main/preload/React, saved encrypted default model, direct sample-question send without retest/save or separate practice creation, isolated workspace",
+  "provider": "qwen",
+  "model": "qwen3.7-flash",
+  "elapsedMs": 8556,
+  "status": "completed",
+  "answerCharacters": 851,
+  "persistedTurnStatus": "complete",
+  "selectedProfileMatches": true,
+  "originalUserDataModified": false,
+  "keysOrAnswersIncluded": false,
+  "screenshot": "E:\\AI-Project\\menghan-notes\\output\\verification\\onboarding\\11-real-model-answer.png"
+}

@@ -1,0 +1,89 @@
+{
+  "schemaVersion": 1,
+  "fixtureId": "phase-0-context-runtime-v1",
+  "routes": {
+    "chat": {
+      "transport": "openai-compatible-chat-completions",
+      "endpointPath": "/v1/chat/completions",
+      "roleStructure": [
+        "system",
+        "user"
+      ],
+      "answerDepth": "detailed",
+      "answerDepthProjection": "projected",
+      "temperature": 0.7,
+      "systemPromptChars": 411,
+      "systemPromptSha256": "9a7738cd8df5226f7ccf1ca0bb65cfb4491190db7359cd93b0f47d727df5414c",
+      "userPromptChars": 84,
+      "userPromptSha256": "8e8f8860d51d3fef212e9ee5c86b0e88b54a362709c76e74773820275ebcf58a",
+      "legacyCombinedPromptChars": 497,
+      "legacyCombinedPromptSha256": "0e88732181f048def8edbe2a4c8bee729430163dedd62df34d12f74926e75e4c"
+    },
+    "knowledgeBase": {
+      "transport": "openai-compatible-chat-completions",
+      "endpointPath": "/v1/chat/completions",
+      "roleStructure": [
+        "system",
+        "user"
+      ],
+      "answerDepth": "detailed",
+      "answerDepthProjection": "projected",
+      "temperature": 0.2,
+      "systemPromptChars": 407,
+      "systemPromptSha256": "172f471e3cab365629db6ecf9b899239ef2e1145b0a64a720534250dd6c5b517",
+      "userPromptChars": 112,
+      "userPromptSha256": "c1ea71c172b031b1926d61202265f3bf60cf6b7a136477b9cc8852fe165e41b9",
+      "legacyCombinedPromptChars": 521,
+      "legacyCombinedPromptSha256": "5b46da9af014862e3e1c0b4fb2d3d38a9535eb497ccad62ec84e2199b00dacaf"
+    },
+    "currentNoteDirect": {
+      "transport": "openai-compatible-chat-completions",
+      "endpointPath": "/v1/chat/completions",
+      "roleStructure": [
+        "user"
+      ],
+      "answerDepth": "detailed",
+      "answerDepthProjection": "not-projected",
+      "temperature": 0.2,
+      "systemPromptChars": 0,
+      "systemPromptSha256": null,
+      "userPromptChars": 4516,
+      "userPromptSha256": "08ad873ab8547f8b4ce1a45c9b5653fedf4394618fb5612065404d6b751ec690",
+      "legacyCombinedPromptChars": 4516,
+      "legacyCombinedPromptSha256": "08ad873ab8547f8b4ce1a45c9b5653fedf4394618fb5612065404d6b751ec690"
+    },
+    "currentNoteReact": {
+      "transport": "openai-compatible-chat-completions",
+      "endpointPath": "/v1/chat/completions",
+      "roleStructure": [
+        "user"
+      ],
+      "answerDepth": "detailed",
+      "answerDepthProjection": "not-projected",
+      "temperature": 0.2,
+      "systemPromptChars": 0,
+      "systemPromptSha256": null,
+      "userPromptChars": 8510,
+      "userPromptSha256": "94d65ef1cb4daeecccd66210ed9e94f74718eadb58b9bda22935c94419298163",
+      "legacyCombinedPromptChars": 8510,
+      "legacyCombinedPromptSha256": "94d65ef1cb4daeecccd66210ed9e94f74718eadb58b9bda22935c94419298163"
+    }
+  },
+  "rollingSummaryProjection": {
+    "sourceLimitChars": 4000,
+    "sourceChars": 4000,
+    "sourceSha256": "5ba84816ae279a140bba2672ef87ae4eaf3f08acef0955edc048f43f82fc6f5d",
+    "projectorPerMessageChars": 800,
+    "projectedSha256": "5e5190c84407942ec4f614586269114efdf9cb1a4dd145cb8f1dfb39983df67d",
+    "keepsTail": true,
+    "keepsHead": false
+  },
+  "effectiveWindowMismatch": {
+    "discoveredTokens": 32768,
+    "configuredCapTokens": 65536,
+    "selectedTokens": 131072,
+    "source": "application-fixed",
+    "confidence": "exact",
+    "warning": "模型元数据显示 32768 token；Trellora 仍统一按 131072 token 规划上下文。 旧配置中的 65536 token 已由统一的 131072 token 上下文预算替代。"
+  }
+}

@@ -1,0 +1,88 @@
+{
+  "schemaVersion": 1,
+  "fixture": "ner-multi-section.md",
+  "baselineReadHitLimit": 2,
+  "cases": [
+    {
+      "id": "S01",
+      "kind": "normal",
+      "question": "NER 是什么？",
+      "searchTerms": ["NER 是什么？"],
+      "expectedHeadings": ["NER 定义"],
+      "expectedProbeCompleteness": "complete"
+    },
+    {
+      "id": "S02",
+      "kind": "normal",
+      "question": "NER 模型的分类有哪些？",
+      "searchTerms": ["NER", "模型", "分类"],
+      "expectedHeadings": ["NER 模型分类"],
+      "expectedProbeCompleteness": "complete"
+    },
+    {
+      "id": "S03",
+      "kind": "coverage-baseline",
+      "question": "笔记里关于 NER 都讲了什么？",
+      "searchTerms": ["NER"],
+      "expectedHeadings": ["NER 定义", "NER 模型分类", "NER 数据标注", "NER 评估", "NER 部署"],
+      "expectedProbeCompleteness": "partial"
+    },
+    {
+      "id": "S04",
+      "kind": "coverage-baseline",
+      "question": "逐处列出全文所有提到 NER 的地方",
+      "searchTerms": ["NER"],
+      "expectedHeadings": ["NER 定义", "NER 模型分类", "NER 数据标注", "NER 评估", "NER 部署"],
+      "expectedProbeCompleteness": "partial"
+    },
+    {
+      "id": "S05",
+      "kind": "summary-route",
+      "question": "完整总结当前笔记",
+      "searchTerms": [],
+      "expectedHeadings": [],
+      "expectedSummaryMode": "summary-complete"
+    },
+    {
+      "id": "S06",
+      "kind": "normal",
+      "question": "Ner 是什么？",
+      "searchTerms": ["Ner 是什么？"],
+      "expectedHeadings": ["NER 定义"],
+      "expectedProbeCompleteness": "complete"
+    },
+    {
+      "id": "S07",
+      "kind": "exception",
+      "question": "RBG 版本 1.2.4 是什么？",
+      "searchTerms": ["RBG 版本 1.2.4 是什么？"],
+      "expectedHeadings": [],
+      "expectedProbeCompleteness": "not-found"
+    },
+    {
+      "id": "S08",
+      "kind": "normal",
+      "question": "只看 NER 模型分类这一节",
+      "searchTerms": ["NER", "模型", "分类"],
+      "expectedHeadings": ["NER 模型分类"],
+      "expectedProbeCompleteness": "complete"
+    },
+    {
+      "id": "S11",
+      "kind": "boundary",
+      "question": "120 个标题后的 NER 章节讲了什么？",
+      "searchTerms": ["120 个标题后的 NER"],
+      "expectedHeadings": ["120 个标题后的 NER 章节"],
+      "expectedCapsuleTruncated": true,
+      "expectedProbeCompleteness": "complete"
+    },
+    {
+      "id": "S12",
+      "kind": "duplicate-baseline",
+      "question": "重复 NER 说明是什么？",
+      "searchTerms": ["重复", "NER", "说明"],
+      "expectedHeadings": ["重复说明甲", "重复说明乙"],
+      "expectedProbeCompleteness": "partial"
+    }
+  ]
+}

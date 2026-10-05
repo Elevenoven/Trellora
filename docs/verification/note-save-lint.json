@@ -1,0 +1,141 @@
+{
+  "capturedAt": "2026-09-30T13:52:25.127Z",
+  "command": "pnpm lint",
+  "passed": false,
+  "errors": 8,
+  "warnings": 7,
+  "files": [
+    {
+      "file": ".codex/current-note-stage2-check.mjs",
+      "errors": 0,
+      "warnings": 3,
+      "messages": [
+        {
+          "line": 832,
+          "rule": null,
+          "severity": 1,
+          "message": "Unused eslint-disable directive (no problems were reported from 'max-len')."
+        },
+        {
+          "line": 4326,
+          "rule": null,
+          "severity": 1,
+          "message": "Unused eslint-disable directive (no problems were reported from 'complexity')."
+        },
+        {
+          "line": 9797,
+          "rule": null,
+          "severity": 1,
+          "message": "Unused eslint-disable directive (no problems were reported from 'no-bitwise')."
+        }
+      ]
+    },
+    {
+      "file": ".codex/library-stage2-check.mjs",
+      "errors": 0,
+      "warnings": 3,
+      "messages": [
+        {
+          "line": 832,
+          "rule": null,
+          "severity": 1,
+          "message": "Unused eslint-disable directive (no problems were reported from 'max-len')."
+        },
+        {
+          "line": 3960,
+          "rule": null,
+          "severity": 1,
+          "message": "Unused eslint-disable directive (no problems were reported from 'complexity')."
+        },
+        {
+          "line": 9431,
+          "rule": null,
+          "severity": 1,
+          "message": "Unused eslint-disable directive (no problems were reported from 'no-bitwise')."
+        }
+      ]
+    },
+    {
+      "file": "electron/main.ts",
+      "errors": 4,
+      "warnings": 0,
+      "messages": [
+        {
+          "line": 147,
+          "rule": "@typescript-eslint/no-unused-vars",
+          "severity": 2,
+          "message": "'getContextRuntimeObservations' is defined but never used. Allowed unused vars must match /^_/u."
+        },
+        {
+          "line": 247,
+          "rule": "@typescript-eslint/no-unused-vars",
+          "severity": 2,
+          "message": "'embedRemoteTexts' is defined but never used. Allowed unused vars must match /^_/u."
+        },
+        {
+          "line": 2748,
+          "rule": "no-useless-catch",
+          "severity": 2,
+          "message": "Unnecessary try/catch wrapper."
+        },
+        {
+          "line": 3029,
+          "rule": "no-useless-catch",
+          "severity": 2,
+          "message": "Unnecessary try/catch wrapper."
+        }
+      ]
+    },
+    {
+      "file": "src/App.tsx",
+      "errors": 2,
+      "warnings": 0,
+      "messages": [
+        {
+          "line": 486,
+          "rule": "@typescript-eslint/no-unused-vars",
+          "severity": 2,
+          "message": "'handleRemoveLibrary' is assigned a value but never used. Allowed unused vars must match /^_/u."
+        },
+        {
+          "line": 1352,
+          "rule": "@typescript-eslint/no-unused-vars",
+          "severity": 2,
+          "message": "'handleOpenRecentNote' is assigned a value but never used. Allowed unused vars must match /^_/u."
+        }
+      ]
+    },
+    {
+      "file": "src/components/settings/UserInformationSettings.tsx",
+      "errors": 0,
+      "warnings": 1,
+      "messages": [
+        {
+          "line": 90,
+          "rule": "react-hooks/exhaustive-deps",
+          "severity": 1,
+          "message": "React Hook useCallback has a missing dependency: 'setError'. Either include it or remove the dependency array. If 'setError' changes too often, find the parent component that defines it and wrap that definition in useCallback."
+        }
+      ]
+    },
+    {
+      "file": "src/editor/CodeBlockNodeView.tsx",
+      "errors": 2,
+      "warnings": 0,
+      "messages": [
+        {
+          "line": 86,
+          "rule": "react-refresh/only-export-components",
+          "severity": 2,
+          "message": "Fast refresh only works when a file only exports components. Use a new file to share constants or functions between components."
+        },
+        {
+          "line": 337,
+          "rule": "react-refresh/only-export-components",
+          "severity": 2,
+          "message": "Fast refresh only works when a file only exports components. Use a new file to share constants or functions between components."
+        }
+      ]
+    }
+  ]
+}

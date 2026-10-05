@@ -1,0 +1,17 @@
+{
+  "verifiedAt": "2026-10-04T13:58:50.322Z",
+  "checks": [
+    "all pages cover 401 tied-time records exactly once with deterministic ID ordering",
+    "kind/status predicates apply to both COUNT and rows; global counts do not depend on the current page",
+    "oversized page requests return at most 200; invalid sizes normalize and deleted final pages clamp to the last real page",
+    "shared-database workspace/principal isolation is enforced for page rows and counts; caller scope fields are ignored",
+    "the original cursor API and its default limit remain compatible",
+    "topics/documents page beyond their old display limits while preserving model candidate and affinity limits",
+    "empty/cleared pages normalize to page one without changing other owners; database and foreign keys remain valid"
+  ],
+  "method": "real scoped SQLite services; isolated data, 401 owned memories and separate owners, 260 topics/documents",
+  "maximumReturnedItems": 200,
+  "defaultPageSize": 50,
+  "originalUserDataModified": false,
+  "databaseIntegrity": "ok"
+}

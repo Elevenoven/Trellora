@@ -1,0 +1,14 @@
+{
+  "fixture": "1000 small Chinese Markdown notes and one 1 GiB zero-filled, highly compressible attachment; real expanded bytes are streamed and SHA-256 checked",
+  "fileCount": 1001,
+  "inputBytes": 1073804714,
+  "archiveBytes": 1332391,
+  "captureMs": 14443,
+  "packAndVerifyMs": 6386,
+  "restoreAndVerifyMs": 8249,
+  "peakRssBytes": 114941952,
+  "node": "20.18.0",
+  "electron": "31.7.7",
+  "platform": "win32",
+  "measuredAt": "2026-10-02T07:09:59.081Z"
+}

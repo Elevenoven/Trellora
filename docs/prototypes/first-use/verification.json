@@ -1,0 +1,330 @@
+{
+  "verifiedAt": "2026-10-02T08:43:27.107Z",
+  "method": "Isolated headless Chrome CDP; static HTML prototype only; no application IPC or live model calls",
+  "results": [
+    {
+      "check": "menu explanations, configuration success/failure, saved-but-unverified manual path, changed-model invalidation, no-model preview, sample draft, answer, finish with preserved conversation, defer/resume",
+      "passed": true
+    },
+    {
+      "viewport": {
+        "width": 1440,
+        "height": 960
+      },
+      "theme": "light",
+      "scene": "menus",
+      "horizontal": true,
+      "tourFits": true
+    },
+    {
+      "viewport": {
+        "width": 1440,
+        "height": 960
+      },
+      "theme": "light",
+      "scene": "config",
+      "horizontal": true,
+      "tourFits": true
+    },
+    {
+      "viewport": {
+        "width": 1440,
+        "height": 960
+      },
+      "theme": "light",
+      "scene": "question",
+      "horizontal": true,
+      "tourFits": true
+    },
+    {
+      "viewport": {
+        "width": 1440,
+        "height": 960
+      },
+      "theme": "light",
+      "scene": "complete",
+      "horizontal": true,
+      "tourFits": true
+    },
+    {
+      "viewport": {
+        "width": 1440,
+        "height": 960
+      },
+      "theme": "dark",
+      "scene": "menus",
+      "horizontal": true,
+      "tourFits": true
+    },
+    {
+      "viewport": {
+        "width": 1440,
+        "height": 960
+      },
+      "theme": "dark",
+      "scene": "config",
+      "horizontal": true,
+      "tourFits": true
+    },
+    {
+      "viewport": {
+        "width": 1440,
+        "height": 960
+      },
+      "theme": "dark",
+      "scene": "question",
+      "horizontal": true,
+      "tourFits": true
+    },
+    {
+      "viewport": {
+        "width": 1440,
+        "height": 960
+      },
+      "theme": "dark",
+      "scene": "complete",
+      "horizontal": true,
+      "tourFits": true
+    },
+    {
+      "viewport": {
+        "width": 1024,
+        "height": 768
+      },
+      "theme": "light",
+      "scene": "menus",
+      "horizontal": true,
+      "tourFits": true
+    },
+    {
+      "viewport": {
+        "width": 1024,
+        "height": 768
+      },
+      "theme": "light",
+      "scene": "config",
+      "horizontal": true,
+      "tourFits": true
+    },
+    {
+      "viewport": {
+        "width": 1024,
+        "height": 768
+      },
+      "theme": "light",
+      "scene": "question",
+      "horizontal": true,
+      "tourFits": true
+    },
+    {
+      "viewport": {
+        "width": 1024,
+        "height": 768
+      },
+      "theme": "light",
+      "scene": "complete",
+      "horizontal": true,
+      "tourFits": true
+    },
+    {
+      "viewport": {
+        "width": 1024,
+        "height": 768
+      },
+      "theme": "dark",
+      "scene": "menus",
+      "horizontal": true,
+      "tourFits": true
+    },
+    {
+      "viewport": {
+        "width": 1024,
+        "height": 768
+      },
+      "theme": "dark",
+      "scene": "config",
+      "horizontal": true,
+      "tourFits": true
+    },
+    {
+      "viewport": {
+        "width": 1024,
+        "height": 768
+      },
+      "theme": "dark",
+      "scene": "question",
+      "horizontal": true,
+      "tourFits": true
+    },
+    {
+      "viewport": {
+        "width": 1024,
+        "height": 768
+      },
+      "theme": "dark",
+      "scene": "complete",
+      "horizontal": true,
+      "tourFits": true
+    },
+    {
+      "viewport": {
+        "width": 900,
+        "height": 700
+      },
+      "theme": "light",
+      "scene": "menus",
+      "horizontal": true,
+      "tourFits": true
+    },
+    {
+      "viewport": {
+        "width": 900,
+        "height": 700
+      },
+      "theme": "light",
+      "scene": "config",
+      "horizontal": true,
+      "tourFits": true
+    },
+    {
+      "viewport": {
+        "width": 900,
+        "height": 700
+      },
+      "theme": "light",
+      "scene": "question",
+      "horizontal": true,
+      "tourFits": true
+    },
+    {
+      "viewport": {
+        "width": 900,
+        "height": 700
+      },
+      "theme": "light",
+      "scene": "complete",
+      "horizontal": true,
+      "tourFits": true
+    },
+    {
+      "viewport": {
+        "width": 900,
+        "height": 700
+      },
+      "theme": "dark",
+      "scene": "menus",
+      "horizontal": true,
+      "tourFits": true
+    },
+    {
+      "viewport": {
+        "width": 900,
+        "height": 700
+      },
+      "theme": "dark",
+      "scene": "config",
+      "horizontal": true,
+      "tourFits": true
+    },
+    {
+      "viewport": {
+        "width": 900,
+        "height": 700
+      },
+      "theme": "dark",
+      "scene": "question",
+      "horizontal": true,
+      "tourFits": true
+    },
+    {
+      "viewport": {
+        "width": 900,
+        "height": 700
+      },
+      "theme": "dark",
+      "scene": "complete",
+      "horizontal": true,
+      "tourFits": true
+    },
+    {
+      "viewport": {
+        "width": 375,
+        "height": 900
+      },
+      "theme": "light",
+      "scene": "menus",
+      "horizontal": true,
+      "tourFits": true
+    },
+    {
+      "viewport": {
+        "width": 375,
+        "height": 900
+      },
+      "theme": "light",
+      "scene": "config",
+      "horizontal": true,
+      "tourFits": true
+    },
+    {
+      "viewport": {
+        "width": 375,
+        "height": 900
+      },
+      "theme": "light",
+      "scene": "question",
+      "horizontal": true,
+      "tourFits": true
+    },
+    {
+      "viewport": {
+        "width": 375,
+        "height": 900
+      },
+      "theme": "light",
+      "scene": "complete",
+      "horizontal": true,
+      "tourFits": true
+    },
+    {
+      "viewport": {
+        "width": 375,
+        "height": 900
+      },
+      "theme": "dark",
+      "scene": "menus",
+      "horizontal": true,
+      "tourFits": true
+    },
+    {
+      "viewport": {
+        "width": 375,
+        "height": 900
+      },
+      "theme": "dark",
+      "scene": "config",
+      "horizontal": true,
+      "tourFits": true
+    },
+    {
+      "viewport": {
+        "width": 375,
+        "height": 900
+      },
+      "theme": "dark",
+      "scene": "question",
+      "horizontal": true,
+      "tourFits": true
+    },
+    {
+      "viewport": {
+        "width": 375,
+        "height": 900
+      },
+      "theme": "dark",
+      "scene": "complete",
+      "horizontal": true,
+      "tourFits": true
+    }
+  ]
+}

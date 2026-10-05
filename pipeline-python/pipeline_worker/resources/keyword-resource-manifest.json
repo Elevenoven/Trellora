@@ -1,0 +1,26 @@
+{
+  "schemaVersion": 1,
+  "resources": [
+    {
+      "path": "pipeline_worker/resources/stopwords-zh.txt",
+      "kind": "stopwords",
+      "language": "zh",
+      "license": "Project-maintained"
+    },
+    {
+      "path": "pipeline_worker/resources/stopwords-en.txt",
+      "kind": "stopwords",
+      "language": "en",
+      "license": "Project-maintained"
+    }
+  ],
+  "dependencies": [
+    {
+      "name": "jieba",
+      "version": "0.42.1",
+      "license": "MIT",
+      "source": "https://github.com/fxsjy/jieba",
+      "usage": "精确模式中文分词，HMM 关闭；不使用其默认 IDF 排序"
+    }
+  ]
+}

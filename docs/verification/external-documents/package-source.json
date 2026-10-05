@@ -1,0 +1,136 @@
+{
+  "date": "2026-10-03T11:35:33.117Z",
+  "matched": true,
+  "packages": [
+    {
+      "archive": "trellora/win-unpacked/resources/app.asar",
+      "matched": true,
+      "files": [
+        {
+          "file": "dist-electron/main.js",
+          "localSha256": "07a00b1a75cf6c8674fa0b677620959fae724c7d2c4a5c37157d0a938bc42541",
+          "packagedSha256": "07a00b1a75cf6c8674fa0b677620959fae724c7d2c4a5c37157d0a938bc42541"
+        },
+        {
+          "file": "dist-electron/preload.js",
+          "localSha256": "7b2bb7a747d82907ff3ff71ae0046a1fff9830e8724ea917ecf74c7e06564b71",
+          "packagedSha256": "7b2bb7a747d82907ff3ff71ae0046a1fff9830e8724ea917ecf74c7e06564b71"
+        },
+        {
+          "file": "dist/index.html",
+          "localSha256": "8683fd5e2fd5910f1a01dea7cc5771cfb7ddcbe5e58ea2f5cf52bcb5600e6a08",
+          "packagedSha256": "8683fd5e2fd5910f1a01dea7cc5771cfb7ddcbe5e58ea2f5cf52bcb5600e6a08"
+        },
+        {
+          "file": "dist/assets/index-C95e__De.js",
+          "localSha256": "db2786b0b93dd3befbea05b5fe7fc02045f2478531d7095a982d6edc1c4a5545",
+          "packagedSha256": "db2786b0b93dd3befbea05b5fe7fc02045f2478531d7095a982d6edc1c4a5545"
+        }
+      ]
+    },
+    {
+      "archive": "output/verification/external-document-package/v1/win-unpacked/resources/app.asar",
+      "matched": true,
+      "files": [
+        {
+          "file": "dist-electron/main.js",
+          "localSha256": "07a00b1a75cf6c8674fa0b677620959fae724c7d2c4a5c37157d0a938bc42541",
+          "packagedSha256": "07a00b1a75cf6c8674fa0b677620959fae724c7d2c4a5c37157d0a938bc42541"
+        },
+        {
+          "file": "dist-electron/preload.js",
+          "localSha256": "7b2bb7a747d82907ff3ff71ae0046a1fff9830e8724ea917ecf74c7e06564b71",
+          "packagedSha256": "7b2bb7a747d82907ff3ff71ae0046a1fff9830e8724ea917ecf74c7e06564b71"
+        },
+        {
+          "file": "dist/index.html",
+          "localSha256": "8683fd5e2fd5910f1a01dea7cc5771cfb7ddcbe5e58ea2f5cf52bcb5600e6a08",
+          "packagedSha256": "8683fd5e2fd5910f1a01dea7cc5771cfb7ddcbe5e58ea2f5cf52bcb5600e6a08"
+        },
+        {
+          "file": "dist/assets/index-C95e__De.js",
+          "localSha256": "db2786b0b93dd3befbea05b5fe7fc02045f2478531d7095a982d6edc1c4a5545",
+          "packagedSha256": "db2786b0b93dd3befbea05b5fe7fc02045f2478531d7095a982d6edc1c4a5545"
+        }
+      ]
+    },
+    {
+      "archive": "output/verification/external-document-package/v2/win-unpacked/resources/app.asar",
+      "matched": true,
+      "files": [
+        {
+          "file": "dist-electron/main.js",
+          "localSha256": "07a00b1a75cf6c8674fa0b677620959fae724c7d2c4a5c37157d0a938bc42541",
+          "packagedSha256": "07a00b1a75cf6c8674fa0b677620959fae724c7d2c4a5c37157d0a938bc42541"
+        },
+        {
+          "file": "dist-electron/preload.js",
+          "localSha256": "7b2bb7a747d82907ff3ff71ae0046a1fff9830e8724ea917ecf74c7e06564b71",
+          "packagedSha256": "7b2bb7a747d82907ff3ff71ae0046a1fff9830e8724ea917ecf74c7e06564b71"
+        },
+        {
+          "file": "dist/index.html",
+          "localSha256": "8683fd5e2fd5910f1a01dea7cc5771cfb7ddcbe5e58ea2f5cf52bcb5600e6a08",
+          "packagedSha256": "8683fd5e2fd5910f1a01dea7cc5771cfb7ddcbe5e58ea2f5cf52bcb5600e6a08"
+        },
+        {
+          "file": "dist/assets/index-C95e__De.js",
+          "localSha256": "db2786b0b93dd3befbea05b5fe7fc02045f2478531d7095a982d6edc1c4a5545",
+          "packagedSha256": "db2786b0b93dd3befbea05b5fe7fc02045f2478531d7095a982d6edc1c4a5545"
+        }
+      ]
+    },
+    {
+      "archive": "trellora/Trellora-1.0.0-portable-x64.exe > resources/app.asar",
+      "matched": true,
+      "files": [
+        {
+          "file": "dist-electron/main.js",
+          "localSha256": "07a00b1a75cf6c8674fa0b677620959fae724c7d2c4a5c37157d0a938bc42541",
+          "packagedSha256": "07a00b1a75cf6c8674fa0b677620959fae724c7d2c4a5c37157d0a938bc42541"
+        },
+        {
+          "file": "dist-electron/preload.js",
+          "localSha256": "7b2bb7a747d82907ff3ff71ae0046a1fff9830e8724ea917ecf74c7e06564b71",
+          "packagedSha256": "7b2bb7a747d82907ff3ff71ae0046a1fff9830e8724ea917ecf74c7e06564b71"
+        },
+        {
+          "file": "dist/index.html",
+          "localSha256": "8683fd5e2fd5910f1a01dea7cc5771cfb7ddcbe5e58ea2f5cf52bcb5600e6a08",
+          "packagedSha256": "8683fd5e2fd5910f1a01dea7cc5771cfb7ddcbe5e58ea2f5cf52bcb5600e6a08"
+        },
+        {
+          "file": "dist/assets/index-C95e__De.js",
+          "localSha256": "db2786b0b93dd3befbea05b5fe7fc02045f2478531d7095a982d6edc1c4a5545",
+          "packagedSha256": "db2786b0b93dd3befbea05b5fe7fc02045f2478531d7095a982d6edc1c4a5545"
+        }
+      ]
+    },
+    {
+      "archive": "trellora/Trellora-1.0.0-setup-x64.exe > resources/app.asar",
+      "matched": true,
+      "files": [
+        {
+          "file": "dist-electron/main.js",
+          "localSha256": "07a00b1a75cf6c8674fa0b677620959fae724c7d2c4a5c37157d0a938bc42541",
+          "packagedSha256": "07a00b1a75cf6c8674fa0b677620959fae724c7d2c4a5c37157d0a938bc42541"
+        },
+        {
+          "file": "dist-electron/preload.js",
+          "localSha256": "7b2bb7a747d82907ff3ff71ae0046a1fff9830e8724ea917ecf74c7e06564b71",
+          "packagedSha256": "7b2bb7a747d82907ff3ff71ae0046a1fff9830e8724ea917ecf74c7e06564b71"
+        },
+        {
+          "file": "dist/index.html",
+          "localSha256": "8683fd5e2fd5910f1a01dea7cc5771cfb7ddcbe5e58ea2f5cf52bcb5600e6a08",
+          "packagedSha256": "8683fd5e2fd5910f1a01dea7cc5771cfb7ddcbe5e58ea2f5cf52bcb5600e6a08"
+        },
+        {
+          "file": "dist/assets/index-C95e__De.js",
+          "localSha256": "db2786b0b93dd3befbea05b5fe7fc02045f2478531d7095a982d6edc1c4a5545",
+          "packagedSha256": "db2786b0b93dd3befbea05b5fe7fc02045f2478531d7095a982d6edc1c4a5545"
+        }
+      ]
+    }
+  ]
+}

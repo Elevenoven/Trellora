@@ -1,0 +1,16 @@
+{
+  "verifiedAt": "2026-10-03T02:40:27.498Z",
+  "executablePath": "E:\\AI-Project\\menghan-notes\\output\\verification\\memory-package\\Trellora-1.0.0-portable-x64.exe",
+  "sha256": "4d5bb01cf56d71f2b846e5fcef09c85c60f96a909ebbcf2c83e870ff950e7d54",
+  "method": "production portable/main/preload/React; local HTTP model fixture; no injected handlers; isolated profile; application PATH limited to Windows directories",
+  "checks": [
+    "portable default observe reports disabled routes even with auto selected",
+    "packaged main/preload/native SQLite extraction and consolidation preserve pending status and finite expiry",
+    "full portable restart keeps receipts and item identity; pending never enters prompt; explicit_only does not extract; clear does not replay old sources"
+  ],
+  "databaseIntegrity": "ok",
+  "schemaVersion": 10,
+  "cleanWindowsVm": false,
+  "originalUserDataModified": false,
+  "screenshot": "E:\\AI-Project\\menghan-notes\\output\\verification\\memory\\portable-status.png"
+}

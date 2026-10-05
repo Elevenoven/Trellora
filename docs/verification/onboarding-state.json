@@ -1,0 +1,11 @@
+{
+  "verifiedAt": "2026-10-02T11:07:05.219Z",
+  "method": "main-process service with controlled ports; no live model",
+  "checks": [
+    "fresh/legacy migration, old completion does not claim the new course, v2 validation",
+    "pause/resume, skipped AI cannot complete, stale revision and failed writes do not advance progress",
+    "catalog failure manual path, request ownership/scope, actual persistence, changed model, paused success, idempotent finish, no credentials or answers in progress",
+    "cold restart retains progress but never assumes a prior live connection test",
+    "saved untested models can ask after setup or skip; only a persisted complete answer completes the guide; incomplete profiles never hide another configured model or enable an unconfigured remote model"
+  ]
+}

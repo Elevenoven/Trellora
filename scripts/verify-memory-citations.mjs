@@ -1,0 +1,92 @@
+import assert from 'node:assert/strict';
+import fs from 'node:fs';
+import path from 'node:path';
+import { pathToFileURL } from 'node:url';
+import { transpileLocalModules } from './lib/transpile-local.mjs';
+
+const root = process.cwd();
+const temporary = fs.mkdtempSync(path.join(root, '.package-staging', 'memory-citations-contract-'));
+const compiled = path.join(temporary, 'compiled');
+const workspace = path.join(temporary, 'workspace');
+let owner;
+try {
+  fs.mkdirSync(workspace, { recursive: true });
+  const entries = ['src/components/assistantMemoryCitations.ts', 'src/components/assistantKnowledgeBaseCitations.ts', 'electron/knowledge/memory/memoryRecallService.ts', 'electron/knowledge/memory/memoryScope.ts', 'electron/knowledge/memory/memoryWriteService.ts', 'electron/knowledge/qaMemoryRepository.ts'];
+  transpileLocalModules(root, compiled, entries);
+  const load = async entry => import(pathToFileURL(path.join(compiled, entry.replace(/\.ts$/u, '.js'))).href);
+  const { formatMemoryCitationMarkdown, getReferencedMemoryCitations } = await load(entries[0]);
+  const { formatKnowledgeBaseCitationMarkdown } = await load(entries[1]);
+  const { QaMemoryDatabase } = await load('electron/knowledge/qaMemoryDatabase.ts');
+  const { MemoryScopeResolver } = await load(entries[3]);
+  const { MemoryWriteService } = await load(entries[4]);
+  const { MemoryRecallService } = await load(entries[2]);
+  const { QaMemoryRepository } = await load(entries[5]);
+  const snapshots = [{ itemId: 'z', kind: 'profile', contentSnapshot: 'Python 程序员', reference: 3 }, { itemId: 'a', kind: 'profile', contentSnapshot: 'Java 程序员', reference: 1 }];
+  const answer = '当前职业 [记忆3]，知识来源 [1]。重复 [记忆3]。';
+  const formatted = formatMemoryCitationMarkdown(formatKnowledgeBaseCitationMarkdown(answer, [{ reference: 1 }]), snapshots, 'turn-a');
+  assert.match(formatted, /data-memory-reference="3"/u);
+  assert.match(formatted, /href="#knowledge-base-citation-1"/u);
+  assert.deepEqual(getReferencedMemoryCitations(answer, snapshots).map(item => item.itemId), ['z']);
+  assert.match(formatMemoryCitationMarkdown('[记忆3]', snapshots, 'turn-b'), /assistant-memory-citation-turn-b-3/u);
+  const protectedText = '`[记忆3]`\n``[记忆3]``\n\\[记忆3]\n[记忆3](https://example.com)\n[说明 [记忆3]](https://example.com)\n```ts\n[记忆3]\n~~~\n[记忆3]\n```\n    [记忆3]';
+  assert.equal(formatMemoryCitationMarkdown(protectedText, snapshots, 'turn-a'), protectedText);
+  assert.equal(formatMemoryCitationMarkdown('[记忆99] [3]', snapshots, 'turn-a'), '[记忆99] [3]');
+  assert.equal(formatMemoryCitationMarkdown('[记忆3]', snapshots.map(({ reference, ...item }) => item), 'turn-a'), '[记忆3]');
+  assert.equal(formatMemoryCitationMarkdown('[记忆3]', [...snapshots, { ...snapshots[0], itemId: 'ambiguous' }], 'turn-a'), '[记忆3]');
+
+  owner = new QaMemoryDatabase();
+  let database = owner.getDatabase(workspace);
+  const resolver = new MemoryScopeResolver({ getActiveWorkspacePath: () => workspace, listRegisteredWorkspacePaths: () => [workspace], getPrincipalId: () => 'memory-citation-owner' });
+  const { scope } = resolver.resolveActive();
+  const writer = new MemoryWriteService(owner, workspace);
+  writer.updateWorkspaceConfig(scope, { enabled: true, writeMode: 'explicit_only' });
+  let repository = new QaMemoryRepository(owner, workspace);
+  const session = repository.createSession('chat');
+  const metadata = { memoryScope: { workspaceId: scope.workspaceId, principalId: scope.principalId } };
+  let sequence = 0;
+  function insertTurn(id, text, answerText = 'answer') {
+    const timestamp = '2026-10-04T15:00:00.000Z';
+    database.prepare(`INSERT INTO qa_turns (turn_id, session_id, turn_seq, request_id, attempt_no, user_text, assistant_text, scope_label, status, user_tokens, assistant_tokens, result_json, result_metadata_json, created_at, finished_at)
+      VALUES (?, ?, ?, ?, 1, ?, ?, '', 'complete', 1, 1, '{}', ?, ?, ?)`).run(id, session.sessionId, ++sequence, id, text, answerText, JSON.stringify(metadata), timestamp, timestamp);
+  }
+  insertTurn('citation-source-turn', '请你记住我现在是Python程序员');
+  const explicit = writer.writeExplicit(scope, '我现在是Python程序员', { sessionId: session.sessionId, messageId: 'citation-source-turn' });
+  const manual = writer.createManual(scope, { kind: 'preference', content: '偏好简体中文' });
+  let recallService = new MemoryRecallService(owner, workspace);
+  const recall = await recallService.recall(scope, '我现在是什么职业');
+  const selected = recall.usedItems.find(entry => entry.item.id === explicit.item.id);
+  assert.ok(selected.reference > 0);
+  assert.ok(recall.prompt.includes(`[记忆${selected.reference}]`));
+  insertTurn('citation-answer-turn', '我现在是什么职业', `Python程序员 [记忆${selected.reference}]`);
+  recallService.recordUsedMemories(scope, 'citation-answer-turn', recall.usedItems);
+  const before = recallService.listUsedMemories(scope, 'citation-answer-turn');
+  assert.equal(before.find(item => item.itemId === explicit.item.id).reference, selected.reference);
+  assert.equal(recallService.getCitationSource(scope, 'citation-answer-turn', explicit.item.id).userText, '请你记住我现在是Python程序员');
+  const longSource = '请你记住我现在是Python程序员\n' + '原始说明。'.repeat(90) + '\n完整原话末尾';
+  database.prepare('UPDATE qa_turns SET user_text = ? WHERE turn_id = ?').run(longSource, 'citation-source-turn');
+  assert.equal(recallService.getCitationSource(scope, 'citation-answer-turn', explicit.item.id).userText, longSource, 'original conversation must preserve line breaks and text beyond the memory-item length limit');
+  assert.equal(recallService.getCitationSource(scope, 'citation-answer-turn', manual.item.id).status, 'manual');
+  assert.equal(recallService.getCitationSource(scope, 'citation-answer-turn', 'not-in-answer').status, 'unavailable');
+  recallService.recordUsedMemories(scope, 'citation-answer-turn', recall.usedItems.slice().reverse().map(entry => ({ ...entry, reference: 99 })));
+  assert.deepEqual(recallService.listUsedMemories(scope, 'citation-answer-turn'), before, 'duplicate completion must not renumber an answer');
+  const otherResolver = new MemoryScopeResolver({ getActiveWorkspacePath: () => workspace, listRegisteredWorkspacePaths: () => [workspace], getPrincipalId: () => 'another-owner' });
+  assert.equal(recallService.getCitationSource(otherResolver.resolveActive().scope, 'citation-answer-turn', explicit.item.id).status, 'unavailable');
+  writer.delete(scope, explicit.item.id);
+  owner.closeAll();
+  database = owner.getDatabase(workspace);
+  recallService = new MemoryRecallService(owner, workspace);
+  repository = new QaMemoryRepository(owner, workspace);
+  assert.deepEqual(recallService.listUsedMemories(scope, 'citation-answer-turn'), before, 'restart/deletion must preserve source snapshots and references');
+  assert.deepEqual(repository.getSession(session.sessionId).turns.find(turn => turn.turnId === 'citation-answer-turn').usedMemories, before, 'history and live IPC must agree');
+  assert.equal(recallService.getCitationSource(scope, 'citation-answer-turn', explicit.item.id).status, 'available', 'memory deletion must not delete the original conversation');
+  database.prepare('DELETE FROM qa_turns WHERE turn_id = ?').run('citation-source-turn');
+  assert.equal(recallService.getCitationSource(scope, 'citation-answer-turn', explicit.item.id).status, 'unavailable');
+  assert.deepEqual(recallService.listUsedMemories(scope, 'citation-answer-turn'), before);
+  assert.equal(database.pragma('quick_check', { simple: true }), 'ok');
+  assert.deepEqual(database.prepare('PRAGMA foreign_key_check').all(), []);
+  console.log('Memory citation Markdown, namespace, stable numbering, history, deletion and owner isolation checks passed.');
+} finally {
+  owner?.closeAll();
+  if (!path.resolve(temporary).startsWith(path.resolve(root, '.package-staging') + path.sep)) throw new Error('Test cleanup outside staging');
+  fs.rmSync(temporary, { recursive: true, force: true });
+}

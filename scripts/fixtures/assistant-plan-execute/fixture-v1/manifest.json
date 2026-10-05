@@ -1,0 +1,15 @@
+{
+  "fixtureVersion": 1,
+  "encoding": "utf-8",
+  "questionsFile": "questions.json",
+  "files": [
+    {
+      "path": "notes/fixture-note.md",
+      "sha256": "2f11fa2208f1589c9562367550d27d7533978c3ddb9dfa7c2d577b5668677af1"
+    },
+    {
+      "path": "questions.json",
+      "sha256": "1dc6b0fd6bcc7476c57e21ce22da1d253b89c23b37376e729d7ded0d17243a35"
+    }
+  ]
+}

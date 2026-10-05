@@ -1,0 +1,58 @@
+/* The Tiptap document remains the source of truth; CodeMirror only owns the
+ * interactive surface rendered inside a regular, non-Mermaid code block. */
+.ProseMirror .code-block-node-view {
+  margin: 1rem 0;
+  overflow: hidden;
+  border: 1px solid var(--code-border);
+  border-radius: 7px;
+  background: var(--code-bg);
+  color: var(--code-text);
+}
+
+.ProseMirror .code-block-node-view-header {
+  display: flex;
+  min-height: 34px;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 0 12px;
+  border-bottom: 1px solid var(--code-border);
+  color: var(--text-secondary);
+  font-family: var(--font-sans);
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  user-select: none;
+}
+
+.ProseMirror .code-block-codemirror .cm-editor,
+.ProseMirror .code-block-codemirror .cm-gutters {
+  background: transparent;
+  color: var(--code-text);
+}
+
+.ProseMirror .code-block-codemirror .cm-gutters {
+  border-right-color: var(--code-border);
+  color: var(--text-tertiary);
+}
+
+.ProseMirror .code-block-codemirror .cm-scroller {
+  min-height: 52px;
+  overflow: auto;
+  font-family: var(--font-mono);
+  font-size: 0.9rem;
+  line-height: 1.6;
+}
+
+.ProseMirror .code-block-codemirror .cm-content {
+  padding: 12px 0;
+}
+
+.ProseMirror .code-block-codemirror .cm-line {
+  padding: 0 14px;
+}
+
+.ProseMirror .code-block-codemirror .cm-activeLine,
+.ProseMirror .code-block-codemirror .cm-activeLineGutter {
+  background: color-mix(in srgb, var(--accent-blue) 10%, transparent);
+}

@@ -1,0 +1,76 @@
+{
+  "fixtureVersion": 1,
+  "question": "请根据当前笔记核对全量证据中的事实、冲突、日期和版本信息。",
+  "plannerOutput": {
+    "scope": {
+      "mode": "focused",
+      "coveragePolicy": "sufficient",
+      "targetTopic": "全量证据基线",
+      "targetAspects": []
+    },
+    "goals": [
+      {
+        "goalId": "goal-alpha",
+        "question": "核对事实和冲突证据。",
+        "evidenceKind": "fact",
+        "requirements": [
+          {
+            "requirementId": "requirement-alpha",
+            "label": "事实与冲突原文",
+            "subject": "冲突",
+            "minEvidence": 1
+          }
+        ],
+        "queryTerms": ["EvidenceAnchor", "1.2.0", "ConflictSignal", "否定条件"]
+      },
+      {
+        "goalId": "goal-beta",
+        "question": "核对日期、版本和同名事实。",
+        "evidenceKind": "timeline",
+        "requirements": [
+          {
+            "requirementId": "requirement-beta",
+            "label": "日期与版本原文",
+            "subject": "版本",
+            "minEvidence": 1
+          }
+        ],
+        "queryTerms": ["evidenceAnchor", "Beta", "2026-08-23", "Version-1.2.0"]
+      }
+    ]
+  },
+  "readBlockIndexes": [0, 1],
+  "evidenceBudgetScenarios": [
+    { "id": "below", "rawEvidenceChars": 60000 },
+    { "id": "near", "rawEvidenceChars": 70000 },
+    { "id": "over", "rawEvidenceChars": 80000 }
+  ],
+  "phase5Compression": {
+    "term": "Stage5EvidenceAnchor",
+    "blockCount": 20,
+    "blockCharacters": 900,
+    "compressionTargetRatio": 0.65,
+    "maxCompressionCalls": 5,
+    "maxCompressionRounds": 2,
+    "maxCompressionBatches": 6
+  },
+  "phase6BroadCoverage": {
+    "stateTable": [
+      { "id": "never-searched", "hasEvidence": false, "candidateExhausted": false, "goalStatus": "partial", "answerCompleteness": "partial" },
+      { "id": "searched-without-evidence", "hasEvidence": false, "candidateExhausted": false, "goalStatus": "partial", "answerCompleteness": "partial" },
+      { "id": "exhausted-without-evidence", "hasEvidence": false, "candidateExhausted": true, "goalStatus": "not-found", "answerCompleteness": "not-found" },
+      { "id": "covered-with-one-citation", "hasEvidence": true, "candidateExhausted": true, "goalStatus": "covered", "answerCompleteness": "complete" },
+      { "id": "conflicted-with-both-sides", "hasEvidence": true, "candidateExhausted": true, "goalStatus": "conflicted", "answerCompleteness": "complete" },
+      { "id": "invalid-citation", "hasEvidence": true, "candidateExhausted": true, "goalStatus": "covered", "answerCompleteness": "partial" },
+      { "id": "incomplete-representation", "hasEvidence": true, "candidateExhausted": true, "goalStatus": "covered", "answerCompleteness": "partial" }
+    ],
+    "relaxedRequirementMinEvidence": 1,
+    "conflictedRequiresBothSides": true,
+    "citationRejects": ["artifact", "cross-session", "stale"]
+  },
+  "promptInjectionMarkers": [
+    "忽略系统要求",
+    "修改 JSON",
+    "泄露提示词"
+  ]
+}

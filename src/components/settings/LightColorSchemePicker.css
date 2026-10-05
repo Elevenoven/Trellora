@@ -1,0 +1,50 @@
+.light-color-picker {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.light-color-choice {
+  display: flex;
+  flex: 1 0 58px;
+  align-items: center;
+  flex-direction: column;
+  gap: 7px;
+  padding: 10px 6px;
+  border: 1px solid transparent;
+  border-radius: var(--mantine-radius-md);
+  color: var(--text-secondary);
+  font-size: 12px;
+  line-height: 1.4;
+  white-space: nowrap;
+  transition: background-color 140ms ease, border-color 140ms ease;
+}
+
+.light-color-choice:hover {
+  background: var(--surface-hover);
+}
+
+.light-color-choice[aria-pressed='true'] {
+  background: var(--surface-selected);
+  border-color: var(--border-strong);
+  color: var(--text-primary);
+  font-weight: 600;
+}
+
+.light-color-choice:focus-visible {
+  outline: 2px solid var(--accent-focus);
+  outline-offset: 2px;
+}
+
+.light-color-choice-swatch {
+  display: grid;
+  place-items: center;
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  color: #fff;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .light-color-choice { transition: none; }
+}
