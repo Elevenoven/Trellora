@@ -1,0 +1,99 @@
+.model-configuration-guide {
+  display: flex;
+  flex-direction: column;
+  background: var(--surface-raised);
+  color: var(--text-primary);
+  border: 1px solid var(--border-color);
+}
+
+.model-configuration-guide .mantine-Modal-header {
+  flex-shrink: 0;
+  background: var(--surface-raised);
+}
+
+.model-configuration-guide .mantine-Modal-title {
+  font-weight: 650;
+}
+
+.model-guide-body {
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+  overflow: hidden;
+}
+
+.model-guide-scroll {
+  min-height: 0;
+  overflow-y: auto;
+  padding-right: 6px;
+  scrollbar-width: thin;
+  scrollbar-color: var(--border-color) transparent;
+}
+
+.model-guide-tabs {
+  position: sticky;
+  top: 0;
+  z-index: 1;
+  background: var(--surface-raised);
+}
+
+.model-guide-tabs .mantine-Tabs-tab {
+  padding-inline: 12px;
+  font-size: 13px;
+}
+
+.model-guide-steps {
+  padding-left: 25px;
+}
+
+.model-guide-steps .mantine-List-itemWrapper {
+  width: 100%;
+}
+
+.model-guide-steps .mantine-List-itemLabel {
+  min-width: 0;
+}
+
+.model-guide-code {
+  padding: 12px 14px;
+  color: var(--text-primary);
+  background: var(--bg-secondary);
+  border: 1px solid var(--border-color);
+  overflow-x: auto;
+}
+
+.model-guide-docs {
+  padding-bottom: 4px;
+}
+
+.model-guide-doc-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.model-guide-footer {
+  flex-shrink: 0;
+  margin-top: 16px;
+  padding-top: 14px;
+  border-top: 1px solid var(--border-color);
+}
+
+@media (max-width: 560px) {
+  .model-guide-tabs .mantine-Tabs-tab {
+    padding-inline: 7px;
+    font-size: 12px;
+  }
+
+  .model-guide-tabs .mantine-Tabs-tabSection {
+    display: none;
+  }
+
+  .model-guide-footer {
+    align-items: flex-start;
+  }
+
+  .model-guide-footer > .mantine-Text-root {
+    flex: 1;
+  }
+}

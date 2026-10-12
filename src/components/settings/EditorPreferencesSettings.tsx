@@ -32,6 +32,8 @@ export default function EditorPreferencesSettings({ preferences: p, onSave }: { 
     {toggle('editorSelectionToolbarEnabled', '选区浮动工具栏', '编辑模式选中文字后显示格式与 AI 操作。')}
     <Text fw={650} size="sm" mt="lg">{t('写作模式')}</Text>
     {toggle('editorFocusModeEnabled', '专注模式', '隐藏笔记侧栏，保留正文与退出入口。')}
+    {toggle('editorFocusAiButtonVisible', '专注模式 AI 按钮', '在页面边缘显示 AI 助手按钮；右键隐藏后可在这里重新显示。')}
+    {toggle('editorFocusAiButtonPinned', '固定 AI 按钮位置', '固定后不能拖动；取消固定后可沿页面左右边缘移动。')}
     {toggle('editorTypewriterModeEnabled', '打字机模式', '编辑时让光标行保持在正文区域中间；预览时暂停。')}
   </>;
 }

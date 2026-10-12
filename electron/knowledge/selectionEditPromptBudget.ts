@@ -30,7 +30,7 @@ export function resolveSelectionEditPromptBudget(input: {
 }): SelectionEditPromptBudget {
   const descriptor = resolveAiModelDescriptor(input.config, input.model);
   const outputCharacters = input.targetCharacters ?? Math.max(
-    input.selectedText.length * (input.action === 'expand' || input.action === 'explain' ? 2 : 1),
+    input.selectedText.length * (input.action === 'expand' ? 2 : 1),
     320,
   );
   const expectedOutputTokens = estimateTokenCount('扩'.repeat(Math.min(MAX_SUGGESTION_CHARACTERS, outputCharacters))) + 128;

@@ -5,6 +5,9 @@ import { englishDetails } from './enDetails';
 import { desktopEnglish } from '../../shared/desktopTranslations';
 import { onboardingEnglish } from './onboardingEnglish';
 import { workspaceMigrationEnglish } from '../../shared/workspaceMigrationEnglish';
+import { modelGuideEnglish } from './modelGuideEnglish';
+import { skillGuideEnglish } from './skillGuideEnglish';
+import { releaseUpdateEnglish } from './releaseUpdateEnglish';
 
 /** 中文原文作为键；保留文案与英文的直接对应关系。 */
 export const english: Record<string, string> = {
@@ -15,6 +18,9 @@ export const english: Record<string, string> = {
   ...desktopEnglish,
   ...onboardingEnglish,
   ...workspaceMigrationEnglish,
+  ...modelGuideEnglish,
+  ...skillGuideEnglish,
+  ...releaseUpdateEnglish,
   '应用配置读取失败，请在设置中重试。': 'Unable to load app settings. Please retry in Settings.',
   '修改连接地址': 'Change connection address',
   '管理索引代际': 'Manage index generations',
@@ -379,7 +385,7 @@ export const english: Record<string, string> = {
   '诊断信息已导出。': 'Diagnostics exported.',
   '导出诊断信息': 'Export diagnostics',
   '项目许可与第三方依赖': 'License & dependencies',
-  '项目许可证：待确定，正式许可将以 GitHub 仓库中的 LICENSE 文件为准。': 'Project license: to be determined. The LICENSE file in the GitHub repository will be authoritative.',
+  '项目许可证：Apache-2.0。改造、复用并分发本项目时，须保留 LICENSE、相关 NOTICE 署名及来源，并注明修改。': 'Project license: Apache-2.0. When adapting or reusing and distributing this project, retain LICENSE, applicable NOTICE attribution and provenance, and mark modifications.',
   '第三方依赖包括 Electron、React、Tiptap / ProseMirror、CodeMirror、remark / unified、MiniSearch、SQLite、sqlite-vec、LangGraph、Cytoscape 等，各依赖遵循其自身许可证。': 'Dependencies include Electron, React, Tiptap / ProseMirror, CodeMirror, remark / unified, MiniSearch, SQLite, sqlite-vec, LangGraph, and Cytoscape. Each uses its own license.',
   '摘要、问答与笔记整理': 'Summaries, Q&A, and note organization',
   '语义索引与向量召回': 'Semantic indexing and vector retrieval',

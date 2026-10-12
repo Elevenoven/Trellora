@@ -13,7 +13,6 @@ export const selectionEditActions = [
   'shorten',
   'expand',
   'proofread',
-  'explain',
   'translate',
   'custom',
 ] as const;

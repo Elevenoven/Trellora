@@ -234,6 +234,18 @@ function appendHighlightNodes(parent: Node, nodes: HighlightNode[]): void {
   });
 }
 
+/** Share the table scroll boundary between streaming previews and deferred export enhancements. */
+export function wrapMarkdownTable(table: HTMLTableElement): void {
+  if (table.parentElement?.classList.contains('markdown-table-scroll')) return;
+  const wrapper = document.createElement('div');
+  wrapper.className = 'markdown-table-scroll';
+  wrapper.setAttribute('role', 'region');
+  wrapper.setAttribute('aria-label', '可横向滚动的表格');
+  wrapper.tabIndex = 0;
+  table.before(wrapper);
+  wrapper.appendChild(table);
+}
+
 async function wrapMarkdownTables(
   container: HTMLElement,
   yieldControl: NonNullable<MarkdownEnhancementOptions['yieldControl']>,
@@ -242,16 +254,7 @@ async function wrapMarkdownTables(
   const tables = [...container.querySelectorAll<HTMLTableElement>('table')];
   for (let index = 0; index < tables.length; index += 1) {
     if (signal?.aborted) return;
-    const table = tables[index];
-    if (!table.parentElement?.classList.contains('markdown-table-scroll')) {
-      const wrapper = document.createElement('div');
-      wrapper.className = 'markdown-table-scroll';
-      wrapper.setAttribute('role', 'region');
-      wrapper.setAttribute('aria-label', '可横向滚动的表格');
-      wrapper.tabIndex = 0;
-      table.before(wrapper);
-      wrapper.appendChild(table);
-    }
+    wrapMarkdownTable(tables[index]);
     if ((index + 1) % markdownEnhancementLimits.enhancementBatchSize === 0) {
       await yieldControl(signal);
     }

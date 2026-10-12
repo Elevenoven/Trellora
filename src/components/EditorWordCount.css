@@ -5,6 +5,18 @@
     font-size: 12px;
     white-space: nowrap;
     font-variant-numeric: tabular-nums;
+    min-width: 5em;
+    text-align: right;
+}
+
+.editor-word-count button {
+    padding: 0;
+    border: 0;
+    background: transparent;
+    color: var(--text-secondary);
+    font: inherit;
+    cursor: pointer;
+    text-decoration: underline;
 }
 
 .editor-mode-bar .editor-word-count + .note-save-notice {

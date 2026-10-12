@@ -8,10 +8,7 @@ export const EXPANSION_DEFAULT_RATIO = 1.8;
 export interface SelectionLengthReceipt {
   originalCharacters: number;
   targetCharacters: number;
-  minimumCharacters: number;
   actualCharacters: number;
-  missingToMinimum: number;
-  missingToTarget: number;
 }
 
 /** Whitespace is ignored for output length, but punctuation and Unicode count. */
@@ -26,21 +23,19 @@ export function countFullNoteCharacters(markdown: string): number {
 export function resolveExpansionTarget(selectedText: string, targetCharacters?: number, ratio = EXPANSION_DEFAULT_RATIO): number {
   const original = countMeaningfulCharacters(selectedText);
   const target = Math.min(EXPANSION_MAX_TARGET_CHARACTERS, targetCharacters ?? Math.ceil(original * ratio));
-  if (!Number.isSafeInteger(target) || target <= original) {
-    throw new Error('扩写目标必须大于原文有效字符数，请缩小选区或提高目标长度。');
+  if (!Number.isSafeInteger(target) || target <= 0) {
+    throw new Error('扩写参考目标必须为正整数。');
   }
   return target;
 }
 
+/** Length is informational; users review whether the expansion is sufficient. */
 export function createSelectionLengthReceipt(selectedText: string, candidateText: string, targetCharacters?: number): SelectionLengthReceipt {
   const originalCharacters = countMeaningfulCharacters(selectedText);
   const target = targetCharacters ?? originalCharacters + 1;
-  const minimumCharacters = Math.max(originalCharacters + 1, Math.ceil(target * 0.8));
   const actualCharacters = countMeaningfulCharacters(expansionMarkdownText(candidateText));
   return {
-    originalCharacters, targetCharacters: target, minimumCharacters, actualCharacters,
-    missingToMinimum: Math.max(0, minimumCharacters - actualCharacters),
-    missingToTarget: Math.max(0, target - actualCharacters),
+    originalCharacters, targetCharacters: target, actualCharacters,
   };
 }
 

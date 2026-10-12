@@ -183,7 +183,7 @@ export default function SelectionExpansionWorkspace({ session, onChange, onSaveD
           </Badge>
         </Group>
         <Stack gap={2}>
-          <Text size="xs" c="dimmed">{t("生成：")}{qualityReceipt.generation === 'complete' ? t("完成") : qualityReceipt.generation === 'partial' ? t("已生成，待人工核对") : t("没有安全可用的正文")}{t("；计划目标与原文关联：")}{qualityReceipt.evidenceCoverage === 'complete' ? t("已关联") : qualityReceipt.evidenceCoverage === 'partial' ? t("部分关联") : qualityReceipt.evidenceCoverage === 'none' ? t("未关联") : t("本次不要求")}</Text>
+          <Text size="xs" c="dimmed">{t("生成：")}{qualityReceipt.generation === 'empty' ? t("没有安全可用的正文") : t("已生成，待人工核对")}{t("；计划目标与原文关联：")}{qualityReceipt.evidenceCoverage === 'complete' ? t("已关联") : qualityReceipt.evidenceCoverage === 'partial' ? t("部分关联") : qualityReceipt.evidenceCoverage === 'none' ? t("未关联") : t("本次不要求")}</Text>
           <ExpansionReceipt quality={qualityReceipt} />
           {execution ? <Text size="xs" c="dimmed">{t("实际执行：")}{execution.path === 'react' ? t("研究 Agent") : t("直接生成")} · {execution.rounds} {t("轮 · 模型")} {execution.modelCalls} {t("次 · 工具")} {execution.toolCalls} {t("次 · 修复")} {execution.repairAttempts} {t("次")}</Text> : null}
           {qualityReceipt.issues.map((issue) => <Text key={issue.code} size="xs" c="yellow">• {selectionEditQualityIssueLabel(issue)}</Text>)}
@@ -206,7 +206,7 @@ export default function SelectionExpansionWorkspace({ session, onChange, onSaveD
         <Stack gap={2}>{receiptConflicts.map((item) => <Text key={item.conflictId} size="xs">{item.summary}</Text>)}</Stack>
       </Alert> : null}
       {isComplete ? <Paper withBorder p="sm" radius="md">
-        <Group justify="space-between" mb={4}><Text size="xs" fw={600}>{t("扩写建议")}{qualityReceipt?.generation === 'partial' ? t("（待人工核对）") : ''}</Text>{session.result?.text ? <Group gap={2}><Button size="compact-xs" variant="subtle" leftSection={<Copy size={13} />} onClick={() => void copyPlainText(session.result!.text)}>{t("复制")}</Button>{canApplyResult ? <Button size="compact-xs" leftSection={<Check size={13} />} onClick={onApply}>{t("替换选区")}</Button> : null}</Group> : null}</Group>
+        <Group justify="space-between" mb={4}><Text size="xs" fw={600}>{t("扩写建议")}{session.result?.text ? t("（待人工核对）") : ''}</Text>{session.result?.text ? <Group gap={2}><Button size="compact-xs" variant="subtle" leftSection={<Copy size={13} />} onClick={() => void copyPlainText(session.result!.text)}>{t("复制")}</Button>{canApplyResult ? <Button size="compact-xs" leftSection={<Check size={13} />} onClick={onApply}>{t("替换选区")}</Button> : null}</Group> : null}</Group>
         {session.result?.text ? <MarkdownContent className="assistant-markdown-content" content={session.result.text} disableApplicationLinks showCodeCopyActions /> : <Text size="sm">{t("没有找到可用于扩写的已深读本地证据。")}</Text>}
       </Paper> : null}
         </Stack>

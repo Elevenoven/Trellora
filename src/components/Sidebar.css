@@ -1,0 +1,48 @@
+/* 未选择笔记库的引导沿用主题色，并在窄侧栏中允许文案与按钮换行。 */
+.sidebar-library-empty {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 12px;
+    margin: 8px 4px;
+    padding: 16px 14px;
+    border: 1px solid var(--border-subtle);
+    border-radius: 10px;
+    background: var(--surface-raised);
+    color: var(--text-primary);
+}
+
+.sidebar-library-empty-icon {
+    color: var(--accent-primary);
+    flex-shrink: 0;
+}
+
+.sidebar-library-empty h3 {
+    margin: 0;
+    font-size: 14px;
+    font-weight: 650;
+    line-height: 1.5;
+}
+
+.sidebar-library-empty p {
+    margin: 0 0 4px;
+    color: var(--text-secondary);
+    font-size: 12px;
+    line-height: 1.7;
+    overflow-wrap: anywhere;
+}
+
+.sidebar-library-empty .mantine-Button-root {
+    height: auto;
+    min-height: 34px;
+    padding: 7px 6px;
+}
+
+.sidebar-library-empty .mantine-Button-label {
+    white-space: normal;
+    text-wrap: balance;
+}
+
+.sidebar .sidebar-command:disabled {
+    opacity: 0.45;
+}

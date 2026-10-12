@@ -102,7 +102,7 @@ export async function runAdaptiveExpansionAgent(args: {
   let validation = validate(text);
   let repairAttempts = secondCandidate === undefined ? 0 : 1;
   if (!repairAttempts && !validation.passed && evidence.length && (validation.issues ?? []).some((issue) => issue.retryable && !['EVIDENCE_GOAL_UNCOVERED', 'WEB_PAGE_UNVERIFIED'].includes(issue.code))) {
-    input.onStatus?.('正在根据上一版正文与实际长度修复扩写（1/1）…');
+    input.onStatus?.('正在根据校验结果修复扩写（1/1）…');
     const beforeCalls = modelCalls;
     try {
       text = await synthesize(text, validation);

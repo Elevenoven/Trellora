@@ -39,7 +39,6 @@ export interface SelectionEditQualityGateInput {
   requiredGoalIds: readonly string[];
   evidence: readonly SelectionEvidenceItem[];
   validation: SelectionEditValidation;
-  targetExceedsModelOutput?: boolean;
 }
 
 export interface SelectionEditQualityGateResult {
@@ -54,16 +53,8 @@ export interface SelectionEditQualityGateResult {
  */
 export function applySelectionEditQualityGate(input: SelectionEditQualityGateInput): SelectionEditQualityGateResult {
   const validation = input.validation;
-  applyExpansionLengthBoundary(validation, input);
   const evidenceCoverage = applyEvidenceCoverageBoundary(validation, input.requiredGoalIds, input.evidence);
   applyWebVerificationBoundary(validation, input.evidence);
-  if (input.targetExceedsModelOutput) {
-    addIssue(validation, {
-      code: 'TARGET_EXCEEDS_MODEL_OUTPUT_LIMIT',
-      message: issueLabels.TARGET_EXCEEDS_MODEL_OUTPUT_LIMIT,
-      retryable: false,
-    });
-  }
   return {
     validation,
     receipt: {
@@ -86,16 +77,6 @@ export function primarySelectionEditQualityIssue(
 ): SelectionEditQualityIssue | undefined {
   if (!receipt?.issues.length) return undefined;
   return [...receipt.issues].sort((left, right) => issuePriority.indexOf(left.code) - issuePriority.indexOf(right.code))[0];
-}
-
-function applyExpansionLengthBoundary(validation: SelectionEditValidation, input: SelectionEditQualityGateInput): void {
-  if (input.action !== 'expand') return;
-  const { originalCharacters: originalLength, actualCharacters: candidateLength, minimumCharacters: targetLength } = createSelectionLengthReceipt(input.selectedText, input.candidateText, input.targetCharacters);
-  if (candidateLength >= targetLength) return;
-  const code: SelectionEditQualityIssueCode = candidateLength <= originalLength
-    ? 'EXPAND_NOT_LONGER'
-    : 'TARGET_LENGTH_MISSED';
-  addIssue(validation, { code, message: issueLabels[code], retryable: !input.targetExceedsModelOutput });
 }
 
 function applyEvidenceCoverageBoundary(

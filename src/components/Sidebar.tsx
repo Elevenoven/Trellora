@@ -9,6 +9,7 @@ import {
     Folder,
     FolderPlus,
     Import,
+    Library,
     ListTree,
     PanelLeftClose,
     PanelLeftOpen,
@@ -27,6 +28,7 @@ import type { LibrarySummary } from '../electron';
 import LibrarySwitcher from './LibrarySwitcher';
 import NoteLibraryContextMenu, { type NoteLibraryMenuTarget } from './NoteLibraryContextMenu';
 import NoteOverviewModal, { type NoteOverviewData } from './NoteOverviewModal';
+import './Sidebar.css';
 import { getEditableEntryName, getSidebarDisplayName } from '../utils/sidebarDisplay';
 import { collapseAllFolders, collapseExceptCurrentPath, collectDirectoryPaths, getAncestorFolderPaths, reconcileCollapsedFolderPaths } from '../utils/fileTreeState';
 import { buildOutlineTree, collectCollapsibleOutlineKeys, flattenVisibleOutlineTree } from '../utils/outline';
@@ -656,7 +658,7 @@ const Sidebar: React.FC<SidebarProps> = ({
                 <ActionIcon title={t("展开侧栏")} aria-label={t("展开侧栏")} variant="subtle" color="gray" size="md" onClick={onToggleCollapse}>
                     <PanelLeftOpen size={16} />
                 </ActionIcon>
-                <ActionIcon title={t("搜索")} aria-label={t("搜索")} variant="subtle" color="gray" size="md" onClick={onOpenSearch}>
+                <ActionIcon title={t("搜索")} aria-label={t("搜索")} variant="subtle" color="gray" size="md" disabled={!libraryPath} onClick={onOpenSearch}>
                     <Search size={16} />
                 </ActionIcon>
                 <ActionIcon title={t("文件")} aria-label={t("文件")} variant="subtle" color="gray" size="md" onClick={() => { onSetMode('files'); onToggleCollapse(); }}>
@@ -694,13 +696,26 @@ const Sidebar: React.FC<SidebarProps> = ({
                 </Button>
             </div>
 
-            <Button className="sidebar-command" variant="subtle" color="gray" size="sm" fullWidth justify="flex-start" leftSection={<Search size={14} />} onClick={onOpenSearch}>
+            <Button className="sidebar-command" variant="subtle" color="gray" size="sm" fullWidth justify="flex-start" leftSection={<Search size={14} />} disabled={!libraryPath} onClick={onOpenSearch}>
                 <span>{t("搜索")}</span>
                 <span className="shortcut">Ctrl+K</span>
             </Button>
 
             <div className="sidebar-body" onScroll={closeContextMenu} onDragOver={(event) => event.preventDefault()} onDrop={handleRootDrop}>
-                {mode === 'outline' ? (
+                {/* 未选择笔记库时先引导建库或选库，文件和目录模式共用这一入口。 */}
+                {!libraryPath ? (
+                    <section className="sidebar-library-empty" aria-label={t("笔记库使用提示")}>
+                        <Library size={24} className="sidebar-library-empty-icon" aria-hidden="true" />
+                        <h3>{libraries.length === 0 ? t("还没有笔记库") : t("尚未选择笔记库")}</h3>
+                        <p>{libraries.length === 0
+                            ? t("笔记库用来存放和管理你的笔记。先创建一个笔记库，再新建笔记或导入文件。")
+                            : t("选择一个已有笔记库，即可查看和编辑其中的笔记；也可以新建笔记库。")}</p>
+                        <Button size="sm" fullWidth leftSection={libraries.length === 0 ? <FolderPlus size={14} /> : <Library size={14} />} onClick={libraries.length === 0 ? onAddLibrary : onOpenLibraries}>
+                            {libraries.length === 0 ? t("新建笔记库") : t("选择笔记库")}
+                        </Button>
+                        {libraries.length > 0 && <Button size="sm" fullWidth variant="default" leftSection={<FolderPlus size={14} />} onClick={onAddLibrary}>{t("新建笔记库")}</Button>}
+                    </section>
+                ) : mode === 'outline' ? (
                     <OutlinePanel
                         headings={headings}
                         collapsedKeys={collapsedOutlineKeys}
@@ -773,19 +788,19 @@ const Sidebar: React.FC<SidebarProps> = ({
             </div>
 
             <div className="sidebar-bottom">
-                <Button className="sidebar-command" variant="subtle" color="gray" size="sm" fullWidth justify="flex-start" leftSection={<Plus size={14} />} onClick={() => onCreateFile(null)}>
+                <Button className="sidebar-command" variant="subtle" color="gray" size="sm" fullWidth justify="flex-start" leftSection={<Plus size={14} />} disabled={!libraryPath} onClick={() => onCreateFile(null)}>
                     {t("新建笔记")}
                 </Button>
-                <Button className="sidebar-command" variant="subtle" color="gray" size="sm" fullWidth justify="flex-start" leftSection={<FolderPlus size={14} />} onClick={() => onCreateFolder(null)}>
+                <Button className="sidebar-command" variant="subtle" color="gray" size="sm" fullWidth justify="flex-start" leftSection={<FolderPlus size={14} />} disabled={!libraryPath} onClick={() => onCreateFolder(null)}>
                     {t("新建文件夹")}
                 </Button>
-                <Button className="sidebar-command" variant="subtle" color="gray" size="sm" fullWidth justify="flex-start" leftSection={<Import size={14} />} onClick={() => onImportFiles(null)}>
+                <Button className="sidebar-command" variant="subtle" color="gray" size="sm" fullWidth justify="flex-start" leftSection={<Import size={14} />} disabled={!libraryPath} onClick={() => onImportFiles(null)}>
                     {t("导入文件")}
                 </Button>
-                <Button className="sidebar-command" variant="subtle" color="gray" size="sm" fullWidth justify="flex-start" leftSection={<RefreshCw size={14} />} onClick={onRefresh}>
+                <Button className="sidebar-command" variant="subtle" color="gray" size="sm" fullWidth justify="flex-start" leftSection={<RefreshCw size={14} />} disabled={!libraryPath} onClick={onRefresh}>
                     {t("刷新")}
                 </Button>
-                <Button className="sidebar-command" variant="subtle" color="gray" size="sm" fullWidth justify="flex-start" leftSection={<Tags size={14} />} onClick={onOpenTags}>
+                <Button className="sidebar-command" variant="subtle" color="gray" size="sm" fullWidth justify="flex-start" leftSection={<Tags size={14} />} disabled={!libraryPath} onClick={onOpenTags}>
                     {t("标签")}
                 </Button>
             </div>

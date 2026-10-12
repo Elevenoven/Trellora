@@ -4,7 +4,7 @@ import type { QaRecentTurn } from './qaMemoryTypes';
 import type { AssistantTokenUsage } from './tokenEstimator';
 
 /**
- * 知识库问答问题改写（设计 docs/Trellora-2.0-知识库问题改写设计.md）：
+ * 知识库问答问题改写：
  * 改写门（纯规则排除）→ LLM 改写服务（指代消解/上下文补全/显式多问拆分）。
  * 改写只影响检索 query，不替换回答 prompt 中的用户原文。
  */

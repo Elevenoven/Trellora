@@ -1,10 +1,11 @@
-import { forwardRef, useEffect, useImperativeHandle, useMemo, useRef, useState } from 'react';
+import { forwardRef, useEffect, useImperativeHandle, useLayoutEffect, useMemo, useRef, useState } from 'react';
 import {
   decodeHeadingFragment,
   scrollToHeadingAnchor,
 } from '../utils/headingAnchors';
-import { enhanceMarkdownContainer } from '../utils/markdownEnhancements';
+import { enhanceMarkdownContainer, wrapMarkdownTable } from '../utils/markdownEnhancements';
 import { renderPreviewHtml } from '../utils/preview';
+import { applyExternalPreviewResources, prepareExternalPreview } from '../utils/externalPreviewResources';
 import type { MarkdownFrontmatterMode } from '../utils/markdownExtensions';
 import {
   parseRelativeMarkdownLinkHref,
@@ -58,37 +59,10 @@ const MarkdownContent = forwardRef<HTMLDivElement, MarkdownContentProps>(functio
   const onOpenRelativeMarkdownLinkRef = useRef(onOpenRelativeMarkdownLink);
   onOpenWikiLinkRef.current = onOpenWikiLink;
   onOpenRelativeMarkdownLinkRef.current = onOpenRelativeMarkdownLink;
+  const externalBody = useMemo(() => disableLocalResources ? prepareExternalPreview(content, frontmatter) : undefined, [content, frontmatter, disableLocalResources]);
   const html = useMemo(
-    () => {
-      const rendered = renderPreviewHtml(content, disableLocalResources ? { frontmatter, externalAssetUrls } : { currentPath, libraryPath, frontmatter });
-      if (!disableLocalResources) return rendered;
-      // 本地 URL 在进入 DOM 前移除，防止借用当前笔记库的图片协议。
-      const template = document.createElement('template'); template.innerHTML = rendered;
-      template.content.querySelectorAll<HTMLElement>('*').forEach(element => {
-        element.removeAttribute('srcset');
-        for (const attribute of ['src', 'poster', 'data', 'background', 'href', 'xlink:href']) {
-          const value = element.getAttribute(attribute);
-          if (value && !(attribute === 'src' && Object.values(externalAssetUrls ?? {}).includes(value)) && !/^(?:https?:\/\/|#|mailto:|tel:|data:image\/(?:png|jpeg|gif|webp);base64,)/i.test(value)) {
-            if (element.tagName === 'A' && attribute === 'href' && externalAssetUrls) { element.dataset.externalDocumentHref = value; }
-            element.removeAttribute(attribute);
-          }
-        }
-        for (const attribute of ['style', 'fill', 'filter', 'clip-path', 'stroke']) {
-          if (/(?:url\s*\(|@import)/i.test(element.getAttribute(attribute) ?? '')) element.removeAttribute(attribute);
-        }
-      });
-      template.content.querySelectorAll<HTMLImageElement>('img').forEach(img => {
-        if (!Object.values(externalAssetUrls ?? {}).includes(img.getAttribute('src') ?? '') && !/^(?:https?:\/\/|data:image\/(?:png|jpeg|gif|webp);base64,)/i.test(img.getAttribute('src') ?? '')) {
-          const placeholder = document.createElement('span'); placeholder.className = 'external-resource-placeholder';
-          placeholder.textContent = img.alt || '[本地图片]'; img.replaceWith(placeholder);
-        }
-      });
-      template.content.querySelectorAll<HTMLAnchorElement>('a[href]').forEach(anchor => {
-        if (!/^(?:https?:\/\/|mailto:|tel:|#)/i.test(anchor.getAttribute('href') ?? '')) { anchor.removeAttribute('href'); anchor.setAttribute('aria-disabled', 'true'); }
-      });
-      return template.innerHTML;
-    },
-    [content, currentPath, frontmatter, libraryPath, disableLocalResources, externalAssetUrls],
+    () => externalBody?.html ?? renderPreviewHtml(content, { currentPath, libraryPath, frontmatter }),
+    [content, currentPath, frontmatter, libraryPath, externalBody],
   );
   const activeTheme = resolvedTheme ?? (document.documentElement.dataset.theme === 'dark' ? 'dark' : 'light');
   const renderVersion = `${activeTheme}:${html}`;
@@ -96,6 +70,16 @@ const MarkdownContent = forwardRef<HTMLDivElement, MarkdownContentProps>(functio
   const canOpenRelativeLinks = !disableApplicationLinks && Boolean(onOpenRelativeMarkdownLink);
 
   useImperativeHandle(forwardedRef, () => containerRef.current as HTMLDivElement);
+
+  // 资源结果只更新已清洗的图片槽，避免重建正文、重新高亮以及清空用户选区。
+  useLayoutEffect(() => {
+    if (containerRef.current && externalBody) applyExternalPreviewResources(containerRef.current, externalBody, externalAssetUrls ?? {});
+  }, [externalBody, externalAssetUrls, html]);
+
+  // Keep tables scrollable before paint, including while costly enhancements are paused for streaming.
+  useLayoutEffect(() => {
+    containerRef.current?.querySelectorAll<HTMLTableElement>('table').forEach(wrapMarkdownTable);
+  }, [html]);
 
   useEffect(() => {
     const container = containerRef.current;

@@ -43,7 +43,7 @@ export interface CurrentNoteSummaryInput {
   providerKind: AiProviderKind;
   model: string;
   driver: NoteSummaryDriver;
-  digestRepository: NoteDerivedDigestRepository;
+  digestRepository: Pick<NoteDerivedDigestRepository, 'findReusable' | 'save'>;
   signal: AbortSignal;
   isSnapshotCurrent: () => boolean;
   contextWindowTokens?: number;
@@ -94,7 +94,7 @@ export function classifyCurrentNoteSummaryIntent(question: string): NoteSummaryM
   const normalized = question.replace(/\s+/gu, '').toLocaleLowerCase('zh-Hans-CN');
   if (!normalized) return undefined;
   if (/(三句话|一句话|快速概括|快速总结|简要概括|简述)/u.test(normalized)) return 'summary-quick';
-  if (/(完整总结|总结(?:一下)?(?:这篇|当前|整篇|全文|本篇)?笔记|概括(?:一下)?(?:这篇|当前|整篇|全文|本篇)?笔记|全文总结|整篇总结|全篇总结|核心结论(?:是什么)?|整体结论|总体结论)/u.test(normalized)) {
+  if (/(完整总结|总结(?:一下)?(?:这篇|这份|当前|整篇|全文|本篇)?(?:笔记|文件|文档)|概括(?:一下)?(?:这篇|这份|当前|整篇|全文|本篇)?(?:笔记|文件|文档)|全文总结|整篇总结|全篇总结|核心结论(?:是什么)?|整体结论|总体结论)/u.test(normalized)) {
     return 'summary-complete';
   }
   return undefined;

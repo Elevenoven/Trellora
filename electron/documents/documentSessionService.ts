@@ -93,8 +93,9 @@ export class DocumentSessionService {
     throw new DocumentError('DOCUMENT_CONFLICT', '文件正在被其他程序修改，请稍后重新打开。', true);
   }
   private capabilities(content: string, kind: 'markdown' | 'text', writable = true) {
-    const local = kind === 'markdown' && hasDocumentLocalReferences(content), render = Buffer.byteLength(content) <= EXTERNAL_MARKDOWN_RENDER_MAX_BYTES;
-    return { canEdit: true, canSaveInPlace: writable, canSaveAs: true, canJoinLibrary: true, canUseWysiwyg: kind === 'markdown' && !local && render, canPreviewMarkdown: kind === 'markdown' && render, canUseDocumentAi: true, canUseLibraryFeatures: false as const, canWriteLocalAssets: kind === 'markdown' };
+    // 视图能力取决于正文；扩展名只决定原格式和本地图片写入能力。
+    const render = Buffer.byteLength(content) <= EXTERNAL_MARKDOWN_RENDER_MAX_BYTES, local = render && hasDocumentLocalReferences(content);
+    return { canEdit: true, canSaveInPlace: writable, canSaveAs: true, canJoinLibrary: true, canUseWysiwyg: !local && render, canPreviewMarkdown: render, canUseDocumentAi: true, canUseLibraryFeatures: false as const, canWriteLocalAssets: kind === 'markdown' };
   }
   private clone(session: Session): DocumentSnapshot { return structuredClone(session.snapshot); }
   async openRequest(sender: number, id: string, encoding?: DocumentEncoding): Promise<DocumentOpenResult> {
@@ -158,8 +159,10 @@ export class DocumentSessionService {
       if (request.draftRevision < session.snapshot.draftRevision) return this.persistRecovery(session);
       const content = session.aliases ? rewriteDocumentReferences(request.content, session.aliases) : request.content;
       if (request.draftRevision === session.snapshot.draftRevision && content !== session.snapshot.content) throw new DocumentError('DOCUMENT_REVISION_STALE', '同一草稿版本的内容不能变化。');
+      const contentChanged = content !== session.snapshot.content;
       session.snapshot.content = content; session.snapshot.draftRevision = request.draftRevision;
-      session.snapshot.capabilities = this.capabilities(request.content, session.snapshot.fileKind, session.snapshot.capabilities.canSaveInPlace);
+      // 保存、关闭和资源读取会同步同一草稿；正文不变时复用结构能力，仍执行恢复缓存写入与版本校验。
+      if (contentChanged) session.snapshot.capabilities = this.capabilities(content, session.snapshot.fileKind, session.snapshot.capabilities.canSaveInPlace);
       return this.persistRecovery(session);
     });
   }

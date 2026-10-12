@@ -21,12 +21,14 @@ import { WorkspaceRestoreService } from './backup/workspaceRestoreService';
 import { WorkspaceMigrationService } from './workspaceMigrationService';
 import { mapRestoredPath, type PhysicalRestoreContext } from './backup/physicalRestore';
 import { ReleaseChecker } from './releaseCheck';
+import { ReleaseUpdateCoordinator } from './releaseUpdateCoordinator';
 import { clearRestorePause, isRestorePaused } from './backup/restorePause';
 import { safeBackupSettings } from './backup/snapshot';
 import type { BackupConfiguration } from '../shared/workspaceBackup';
 import { DataRootLocks } from './dataRootLocks';
 import { NoteSaveService } from './noteSaveService';
 import { DocumentSessionService } from './documents/documentSessionService';
+import { createDocumentAssistantSnapshot, runDocumentAssistant } from './documents/documentAssistantRuntime';
 import { OpenRequestRouter } from './documents/openRequestRouter';
 import { DOCUMENT_RESOURCE_SCHEME } from './documents/documentResourceService';
 import { DocumentAiService } from './documents/documentAiService';
@@ -446,6 +448,8 @@ const maintenanceBarrier = new MaintenanceBarrier({
 });
 function registerAppHandler(channel: string, handler: Parameters<typeof ipcMain.handle>[1]): void {
   ipcMain.handle(channel, (event, ...args) => {
+    // 版本查询不读写工作区，恢复/维护期间仍可完成查询，展示时机由 UI 协调。
+    if (channel.startsWith('release:')) return handler(event, ...args);
     const flushing = maintenanceBarrier.phase === 'preparing' && ['notes:save', 'notes:mutate', 'documents:update-draft'].includes(channel);
     if (workspaceMigrationService?.busy && !channel.startsWith('workspace-migration:') && !flushing) throw new Error('正在迁移数据，请等待迁移结束。');
     if (workspaceMigrationService?.recoveryPending && !workspaceMigrationService.busy
@@ -1804,12 +1808,17 @@ async function runAssistantTurn(event: IpcMainInvokeEvent, request: AssistantTur
     input: request,
   });
   try {
-    const libraryPath = getCurrentLibraryPath();
+    // 第一次 await 前冻结 sender 所有的文档草稿，渲染进程不能指定任意路径或正文。
+    const documentTarget = request.currentDocument;
+    const document = documentTarget ? getDocumentSessionService().snapshot(event.sender.id, documentTarget.documentSessionId) : undefined;
+    if (document && document.draftRevision !== documentTarget!.draftRevision) throw new Error('文档草稿已变化，请重新提问。');
+    const documentSnapshot = document ? createDocumentAssistantSnapshot(document) : undefined;
+    const libraryPath = documentTarget ? null : getCurrentLibraryPath();
     if (libraryPath && !noteIndex) refreshLibraryIndex();
     if (request.intent === 'organize' && (!libraryPath || !noteIndex)) throw new Error('当前笔记库尚未完成索引。');
     const snapshotRevision = libraryRevision;
     const selectedProfile = resolveAssistantProfile(request.modelProfileId);
-    if (request.intent === 'ask' && !request.contextSources?.length && !request.attachments?.length && !request.skillIds?.length) {
+    if (!documentTarget && request.intent === 'ask' && !request.contextSources?.length && !request.attachments?.length && !request.skillIds?.length) {
       onboardingService?.beginPracticeRequest(event.sender.id, { requestId: request.requestId, sessionId: request.sessionId, scope: request.scope, profile: selectedProfile, webSearch: request.webSearch });
     }
     const assistantSkillSnapshot = readAssistantSkills();
@@ -1944,6 +1953,31 @@ async function runAssistantTurn(event: IpcMainInvokeEvent, request: AssistantTur
     const assistantMineru = resolveAssistantMineruRuntimeConfig();
     emitAssistantTurnEvent(event, { requestId: request.requestId, type: 'started', intent: request.intent, scopeLabel });
     throwIfAssistantCancelled(controller.signal);
+
+    if (documentTarget && documentSnapshot) {
+      const toolEvents: CurrentNotePublicToolEvent[] = [];
+      const isDocumentCurrent = () => {
+        if (controller.signal.aborted) return false;
+        try {
+          const current = getDocumentSessionService().snapshot(event.sender.id, documentTarget.documentSessionId);
+          return current.draftRevision === documentSnapshot.revision && current.displayPath === documentSnapshot.notePath;
+        } catch { return false; }
+      };
+      const result = await runDocumentAssistant({
+        snapshot: documentSnapshot, request, providerConfig: selectedProfile.config, model,
+        contextWindow: effectiveContextWindow, skillInstructions, signal: controller.signal,
+        coordinator: modelCallCoordinator, planMode: preferences.assistantPlanMode,
+        isSnapshotCurrent: isDocumentCurrent, generateJson: generateJsonWithTrace, onDetailedTrace,
+        onDelta: text => { if (!controller.signal.aborted) emitAssistantTurnEvent(event, { requestId: request.requestId, type: 'delta', text }); },
+        onThinkingDelta: text => { if (!controller.signal.aborted) emitAssistantTurnEvent(event, { requestId: request.requestId, type: 'thinking-delta', text }); },
+        onToolEvent: toolEvent => { toolEvents.push(toolEvent); emitAssistantTurnEvent(event, { requestId: request.requestId, type: 'tool', event: toolEvent }); },
+        onPlanEvent: planEvent => { publicPlanEvents.push(planEvent); emitAssistantTurnEvent(event, { requestId: request.requestId, type: 'plan', event: planEvent }); },
+      });
+      throwIfAssistantCancelled(controller.signal);
+      onDetailedTrace({ stage: 'result', action: 'document-assistant-result', status: 'completed', output: result });
+      emitAssistantTurnEvent(event, { requestId: request.requestId, type: 'complete', result: { ...result, toolEvents, planEvents: publicPlanEvents, modelEvents: publicModelEvents } });
+      return;
+    }
 
     const isSnapshotCurrent = () => !controller.signal.aborted
       && getCurrentLibraryPath() === libraryPath
@@ -4170,6 +4204,7 @@ function recordQaContextRuntimeObservation(
 }
 
 function getAssistantScopeLabel(request: AssistantTurnRequest): string {
+  if (request.currentDocument) return '本次使用：当前文件（本轮草稿）';
   if (request.scope === 'chat') return request.attachments?.length
     ? `本次使用：附件 ${request.attachments.length} 个，不检索资料库`
     : '本次使用：无资料库，直接询问 AI';
@@ -5127,8 +5162,27 @@ registerAppHandler('restore:resume', async (event) => {
 });
 registerAppHandler('backup:cancel', () => requireBackupService().cancel());
 registerAppHandler('backup:choose-target', async () => { if (!mainWindow) return null; const result = await dialog.showOpenDialog(mainWindow, { title: desktopText('选择独立的备份目录'), properties: ['openDirectory', 'createDirectory'] }); return result.canceled ? null : result.filePaths[0]; });
-const releaseChecker = new ReleaseChecker({ repositoryUrl: APP_INFO.repositoryUrl, version: APP_INFO.version });
-registerAppHandler('release:check', () => releaseChecker.check());
+const releaseChecker = new ReleaseChecker({ repositoryUrl: APP_INFO.repositoryUrl, version: APP_INFO.version, productName: APP_INFO.name });
+const releaseUpdates = new ReleaseUpdateCoordinator({
+  checker: releaseChecker, repositoryUrl: APP_INFO.repositoryUrl,
+  enabled: app.isPackaged, distribution: process.env.PORTABLE_EXECUTABLE_FILE ? 'portable' : 'other',
+  openExternal: url => shell.openExternal(url),
+  onChecked: result => appLogger.record(result.state === 'unavailable' ? 'warn' : 'info', 'release', result.code ?? result.state),
+});
+registerAppHandler('release:check', (event, options?: unknown) => {
+  assertInternalRenderer(event);
+  return releaseUpdates.check({ force: Boolean(options && typeof options === 'object' && (options as { force?: unknown }).force === true) });
+});
+registerAppHandler('release:get-startup', event => { assertInternalRenderer(event); return releaseUpdates.getStartupCheck(); });
+registerAppHandler('release:claim-startup-notice', (event, version: unknown) => { assertInternalRenderer(event); return releaseUpdates.claimStartupNotice(version); });
+registerAppHandler('release:open-download', (event, version: unknown) => { assertInternalRenderer(event); return releaseUpdates.openDownload(version); });
+registerAppHandler('release:open-page', (event, version: unknown) => { assertInternalRenderer(event); return releaseUpdates.openPage(version); });
+registerAppHandler('release:request-close', event => {
+  assertInternalRenderer(event);
+  const window = mainWindow;
+  // 从主进程发起普通关闭，让保存失败/取消后 renderer 仍可继续交互。
+  setImmediate(() => { if (window && !window.isDestroyed()) window.close(); });
+});
 registerAppHandler('ping', () => 'pong');
 ipcMain.on('external-web-navigation', handleExternalWebNavigation);
 registerAppHandler('editor:read-clipboard-content', (event: IpcMainInvokeEvent) => {

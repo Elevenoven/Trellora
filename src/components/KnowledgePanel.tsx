@@ -21,6 +21,7 @@ import SelectionExpansionWorkspace from './assistant/SelectionExpansionWorkspace
 import AssistantSaveNoteModal from './assistant/AssistantSaveNoteModal';
 import MemoryTurnStatusBadge from './assistant/MemoryTurnStatusBadge';
 import AssistantMemoryCitationList from './assistant/AssistantMemoryCitationList';
+import FocusAssistant, { type FocusAssistantOptions } from './assistant/FocusAssistant';
 import { formatMemoryCitationMarkdown, memoryCitationElementId } from './assistantMemoryCitations';
 import type { MemoryCitationSnapshot } from '../../shared/memoryCitations';
 import type { CreateAssistantNoteResult } from '../../shared/assistantNote';
@@ -53,6 +54,7 @@ interface KnowledgePanelProps {
   onCancelAssistantTurn: (requestId: string) => Promise<boolean>;
   onNavigateAssistantCitation?: (citation: AssistantEvidenceCitation) => Promise<AssistantCitationValidation>;
   onAssistantVisibilityChange?: (visible: boolean) => void;
+  focusAssistant?: FocusAssistantOptions;
   selectionExpansionSession?: SelectionExpansionDraftSession | null;
   onSelectionExpansionSettingsChange?: (settings: SelectionExpansionSettings) => void;
   onSaveSelectionExpansionDefaults?: (settings: SelectionExpansionSettings) => Promise<void>;
@@ -83,6 +85,8 @@ export type KnowledgeAssistantProps = Pick<KnowledgePanelProps,
   onClose?: () => void;
   onOpenFile?: (path: string) => void;
   fixedContextSources?: AssistantContextSource[];
+  /** 独立文件复用当前笔记对话；发送准备阶段同步草稿，不创建库内记忆会话。 */
+  currentDocument?: { documentSessionId: string; title: string; prepare: () => Promise<NonNullable<AssistantTurnRequest['currentDocument']>> };
   contextSourceOptions?: AssistantContextSourceOption[];
   selectedContextSourcePath?: string | null;
   onSelectContextSource?: (libraryPath: string | null) => void;
@@ -121,6 +125,7 @@ const minimumPanelWidth = 260;
 const minimumWorkspaceWidth = 360;
 const collapsePanelWidth = 176;
 
+/** The sidebar and focus window share one assistant so changing its placement cannot reset a turn. */
 export default function KnowledgePanel(props: KnowledgePanelProps) {
   useI18n();
   const notePath = props.noteMeta?.path;
@@ -130,6 +135,7 @@ export default function KnowledgePanel(props: KnowledgePanelProps) {
   const preferredWidthRef = useRef(props.width);
   const [panelWidth, setPanelWidth] = useState(props.width);
   const [activeTab, setActiveTab] = useState<PanelTab>('info');
+  const [assistantSidebarTarget, setAssistantSidebarTarget] = useState<HTMLDivElement | null>(null);
   const { isCollapsed, onAssistantVisibilityChange } = props;
 
   const getWorkspaceWidth = useCallback(() => {
@@ -223,12 +229,9 @@ export default function KnowledgePanel(props: KnowledgePanelProps) {
     return nextWidth;
   }, [constrainPanelWidth]);
 
-  if (props.isCollapsed) {
-    return <aside className="knowledge-panel-collapsed"><ActionIcon title={t("展开右侧栏")} aria-label={t("展开右侧栏")} variant="subtle" color="gray" size="md" onClick={props.onToggleCollapse}><PanelRightOpen size={16} /></ActionIcon></aside>;
-  }
-
   return (
-    <aside
+    <>
+    {props.isCollapsed ? <aside className="knowledge-panel-collapsed"><ActionIcon title={t("展开右侧栏")} aria-label={t("展开右侧栏")} variant="subtle" color="gray" size="md" onClick={props.onToggleCollapse}><PanelRightOpen size={16} /></ActionIcon></aside> : <aside
       ref={panelRef}
       className="knowledge-panel"
       style={{ width: panelWidth, flexBasis: panelWidth }}
@@ -245,8 +248,10 @@ export default function KnowledgePanel(props: KnowledgePanelProps) {
       </div>
       <div ref={scrollRef} className={`knowledge-panel-scroll${activeTab === 'ai' ? ' ai-active' : ''}`}>
         {activeTab === 'info' ? <InfoTab {...props} /> : null}
+        <div ref={setAssistantSidebarTarget} className="knowledge-panel-ai-view" hidden={activeTab !== 'ai' || Boolean(props.selectionExpansionSession)}>
+          {!props.focusAssistant && activeTab === 'ai' && <KnowledgeAssistant {...props} width={panelWidth} onWidthPreviewChange={previewPanelWidth} />}
+        </div>
         {activeTab === 'ai' ? <>
-          <div className="knowledge-panel-ai-view" hidden={Boolean(props.selectionExpansionSession)}><KnowledgeAssistant {...props} width={panelWidth} onWidthPreviewChange={previewPanelWidth} /></div>
           {props.selectionExpansionSession && props.onSelectionExpansionSettingsChange && props.onSaveSelectionExpansionDefaults && props.onStartSelectionExpansion && props.onCancelSelectionExpansion && props.onApplySelectionExpansion && props.onCloseSelectionExpansion ? <SelectionExpansionWorkspace
             session={props.selectionExpansionSession}
             onChange={props.onSelectionExpansionSettingsChange}
@@ -258,7 +263,11 @@ export default function KnowledgePanel(props: KnowledgePanelProps) {
           /> : null}
         </> : null}
       </div>
-    </aside>
+    </aside>}
+    {props.focusAssistant && <FocusAssistant {...props.focusAssistant} sidebarTarget={assistantSidebarTarget} sidebarActive={!props.isCollapsed && activeTab === 'ai'} noteTitle={props.noteMeta?.title}
+      renderAssistant={(floating, width) => <KnowledgeAssistant {...props} width={floating ? width : panelWidth} onWidthPreviewChange={floating ? undefined : previewPanelWidth}
+        hideDebugRailToggle={floating} debugRailOpen={floating ? false : undefined} />} />}
+    </>
   );
 }
 
@@ -366,7 +375,7 @@ export function KnowledgeAssistant(props: KnowledgeAssistantProps) {
   const onComposerStateChange = props.onComposerStateChange;
   const controlledDebugRailOpen = props.debugRailOpen;
   const onDebugRailOpenChange = props.onDebugRailOpenChange;
-  const defaultScope: AssistantScope = isContextLocked ? 'library-search' : isDataSourceWorkspace ? 'chat' : notePath ? 'current-note' : 'library-search';
+  const defaultScope: AssistantScope = isContextLocked ? 'library-search' : isDataSourceWorkspace ? 'chat' : notePath || props.currentDocument ? 'current-note' : 'library-search';
   const onCancelAssistantTurn = props.onCancelAssistantTurn;
   const onRefreshAssistantAiOptions = props.onRefreshAssistantAiOptions;
   const messagesScrollRef = useRef<HTMLDivElement>(null);
@@ -380,7 +389,7 @@ export function KnowledgeAssistant(props: KnowledgeAssistantProps) {
   const debugRailWidthRef = useRef(initialDebugRailWidth);
   const previewPanelWidthRef = useRef(props.width ?? 0);
   const activeRequestIdRef = useRef<string | null>(null);
-  const turnContextKey = JSON.stringify([props.libraryPath, notePath, fixedContextKey, props.workspaceMemory?.revision]);
+  const turnContextKey = JSON.stringify([props.libraryPath, notePath, fixedContextKey, props.workspaceMemory?.revision, props.currentDocument?.documentSessionId]);
   const turnContextKeyRef = useRef(turnContextKey);
   useLayoutEffect(() => {
     turnContextKeyRef.current = turnContextKey;
@@ -425,7 +434,7 @@ export function KnowledgeAssistant(props: KnowledgeAssistantProps) {
   const [selectedSkillIds, setSelectedSkillIds] = useState<string[]>([]);
   const previousFixedContextKeyRef = useRef(fixedContextKey);
   const [contextSources, setContextSources] = useState<AssistantContextSource[]>(fixedContextSources);
-  const attachmentsDisabled = Boolean(activeRequestId) || intent === 'organize' || Boolean(props.onboarding);
+  const attachmentsDisabled = Boolean(activeRequestId) || intent === 'organize' || Boolean(props.onboarding) || Boolean(props.currentDocument);
   const {
     attachments,
     isDragActive,
@@ -836,8 +845,9 @@ export function KnowledgeAssistant(props: KnowledgeAssistantProps) {
   useEffect(() => () => {
     if (messageScrollFrameRef.current !== null) window.cancelAnimationFrame(messageScrollFrameRef.current);
     // 卸载也使尚未完成的建会话操作失效，迟到的 IPC 结果不能继续发送。
+    if (activeRequestIdRef.current) void onCancelAssistantTurn(activeRequestIdRef.current).catch(() => undefined);
     activeRequestIdRef.current = null;
-  }, []);
+  }, [onCancelAssistantTurn]);
 
   useEffect(() => {
     if (!isDebugRailOpen) return;
@@ -876,14 +886,14 @@ export function KnowledgeAssistant(props: KnowledgeAssistantProps) {
       setDraft(isContextLocked ? '请根据所选知识库回答：' : '');
       return;
     }
-    if (preset.scope === 'current-note' && !notePath) return;
+    if (preset.scope === 'current-note' && !notePath && !props.currentDocument) return;
     setIntent(preset.intent);
     setScope(preset.scope);
     if (preset.intent === 'organize' || preset.scope === 'current-note') {
       setContextSources([]);
       clearAttachments();
     }
-    setDraft(preset.draft);
+    setDraft(props.currentDocument ? preset.draft.replaceAll('当前笔记', '当前文件') : preset.draft);
   };
 
   const startNewAssistantSession = async () => {
@@ -998,13 +1008,13 @@ export function KnowledgeAssistant(props: KnowledgeAssistantProps) {
   const startTurn = async (resume?: { userText: string; summaryCheckpoint: NonNullable<AssistantTurnRequest['summaryCheckpoint']> }, overrideUserText?: string) => {
     if (props.onboarding?.sendDisabled) return;
     const userText = (resume?.userText ?? overrideUserText ?? draft).trim();
-    if (!userText || activeRequestIdRef.current || (!isDataSourceWorkspace && !props.libraryPath && !contextSources.length && !attachments.length)) return;
+    if (!userText || activeRequestIdRef.current || (!props.currentDocument && !isDataSourceWorkspace && !props.libraryPath && !contextSources.length && !attachments.length)) return;
     const effectiveScope: AssistantScope = resume
       ? 'current-note'
       : isDataSourceWorkspace
         ? isContextLocked ? 'library-search' : 'chat'
         : intent === 'ask' && !isContextLocked ? 'current-note' : scope;
-    if (effectiveScope === 'current-note' && !notePath) return;
+    if (effectiveScope === 'current-note' && !notePath && !props.currentDocument) return;
     // 第一处 await 之前同步占用请求；停止/切换会话会清空它，使所有迟到结果失效。
     const requestId = createAssistantRequestId();
     const isPreparationCurrent = () => activeRequestIdRef.current === requestId
@@ -1013,6 +1023,8 @@ export function KnowledgeAssistant(props: KnowledgeAssistantProps) {
     setActiveRequestId(requestId);
     let submitted = false;
     try {
+      const currentDocument = props.currentDocument ? await props.currentDocument.prepare() : undefined;
+      if (!isPreparationCurrent()) return;
       let sessionId = assistantSessionId;
       let onboardingProfileId = props.onboarding?.profileId;
       if (props.onboarding?.prepareSend) {
@@ -1042,7 +1054,7 @@ export function KnowledgeAssistant(props: KnowledgeAssistantProps) {
       }
       if (!isPreparationCurrent()) return;
       const effectiveIntent: AssistantIntent = resume ? 'ask' : intent;
-      const scopeLabel = getDraftScopeLabel(effectiveIntent, effectiveScope, props.noteMeta);
+      const scopeLabel = props.currentDocument ? `${t('当前文件')}《${props.currentDocument.title}》` : getDraftScopeLabel(effectiveIntent, effectiveScope, props.noteMeta);
       const history = getConversationHistory(messages);
       const now = new Date().toISOString();
       const request: AssistantTurnRequest = {
@@ -1056,6 +1068,7 @@ export function KnowledgeAssistant(props: KnowledgeAssistantProps) {
         thinkingMode,
         answerDepth,
         skillIds: selectedSkillIds,
+        ...(currentDocument ? { currentDocument, webSearch: 'off' as const } : {}),
         ...(sessionId ? { sessionId } : {}),
         ...(!props.onboarding && intent !== 'organize' && effectiveScope !== 'current-note' && contextSources.length ? { contextSources } : {}),
         ...(!props.onboarding && intent !== 'organize' && attachments.length ? { attachments } : {}),
@@ -1124,7 +1137,7 @@ export function KnowledgeAssistant(props: KnowledgeAssistantProps) {
   const unavailable = isDataSourceWorkspace
     ? false
     : intent === 'ask' && !isContextLocked
-    ? !notePath
+    ? !notePath && !props.currentDocument
     : !props.libraryPath && !contextSources.length && !attachments.length;
   const selectedProfile = props.assistantAiOptions.profiles.find((profile) => profile.id === selectedModelProfileId);
   const toggleSkill = (skillId: string) => setSelectedSkillIds((current) => current.includes(skillId) ? current.filter((id) => id !== skillId) : [...current, skillId].slice(0, 3));
@@ -1144,8 +1157,9 @@ export function KnowledgeAssistant(props: KnowledgeAssistantProps) {
   const currentContextUsage = useMemo(() => getCurrentContextUsage(messages), [messages]);
   const selectedContextCount = attachments.length + selectedSkills.length;
   const lockedContextLabel = fixedContextSources.map((source) => source.label?.trim() || t("个人知识库")).join('、');
-  const visiblePresets = (isContextLocked || isDataSourceWorkspace ? assistantPresets.filter((preset) => preset.id === 'ask') : assistantPresets)
-    .filter((preset) => isContextLocked || isDataSourceWorkspace || preset.scope !== 'current-note' || Boolean(notePath));
+  const visiblePresets = (isContextLocked || isDataSourceWorkspace ? assistantPresets.filter((preset) => preset.id === 'ask') : props.currentDocument ? assistantPresets.filter((preset) => preset.scope === 'current-note') : assistantPresets)
+    .filter((preset) => isContextLocked || isDataSourceWorkspace || preset.scope !== 'current-note' || Boolean(notePath || props.currentDocument))
+    .map((preset) => props.currentDocument ? { ...preset, label: preset.label.replaceAll('当前笔记', '当前文件') } : preset);
   const activeAssistantSession = assistantSessions.find((session) => session.sessionId === assistantSessionId);
   const assistantMessages = messages.filter((message) => message.role === 'assistant');
   const showConversationNavigation = props.showConversationNavigation && messages.some((message) => message.role === 'user');
@@ -1197,11 +1211,11 @@ const lastAssistantMessage = assistantMessages.at(-1);
           {showConversationNavigation ? <AssistantConversationNav messages={messages} scrollRef={messagesScrollRef} contentRef={messagesContentRef} onNavigate={pauseConversationFollowing} /> : null}
           <div ref={messagesScrollRef} className="assistant-message-list" role="log" aria-live="polite" aria-busy={Boolean(activeRequestId)} onScroll={updateAssistantScrollState}>
             <div ref={messagesContentRef} className="assistant-message-list-content">
-              {messages.length === 0 ? <AssistantEmptyState onSelectPreset={selectPreset} presets={visiblePresets} mode={isDataSourceWorkspace ? isContextLocked ? 'knowledge-base' : 'chat' : isContextLocked ? 'knowledge-base' : 'note'} /> : messages.map((message) => {
+              {messages.length === 0 ? <AssistantEmptyState onSelectPreset={selectPreset} presets={visiblePresets} mode={props.currentDocument ? 'file' : isDataSourceWorkspace ? isContextLocked ? 'knowledge-base' : 'chat' : isContextLocked ? 'knowledge-base' : 'note'} /> : messages.map((message) => {
                       const suggestionQuestions = message.id === lastAssistantMessage?.id && !activeRequestId && message.state === 'complete'
                         ? message.suggestions
                         : undefined;
-                      return <AssistantMessageView key={message.id} message={message} showCompactTrace={!isDebugRailOpen} onNavigateCitation={props.onNavigateAssistantCitation} onResumeSummary={resumeSummary} currentPath={notePath} libraryPath={props.libraryPath} suggestionQuestions={suggestionQuestions} onSelectSuggestion={(question) => { void startTurn(undefined, question); }} />;
+                      return <AssistantMessageView key={message.id} message={message} subjectLabel={props.currentDocument ? t('当前文件问答') : undefined} showCompactTrace={!isDebugRailOpen} onNavigateCitation={props.onNavigateAssistantCitation} onResumeSummary={resumeSummary} currentPath={notePath} libraryPath={props.libraryPath} suggestionQuestions={suggestionQuestions} onSelectSuggestion={(question) => { void startTurn(undefined, question); }} />;
                     })}
             </div>
           </div>
@@ -1225,7 +1239,8 @@ const lastAssistantMessage = assistantMessages.at(-1);
             selectedSkills={selectedSkills}
             skills={props.assistantAiOptions.skills}
             onRefreshSkills={onRefreshAssistantAiOptions}
-            disabled={attachmentsDisabled}
+            disabled={Boolean(activeRequestId) || intent === 'organize' || Boolean(props.onboarding)}
+            hideAttachments={Boolean(props.currentDocument)}
             onChooseImages={() => void chooseAttachments('image')}
             onChooseFiles={() => void chooseAttachments('file')}
             onRemoveAttachment={removeAttachment}
@@ -1233,7 +1248,7 @@ const lastAssistantMessage = assistantMessages.at(-1);
           />
           {isDataSourceWorkspace ? <AssistantDataSourceSelector options={props.contextSourceOptions ?? []} selectedLibraryPath={props.selectedContextSourcePath ?? null} disabled={Boolean(activeRequestId) || Boolean(props.onboarding)} onSelect={(libraryPath) => props.onSelectContextSource?.(libraryPath)} /> : isContextLocked ? <span className="assistant-composer-fixed-scope" title={t("当前范围：{0}", { '0': lockedContextLabel })}><Database size={13} />{lockedContextLabel}</span> : null}
           {!isContextLocked && !isDataSourceWorkspace && (intent === 'ask'
-            ? <span className="assistant-composer-fixed-scope" title={t("回答范围固定为当前打开的笔记")}><Sparkles size={13} /></span>
+            ? <span className="assistant-composer-fixed-scope" title={t(props.currentDocument ? '回答范围固定为当前打开的文件' : '回答范围固定为当前打开的笔记')}><Sparkles size={13} />{props.currentDocument ? t('当前文件') : null}</span>
             : <span className="assistant-composer-mode-label">{intent === 'learning-plan' ? t("知识库检索") : t("笔记库结构")}</span>)}
           {selectedContextCount ? <span className="assistant-composer-selection-count" title={t("已添加 {0} 个附件、{1} 个技能", { '0': attachments.length, '1': selectedSkills.length })}>+{selectedContextCount}</span> : null}
         </Group>
@@ -1341,11 +1356,12 @@ const lastAssistantMessage = assistantMessages.at(-1);
   </section>;
 }
 
-function AssistantComposerAddMenu({ attachments, selectedSkills, skills, disabled, onRefreshSkills, onChooseImages, onChooseFiles, onRemoveAttachment, onToggleSkill }: {
+function AssistantComposerAddMenu({ attachments, selectedSkills, skills, disabled, hideAttachments, onRefreshSkills, onChooseImages, onChooseFiles, onRemoveAttachment, onToggleSkill }: {
   attachments: AssistantAttachment[];
   selectedSkills: AssistantAiOptions['skills'];
   skills: AssistantAiOptions['skills'];
   disabled: boolean;
+  hideAttachments?: boolean;
   onRefreshSkills: () => Promise<AssistantAiOptions>;
   onChooseImages: () => void;
   onChooseFiles: () => void;
@@ -1368,15 +1384,15 @@ function AssistantComposerAddMenu({ attachments, selectedSkills, skills, disable
     setRefreshingSkills(true);
     void onRefreshSkills().catch(() => undefined).finally(() => setRefreshingSkills(false));
   }}>
-    <Menu.Target><ActionIcon className="assistant-composer-plus" data-populated={hasSelections || undefined} title={t("添加图片、附件或技能")} aria-label={t("添加图片、附件或技能")} variant="subtle" color="gray" size="sm" disabled={disabled}><Plus size={15} /></ActionIcon></Menu.Target>
+    <Menu.Target><ActionIcon className="assistant-composer-plus" data-populated={hasSelections || undefined} title={t(hideAttachments ? '技能' : '添加图片、附件或技能')} aria-label={t(hideAttachments ? '技能' : '添加图片、附件或技能')} variant="subtle" color="gray" size="sm" disabled={disabled}><Plus size={15} /></ActionIcon></Menu.Target>
     <Menu.Dropdown className="assistant-composer-add-menu">
       <Menu.Label>{t("添加到本轮")}</Menu.Label>
-      <Menu.Item className="assistant-composer-add-menu-item" leftSection={<ImagePlus size={15} />} closeMenuOnClick onClick={onChooseImages} disabled={attachmentLimitReached}>
+      {!hideAttachments && <Menu.Item className="assistant-composer-add-menu-item" leftSection={<ImagePlus size={15} />} closeMenuOnClick onClick={onChooseImages} disabled={attachmentLimitReached}>
         <span className="assistant-composer-add-menu-copy"><strong>{t("上传图片")}</strong><small>{t("PNG、JPEG、WebP、GIF，单张不超过 5 MB")}</small></span>
-      </Menu.Item>
-      <Menu.Item className="assistant-composer-add-menu-item" leftSection={<FileUp size={15} />} closeMenuOnClick onClick={onChooseFiles} disabled={attachmentLimitReached}>
+      </Menu.Item>}
+      {!hideAttachments && <Menu.Item className="assistant-composer-add-menu-item" leftSection={<FileUp size={15} />} closeMenuOnClick onClick={onChooseFiles} disabled={attachmentLimitReached}>
         <span className="assistant-composer-add-menu-copy"><strong>{t("上传附件")}</strong><small>{t("PDF、DOCX、Markdown、TXT、CSV、JSON 等")}</small></span>
-      </Menu.Item>
+      </Menu.Item>}
       {attachments.length ? <>
         <Menu.Divider />
         <Menu.Label>{t("已添加附件")}</Menu.Label>
@@ -1446,14 +1462,15 @@ function AssistantDataSourceSelector({ options, selectedLibraryPath, disabled, o
   </Menu>;
 }
 
-function AssistantEmptyState({ onSelectPreset, presets, mode }: { onSelectPreset: (presetId: string) => void; presets: AssistantPreset[]; mode: 'chat' | 'knowledge-base' | 'note' }) {
+/** Current-note prompts form one compact group in both the sidebar and focus window. */
+function AssistantEmptyState({ onSelectPreset, presets, mode }: { onSelectPreset: (presetId: string) => void; presets: AssistantPreset[]; mode: 'chat' | 'knowledge-base' | 'note' | 'file' }) {
   useI18n();
-  const title = mode === 'knowledge-base' ? t("从选定知识库中找到答案") : mode === 'chat' ? t("直接询问 AI") : t("围绕当前笔记继续思考");
-  const askLabel = mode === 'knowledge-base' ? t("知识库问答") : mode === 'chat' ? t("开放式问答") : t("当前笔记问答");
-  return <div className="assistant-empty-state"><Bot size={20} /><strong>{title}</strong><p>{t("输入问题，或选择一个预置任务。")}</p><div>{presets.map((preset) => <button key={preset.id} type="button" onClick={() => onSelectPreset(preset.id)}>{preset.id === 'ask' ? askLabel : t(preset.label)}</button>)}</div></div>;
+  const title = mode === 'knowledge-base' ? t("从选定知识库中找到答案") : mode === 'chat' ? t("直接询问 AI") : mode === 'file' ? t('分析当前文件的内容') : t("围绕当前笔记继续思考");
+  const askLabel = mode === 'knowledge-base' ? t("知识库问答") : mode === 'chat' ? t("开放式问答") : mode === 'file' ? t('当前文件问答') : t("当前笔记问答");
+  return <div className={`assistant-empty-state${mode === 'note' || mode === 'file' ? ' assistant-note-empty-state' : ''}`}><Bot size={20} /><strong>{title}</strong>{mode !== 'note' && mode !== 'file' && <p>{t("输入问题，或选择一个预置任务。")}</p>}<div>{presets.map((preset) => <button key={preset.id} type="button" onClick={() => onSelectPreset(preset.id)}>{preset.id === 'ask' ? askLabel : t(preset.label)}</button>)}</div></div>;
 }
 
-function AssistantMessageView({ message, showCompactTrace, onNavigateCitation, onResumeSummary, currentPath, libraryPath, suggestionQuestions, onSelectSuggestion }: { message: AssistantMessage; showCompactTrace: boolean; onNavigateCitation?: (citation: AssistantEvidenceCitation) => Promise<AssistantCitationValidation>; onResumeSummary?: (message: AssistantMessage) => void; currentPath: string | null; libraryPath: string | null; suggestionQuestions?: string[]; onSelectSuggestion?: (question: string) => void }) {
+function AssistantMessageView({ message, subjectLabel, showCompactTrace, onNavigateCitation, onResumeSummary, currentPath, libraryPath, suggestionQuestions, onSelectSuggestion }: { message: AssistantMessage; subjectLabel?: string; showCompactTrace: boolean; onNavigateCitation?: (citation: AssistantEvidenceCitation) => Promise<AssistantCitationValidation>; onResumeSummary?: (message: AssistantMessage) => void; currentPath: string | null; libraryPath: string | null; suggestionQuestions?: string[]; onSelectSuggestion?: (question: string) => void }) {
   useI18n();
   const [copyState, setCopyState] = useState<'idle' | 'success' | 'error'>('idle');
   const [saveNoteOpen, setSaveNoteOpen] = useState(false);
@@ -1476,7 +1493,7 @@ function AssistantMessageView({ message, showCompactTrace, onNavigateCitation, o
     });
   }, [message.content]);
 
-  if (message.role === 'user') return <article className="assistant-message user" data-conversation-turn-id={message.id}><div className="assistant-message-meta"><span>{translateIntent(message.intent, message.scope, message.interactionRoute)}</span><time>{formatDate(message.createdAt)}</time></div><p>{message.content}</p><AssistantMessageAttachments attachments={message.attachments ?? []} /></article>;
+  if (message.role === 'user') return <article className="assistant-message user" data-conversation-turn-id={message.id}><div className="assistant-message-meta"><span>{subjectLabel ?? translateIntent(message.intent, message.scope, message.interactionRoute)}</span><time>{formatDate(message.createdAt)}</time></div><p>{message.content}</p><AssistantMessageAttachments attachments={message.attachments ?? []} /></article>;
   const result = message.result;
   const toolEvents = result?.type === 'answer' ? result.toolEvents ?? message.toolEvents ?? [] : message.toolEvents ?? [];
   const memorySave = message.memorySave ?? (result?.type === 'answer' ? result.memorySave : undefined);

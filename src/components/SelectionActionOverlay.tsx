@@ -117,7 +117,6 @@ const quickActions: Array<{ action: SelectionEditAction; label: string; descript
     { action: 'shorten', label: '精简', description: '保留重点，缩短篇幅' },
     { action: 'expand', label: '扩写', description: '补充必要解释' },
     { action: 'proofread', label: '校对', description: '修正语病与标点' },
-    { action: 'explain', label: '解释', description: '用易懂文字说明' },
     { action: 'translate', label: '翻译', description: '翻译到指定语言' },
     { action: 'custom', label: '自定义', description: '按你的要求编辑' },
 ];

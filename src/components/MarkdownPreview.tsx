@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useLayoutEffect, useRef } from 'react';
 import 'katex/dist/katex.min.css';
 import { scrollToHeadingAnchor } from '../utils/headingAnchors';
 import { findMarkdownLineTarget, normalizeMarkdownSearchText } from '../utils/markdown';
@@ -7,6 +7,7 @@ import type { MarkdownRelativeLinkTarget } from '../utils/markdownLinks';
 import type { HeadingEntry } from '../electron';
 import type { ResolvedTheme } from '../utils/theme';
 import MarkdownContent from './MarkdownContent';
+import { scheduleAfterPaint } from '../utils/afterPaint';
 import type { MarkdownFrontmatterMode } from '../utils/markdownExtensions';
 
 interface MarkdownPreviewProps {
@@ -26,6 +27,10 @@ interface MarkdownPreviewProps {
     onOpenWikiLink?: (target: string) => void;
     onOpenRelativeMarkdownLink?: (target: MarkdownRelativeLinkTarget) => void;
     onOutlineChange: (headings: HeadingEntry[]) => void;
+    deferOutline?: boolean;
+    outlineRetry?: number;
+    onOutlineError?: () => void;
+    onOutlinePending?: (hasHeadings: boolean) => void;
 }
 
 const MarkdownPreview: React.FC<MarkdownPreviewProps> = ({
@@ -45,14 +50,29 @@ const MarkdownPreview: React.FC<MarkdownPreviewProps> = ({
     onOpenWikiLink,
     onOpenRelativeMarkdownLink,
     onOutlineChange,
+    deferOutline = false,
+    outlineRetry = 0,
+    onOutlineError,
+    onOutlinePending,
 }) => {
     const containerRef = useRef<HTMLDivElement>(null);
+
+    // 预留实际标题文档的目录宽度，后台补齐目录时不挤动已显示的正文。
+    useLayoutEffect(() => {
+        if (deferOutline && containerRef.current) onOutlinePending?.(Boolean(containerRef.current.querySelector('h1, h2, h3, h4, h5, h6')));
+    }, [content, currentPath, libraryPath, deferOutline, outlineRetry, onOutlinePending]);
 
     useEffect(() => {
         const container = containerRef.current;
         if (!container) return;
-        onOutlineChange(extractRenderedHeadings(container));
-    }, [content, currentPath, libraryPath, onOutlineChange]);
+        // 独立文件先给正文绘制机会；目录失败或卸载不能继续持有旧文档任务。
+        const collect = () => {
+            try { onOutlineChange(extractRenderedHeadings(container)); }
+            catch (error) { if (onOutlineError) onOutlineError(); else throw error; }
+        };
+        if (deferOutline) return scheduleAfterPaint(collect);
+        collect();
+    }, [content, currentPath, libraryPath, onOutlineChange, deferOutline, outlineRetry, onOutlineError]);
 
     useEffect(() => {
         if (!headingJump) return;

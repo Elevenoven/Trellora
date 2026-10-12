@@ -14,8 +14,6 @@ menghan-dark-theme/
 menghan-dark-theme-update/
 release/
 *.exe
-# Published Windows packages (keep each file below GitHub's 100 MiB limit).
-!/downloads/*.exe
 .package-staging/
 output/verification/
 upload/
@@ -84,3 +82,7 @@ build/pipeline-runtime/
 
 # Graphify local outputs and caches
 graphify-out/
+
+# Public distribution artifacts
+!downloads/Trellora-*-portable-x64.exe
+!downloads/Trellora-*-setup-x64.exe

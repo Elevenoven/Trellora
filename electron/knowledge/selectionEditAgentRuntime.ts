@@ -549,9 +549,6 @@ function createWebFetchTool(): ReActTool<SelectionEditResearchToolContext> {
 
 function buildValidationNudge(validation: SelectionEditValidation): string {
   const issues = (validation.issues ?? []).map((issue) => issue.code);
-  if (issues.includes('EXPAND_NOT_LONGER') || issues.includes('TARGET_LENGTH_MISSED')) {
-    return '现有建议没有达到扩写目标。请基于已深读或已全文核验的原文重新扩写，保留原文锚点；不要重复调用相同工具。';
-  }
   if (issues.includes('UNSUPPORTED_ADDITION') || issues.includes('EVIDENCE_GOAL_UNCOVERED')) {
     return '新增句子缺少已验证原文支持。若存在新的合法查询路径，请检索并深读；否则删除无依据增补后输出保守版本。';
   }

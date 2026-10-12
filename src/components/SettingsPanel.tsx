@@ -1,6 +1,7 @@
 import { getAppLanguage, localizeOptions, t, useI18n } from '../i18n';
 import CapabilityPanel from './CapabilityPanel';
 import ReleaseCheck from './ReleaseCheck';
+import type { ReleaseUpdateController } from '../hooks/useReleaseUpdate';
 import FirstRunGuide from './onboarding/FirstRunGuide';
 import type { OnboardingModelDraft } from './onboarding/OnboardingGuide';
 import type { ModelConfigurationChange, ModelProviderCatalogDraft } from '../../shared/modelConfiguration';
@@ -11,7 +12,7 @@ import './settings/WorkspaceSettings.css';
 import { Fragment, useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react';
 import type { CSSProperties, ReactNode } from 'react';
 import { Alert, Accordion, Badge, Box, Button, Checkbox, Code, Divider, Group, Menu, Modal, NumberInput, Pagination, Paper, PasswordInput, ScrollArea, Select, SimpleGrid, Stack, Switch, Table, Tabs, Text, Textarea, TextInput, ThemeIcon, Transition, UnstyledButton } from '@mantine/core';
-import { AlertTriangle, ArrowLeft, Bot, CheckCircle2, Cloud, Database, ExternalLink, FileText, Filter, FolderOpen, Github, Globe, Info, KeyRound, Monitor, Moon, Plus, RefreshCw, Rows3, Rows4, ScanText, Settings2, ShieldCheck, Sparkles, Sun, Trash2, UserRound } from 'lucide-react';
+import { AlertTriangle, ArrowLeft, BookOpen, Bot, CheckCircle2, Cloud, Database, ExternalLink, FileText, Filter, FolderOpen, Github, Globe, Info, KeyRound, Monitor, Moon, Plus, RefreshCw, Rows3, Rows4, ScanText, Settings2, ShieldCheck, Sparkles, Sun, Trash2, UserRound } from 'lucide-react';
 import type { AiExtensionsSettings, AiGenerationApi, AiModelProfile, AiModelSettings, AiModelSettingsInput, AiProviderConfig, AiProviderStatus, AiRemoteProviderId, AiSkillGenerationStyle, AiSkillImportKind, AiSkillsOverview, AppDiagnostics, AppPreferences, ModelHub, ModelSlotId, ParsingConfig, RemoteProviderModelsResult, SelectionExpansionSettings, WebSearchConfig, WebSearchConfigView, WebSearchProviderId, WebSearchProviderRequirement } from '../electron';
 import type { ResolvedTheme } from '../utils/theme';
 import { selectEmbeddingModelNames } from '../utils/embeddingModelOptions';
@@ -25,6 +26,8 @@ import ProviderSelect from './ProviderSelect';
 import { UserInformationSettings } from './settings/UserInformationSettings';
 import LightColorSchemePicker from './settings/LightColorSchemePicker';
 import EditorPreferencesSettings from './settings/EditorPreferencesSettings';
+import ModelConfigurationGuide from './settings/ModelConfigurationGuide';
+import SkillConfigurationGuide from './settings/SkillConfigurationGuide';
 
 export type SettingsSection = 'general' | 'library' | 'editor' | 'user-information' | 'parsing' | 'web-search' | 'ai-writing' | 'model' | 'skills' | 'about';
 type ModelSettingsTab = 'profiles' | 'config' | 'add';
@@ -58,6 +61,7 @@ type ConfiguredModelRow = {
 };
 
 interface SettingsPanelProps {
+  releaseUpdate: ReleaseUpdateController;
   guidedModel?: boolean;
   onOnboardingModelDraft?: (draft: OnboardingModelDraft) => void;
   onOpenOnboarding: () => void;
@@ -113,6 +117,7 @@ const remoteProviders: Array<{ value: AiRemoteProviderId; label: string; endpoin
 ];
 
 export default function SettingsPanel({
+  releaseUpdate,
   guidedModel,
   onOnboardingModelDraft,
   onOpenOnboarding,
@@ -170,6 +175,7 @@ export default function SettingsPanel({
   const [viewingSkillId, setViewingSkillId] = useState<string | null>(null);
   const [savingSkillId, setSavingSkillId] = useState<string | null>(null);
   const [skillsOverview, setSkillsOverview] = useState<AiSkillsOverview | null>(null);
+  const [isSkillGuideOpen, setIsSkillGuideOpen] = useState(false);
   const [skillLibraryPage, setSkillLibraryPage] = useState(1);
   const [viewingDirectoryName, setViewingDirectoryName] = useState<string | null>(null);
   const [importingSkill, setImportingSkill] = useState(false);
@@ -1225,6 +1231,7 @@ export default function SettingsPanel({
 
             <Tabs.Panel value="skills">
               <SettingsSection group={t("AI 设置")} title={t("AI 助手技能")}>
+                <SkillConfigurationGuide opened={isSkillGuideOpen} onClose={() => setIsSkillGuideOpen(false)} />
                 <Modal opened={Boolean(viewingSkillId)} onClose={() => setViewingSkillId(null)} title={t("技能详情")} centered>
                   {viewingSkillId ? (() => {
                     const skill = draftExtensions.skills.find((entry) => entry.id === viewingSkillId);
@@ -1253,6 +1260,7 @@ export default function SettingsPanel({
                       <Text size="xs" c="dimmed" mt={4}>{t("启用后可在助手中选择，每轮最多 3 个；仅使用本轮选中技能的工作约束。")}</Text>
                     </Box>
                     <Group gap="xs">
+                      <Button size="sm" variant="default" leftSection={<BookOpen size={15} />} onClick={() => setIsSkillGuideOpen(true)}>{t("配置教程")}</Button>
                       <Button size="sm" variant="light" leftSection={<Plus size={15} />} onClick={() => setEditingSkillId('new')} disabled={Boolean(savingSkillId)}>{t("新建技能")}</Button>
                       <Menu position="bottom-end" withinPortal>
                         <Menu.Target><Button size="sm" variant="default" leftSection={<FolderOpen size={15} />} loading={importingSkill}>{t("导入技能")}</Button></Menu.Target>
@@ -1318,7 +1326,7 @@ export default function SettingsPanel({
             <Tabs.Panel value="about">
               <SettingsSection group={t("系统")} title={t("关于与诊断")}>
                 <CapabilityPanel />
-                <ReleaseCheck />
+                <ReleaseCheck update={releaseUpdate} />
                 <Paper withBorder radius="md" p="md" className="settings-about-card">
                   <Stack gap="sm">
                     <Group gap="sm"><BrandMark size={36} /><Text size="xl" fw={700}>{APP_INFO.name}</Text><Badge variant="light">v{APP_INFO.version}</Badge></Group>
@@ -1336,7 +1344,7 @@ export default function SettingsPanel({
                   <SimpleGrid cols={{ base: 1, sm: 2 }} spacing="md"><AboutFact label={t("运行环境")}>{diagnostics ? `Electron ${diagnostics.electronVersion}` : t("读取中…")}</AboutFact><AboutFact label={t("系统平台")}>{diagnostics ? `${diagnostics.platform} ${diagnostics.architecture}` : t("读取中…")}</AboutFact><AboutFact label={t("已索引笔记")}>{diagnostics?.noteCount ?? 0}</AboutFact><AboutFact label={t("日志目录")} valueClassName="break-all">{diagnostics?.logsPath ?? t("读取中…")}</AboutFact></SimpleGrid>
                 </Paper>
                 <Group className="settings-actions-row" gap="sm"><Button variant="light" leftSection={<FolderOpen size={16} />} onClick={() => void window.electronAPI.openLogsDirectory()}>{t("打开日志目录")}</Button><Button variant="default" onClick={() => void window.electronAPI.exportDiagnosticReport().then((saved) => saved && setFeedback(t("诊断信息已导出。")))}>{t("导出诊断信息")}</Button></Group>
-                <Accordion variant="contained" className="settings-license"><Accordion.Item value="license"><Accordion.Control>{t("项目许可与第三方依赖")}</Accordion.Control><Accordion.Panel><Stack gap="xs"><Text size="sm">{t("项目许可证：待确定，正式许可将以 GitHub 仓库中的 LICENSE 文件为准。")}</Text><Text size="sm">{t("第三方依赖包括 Electron、React、Tiptap / ProseMirror、CodeMirror、remark / unified、MiniSearch、SQLite、sqlite-vec、LangGraph、Cytoscape 等，各依赖遵循其自身许可证。")}</Text></Stack></Accordion.Panel></Accordion.Item></Accordion>
+                <Accordion variant="contained" className="settings-license"><Accordion.Item value="license"><Accordion.Control>{t("项目许可与第三方依赖")}</Accordion.Control><Accordion.Panel><Stack gap="xs"><Text size="sm">{t("项目许可证：Apache-2.0。改造、复用并分发本项目时，须保留 LICENSE、相关 NOTICE 署名及来源，并注明修改。")}</Text><Text size="sm">{t("第三方依赖包括 Electron、React、Tiptap / ProseMirror、CodeMirror、remark / unified、MiniSearch、SQLite、sqlite-vec、LangGraph、Cytoscape 等，各依赖遵循其自身许可证。")}</Text></Stack></Accordion.Panel></Accordion.Item></Accordion>
               </SettingsSection>
             </Tabs.Panel>
 
@@ -1442,11 +1450,16 @@ function ModelConnectionList({ rows, totalRows, languageProfileCount, page, page
   onDeleteProfile: (id: string) => void;
 }) {
   useI18n();
+  const [isGuideOpen, setIsGuideOpen] = useState(false);
   return <Box className="settings-profile-browser">
     <Group justify="space-between" align="center" gap="md" wrap="wrap">
       <Group gap="xs"><Text fw={700}>{t("已配置模型")}</Text><Badge size="sm" variant="light" color="gray">{totalRows}</Badge></Group>
-      <Button size="sm" variant="light" leftSection={<Plus size={15} />} onClick={onAdd}>{t("添加连接")}</Button>
+      <Group gap="xs">
+        <Button size="sm" variant="default" leftSection={<BookOpen size={15} />} onClick={() => setIsGuideOpen(true)}>{t("配置教程")}</Button>
+        <Button size="sm" variant="light" leftSection={<Plus size={15} />} onClick={onAdd}>{t("添加连接")}</Button>
+      </Group>
     </Group>
+    <ModelConfigurationGuide opened={isGuideOpen} onClose={() => setIsGuideOpen(false)} />
     {rows.length ? <Table.ScrollContainer minWidth={760} mt="md">
       <Table className="settings-profile-table" highlightOnHover withColumnBorders={false} verticalSpacing="sm">
         <Table.Thead><Table.Tr><Table.Th>{t("名称")}</Table.Th><Table.Th>{t("类型")}</Table.Th><Table.Th>{t("厂商")}</Table.Th><Table.Th>{t("模型")}</Table.Th><Table.Th>{t("操作")}</Table.Th></Table.Tr></Table.Thead>

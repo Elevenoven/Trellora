@@ -1,0 +1,73 @@
+.release-update-content {
+  max-width: calc(100vw - 32px);
+}
+
+.release-update-body {
+  overflow-wrap: anywhere;
+  display: flex;
+  min-height: 0;
+  overflow: hidden;
+  flex: 0 1 auto;
+}
+
+.release-update-scroll {
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.release-update-scroll > .mantine-Modal-header {
+  flex-shrink: 0;
+}
+
+.release-update-layout {
+  flex: 1;
+  min-height: 0;
+}
+
+.release-update-layout > * {
+  flex-shrink: 0;
+}
+
+.release-update-layout > .release-update-notes-section {
+  flex-shrink: 1;
+  min-height: 40px;
+}
+
+.release-update-notes-section > .mantine-Text-root {
+  flex-shrink: 0;
+}
+
+.release-update-notes {
+  flex: 1 1 auto;
+  min-height: 0;
+}
+
+.release-update-versions {
+  padding: 12px 16px;
+  border: 1px solid var(--mantine-color-default-border);
+  border-radius: var(--mantine-radius-md);
+  background: var(--mantine-color-default);
+}
+
+.release-update-notes-text {
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+}
+
+.release-update-guidance {
+  padding-left: 12px;
+  border-left: 2px solid var(--mantine-color-brand-5);
+}
+
+.release-update-actions {
+  padding-top: 8px;
+  border-top: 1px solid var(--mantine-color-default-border);
+}
+
+@media (max-width: 560px) {
+  .release-update-actions > .mantine-Group-root {
+    width: 100%;
+    justify-content: flex-end;
+  }
+}

@@ -69,7 +69,7 @@ export const defaultAppPreferences: AppPreferences = {
   startupBehavior: 'library',
   externalLinkOpenMode: 'in-app',
   backupRetention: NOTE_BACKUP_RETENTION,
-  defaultEditorMode: 'wysiwyg',
+  defaultEditorMode: 'preview',
   autosaveDelayMs: 1_000,
   previewPreference: 'rendered',
   ...ASSISTANT_RELEASE_DEFAULTS,

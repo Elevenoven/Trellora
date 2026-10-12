@@ -1,5 +1,5 @@
-import { getAppLanguage, t, useI18n } from '../../i18n';
-import type { CSSProperties, MouseEvent as ReactMouseEvent } from 'react';
+import { getAppLanguage, localizeOptions, t, useI18n } from '../../i18n';
+import { useState, type CSSProperties, type MouseEvent as ReactMouseEvent } from 'react';
 import { useMediaQuery } from '@mantine/hooks';
 import {
   ActionIcon,
@@ -15,7 +15,6 @@ import {
   Stack,
   Text,
   Textarea,
-  TextInput,
   UnstyledButton,
 } from '@mantine/core';
 import { BookOpenText, Sparkles, X } from 'lucide-react';
@@ -56,6 +55,12 @@ const contextScopeOptions: Array<{ value: SelectionEditContextScope; label: stri
   { value: 'extended', label: '扩展来源（请使用扩写工作区）', disabled: true },
 ];
 
+// 语言显示名称随界面翻译，传给主进程的值沿用现有文字合同。
+const targetLanguageOptions = [
+  '中文', '繁体中文', '英语', '日语', '韩语', '法语', '德语',
+  '西班牙语', '葡萄牙语', '俄语', '意大利语', '阿拉伯语', '泰语', '越南语',
+].map((language) => ({ value: language, label: language }));
+
 export default function SelectionEditLauncher({
   position,
   selectedCharacters,
@@ -78,13 +83,14 @@ export default function SelectionEditLauncher({
   onPreserveSelection,
 }: SelectionEditLauncherProps) {
   useI18n();
+  const [targetLanguageDropdownOpened, setTargetLanguageDropdownOpened] = useState(false);
   const compactViewport = useMediaQuery('(max-width: 520px)');
   const useNearbyContext = contextScope === 'nearby' && snapshotCurrent;
   const receipt = useNearbyContext
     ? `将处理选区，并发送同一文本块前后文共 ${nearbyCharacters} 字。`
     : contextScope === 'current-note'
       ? '将把选区作为编辑对象，并在预算内读取当前笔记的相关原文。'
-      : '系统按动作画像装配上下文；精简、扩写和解释会优先读取当前笔记的相关原文。';
+      : '系统按动作画像装配上下文；精简和扩写会优先读取当前笔记的相关原文。';
 
   const content = (
     <Stack gap="sm" p="sm" style={{ minHeight: 0, flex: '1 1 auto', overflow: 'hidden' }}>
@@ -127,7 +133,26 @@ export default function SelectionEditLauncher({
             })}
           </SimpleGrid>
 
-          {action === 'translate' ? <TextInput label={t("目标语言")} value={targetLanguage} maxLength={60} placeholder={t("例如：英语")} onChange={(event) => onTargetLanguageChange(event.currentTarget.value)} /> : null}
+          {action === 'translate' ? <Select
+            label={t("目标语言")}
+            value={targetLanguage}
+            data={localizeOptions(targetLanguageOptions)}
+            searchable
+            allowDeselect={false}
+            maxDropdownHeight={220}
+            nothingFoundMessage={t("未找到匹配的语言")}
+            comboboxProps={{ zIndex: 1600 }}
+            onDropdownOpen={() => setTargetLanguageDropdownOpened(true)}
+            onDropdownClose={() => setTargetLanguageDropdownOpened(false)}
+            onKeyDown={(event) => {
+              // 搜索时 Esc 只关闭语言菜单，并恢复已选语言，保留编辑会话。
+              if (event.key === 'Escape' && targetLanguageDropdownOpened) {
+                event.stopPropagation();
+                event.currentTarget.blur();
+              }
+            }}
+            onChange={(value) => value && onTargetLanguageChange(value)}
+          /> : null}
           {action === 'custom' ? <Textarea label={t("自定义要求")} value={instruction} maxLength={500} autosize minRows={2} maxRows={5} placeholder={t("例如：改成适合周报的正式语气")} onChange={(event) => onInstructionChange(event.currentTarget.value)} /> : null}
 
           <Select
@@ -161,7 +186,7 @@ export default function SelectionEditLauncher({
   );
 
   if (compactViewport) {
-    return <Modal opened onClose={onCancel} withCloseButton={false} centered size="calc(100vw - 16px)" xOffset={8} yOffset={8} padding={0} radius="md"
+    return <Modal opened onClose={onCancel} closeOnEscape={!targetLanguageDropdownOpened} withCloseButton={false} centered size="calc(100vw - 16px)" xOffset={8} yOffset={8} padding={0} radius="md"
       styles={{ content: { display: 'flex', flexDirection: 'column', maxHeight: 'calc(100dvh - 16px)', overflow: 'hidden' }, body: { display: 'flex', minHeight: 0, overflow: 'hidden' } }}>
       {content}
     </Modal>;
@@ -169,7 +194,7 @@ export default function SelectionEditLauncher({
 
   return (
     <Box aria-hidden style={{ position: 'fixed', left: position.left, top: position.top, width: 1, height: 1, zIndex: 1500 }}>
-      <Popover opened position="bottom-start" offset={8} withinPortal zIndex={1550} shadow="md" radius="md" trapFocus={false} returnFocus={false} closeOnEscape onClose={onCancel}
+      <Popover opened position="bottom-start" offset={8} withinPortal zIndex={1550} shadow="md" radius="md" trapFocus={false} returnFocus={false} closeOnEscape={!targetLanguageDropdownOpened} onClose={onCancel}
         // 选项展开后按真实尺寸避让窗口边缘，空间不足时只滚动中间内容。
         middlewares={{ flip: { padding: 8 }, shift: { padding: 8, crossAxis: true, limiter: undefined }, size: { padding: 8 } }}>
         <Popover.Target><Box component="span" style={{ display: 'block', width: 1, height: 1 }} /></Popover.Target>

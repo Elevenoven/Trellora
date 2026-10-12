@@ -86,16 +86,6 @@ export const selectionEditProfiles = {
     evidencePolicy: 'forbid-new-facts',
     protectedAnchorKinds: selectionEditProtectedAnchorKinds,
   },
-  explain: {
-    label: '解释',
-    description: '结合当前笔记的定义和论证补充说明。',
-    contextStrategy: 'current-note-adaptive',
-    defaultContextScope: 'auto',
-    defaultWritebackMode: 'insert-below',
-    defaultAllowedSources: localOnlySources,
-    evidencePolicy: 'require-for-new-facts',
-    protectedAnchorKinds: selectionEditProtectedAnchorKinds,
-  },
   translate: {
     label: '翻译',
     description: '保持术语、专名、代码和链接一致。',

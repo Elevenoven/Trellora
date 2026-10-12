@@ -2,6 +2,7 @@ import { createHash } from 'node:crypto';
 import { unified } from 'unified';
 import remarkParse from 'remark-parse';
 import remarkGfm from 'remark-gfm';
+import remarkFrontmatter from 'remark-frontmatter';
 import remarkWikiLink from 'remark-wiki-link';
 import { normalizeSelectionProjection } from '../../shared/selectionExpansionPolicy';
 import type { SelectionLocatorCapture } from '../../shared/selectionLocatorTypes';
@@ -15,7 +16,8 @@ interface SourceNode {
   data?: { alias?: string };
   position?: { start: { line: number }; end: { line: number } };
 }
-const parser = unified().use(remarkParse).use(remarkGfm)
+// 与编辑器一致地排除 Frontmatter，避免元数据使正文选区哈希不匹配。
+const parser = unified().use(remarkParse).use(remarkGfm).use(remarkFrontmatter)
   .use(remarkWikiLink as never, { aliasDivider: '|' });
 
 /** Validate the bounded, renderer-owned selection receipt before source lookup. */

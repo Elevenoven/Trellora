@@ -1,4 +1,3 @@
-import { countMeaningfulCharacters } from '../../shared/selectionExpansionPolicy';
 import { expansionMarkdownFormatLosses, expansionMarkdownText } from '../../shared/selectionExpansionMarkdown';
 import type {
   SelectionEditAction,
@@ -50,11 +49,6 @@ export function validateSelectionEditOutput(input: SelectionEditValidationInput)
   if (input.action === 'shorten' && candidate.length >= original.length) {
     warnings.push('精简建议没有比原文更短。');
   }
-  if (input.action === 'expand' && countMeaningfulCharacters(candidate) <= countMeaningfulCharacters(original)) {
-    const message = '扩写未达到目标长度';
-    warnings.push(message);
-    issues.push({ code: 'EXPAND_NOT_LONGER', message, retryable: true });
-  }
   if (input.action === 'proofread' && isBroadRewrite(original, candidate)) {
     warnings.push('校对建议改写幅度过大。');
   }
@@ -62,7 +56,7 @@ export function validateSelectionEditOutput(input: SelectionEditValidationInput)
     warnings.push('翻译结果与目标语言不一致。');
   }
 
-  if (input.action === 'expand' || input.action === 'explain') {
+  if (input.action === 'expand') {
     const additions = findUnsupportedAdditions(original, candidate, input.evidence);
     unsupportedClaims.push(...additions.messages);
     if (additions.messages.length > 0) {

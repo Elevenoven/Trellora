@@ -8,6 +8,10 @@ export interface EditorPreferences {
   editorMarkdownAutoConvert: boolean;
   editorSelectionToolbarEnabled: boolean;
   editorFocusModeEnabled: boolean;
+  editorFocusAiButtonVisible: boolean;
+  editorFocusAiButtonPinned: boolean;
+  editorFocusAiButtonSide: 'left' | 'right';
+  editorFocusAiButtonPosition: number;
   editorTypewriterModeEnabled: boolean;
 }
 
@@ -19,6 +23,8 @@ export const defaultEditorPreferences: EditorPreferences = {
   editorContentWidth: 'standard', defaultEditorZoom: 1, editorPasteMode: 'preserve-format',
   editorMarkdownAutoConvert: true, editorSelectionToolbarEnabled: true,
   editorFocusModeEnabled: false, editorTypewriterModeEnabled: false,
+  editorFocusAiButtonVisible: true, editorFocusAiButtonPinned: false,
+  editorFocusAiButtonSide: 'right', editorFocusAiButtonPosition: 1,
 };
 export const editorPreferenceKeys = Object.keys(defaultEditorPreferences) as Array<keyof EditorPreferences>;
 export const editorContentWidths = { narrow: 720, standard: 900, wide: 1120, full: 0 } as const;
@@ -43,6 +49,10 @@ export function normalizeEditorPreferences(value: unknown): EditorPreferences {
     editorMarkdownAutoConvert: boolean('editorMarkdownAutoConvert'),
     editorSelectionToolbarEnabled: boolean('editorSelectionToolbarEnabled'),
     editorFocusModeEnabled: boolean('editorFocusModeEnabled'),
+    editorFocusAiButtonVisible: boolean('editorFocusAiButtonVisible'),
+    editorFocusAiButtonPinned: boolean('editorFocusAiButtonPinned'),
+    editorFocusAiButtonSide: v.editorFocusAiButtonSide === 'left' ? 'left' : 'right',
+    editorFocusAiButtonPosition: number('editorFocusAiButtonPosition', 0, 1, 0.01),
     editorTypewriterModeEnabled: boolean('editorTypewriterModeEnabled'),
   };
 }

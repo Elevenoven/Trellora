@@ -157,6 +157,8 @@ export interface AssistantTurnRequest {
   scope: AssistantScope;
   userText: string;
   currentNotePath?: string;
+  /** 独立文件只传已授权会话和草稿版本；正文由主进程读取。 */
+  currentDocument?: { documentSessionId: string; draftRevision: number };
   /** Current-note and dedicated knowledge-base conversations may opt into a persisted session. */
   sessionId?: string;
   contextSources?: AssistantContextSource[];
@@ -718,7 +720,7 @@ export type AssistantTurnResult =
     qaSessionId?: string;
     /** Durable explicit-save result; assistant wording is never a save acknowledgement. */
     memorySave?: import('./memory/memoryTypes').MemorySaveReceipt;
-    /** 知识库问答问题改写记录（设计 docs/Trellora-2.0-知识库问题改写设计.md）。 */
+    /** 知识库问答问题改写记录。 */
     queryRewrite?: QaQueryRewriteRecord;
     /** Phase 7: prompt-text-free context projection diagnostics safe for renderer and local persistence. */
     contextDiagnostics?: ContextProjectionDiagnostics;
@@ -773,7 +775,16 @@ export function validateAssistantTurnRequest(value: unknown): AssistantTurnReque
   const userText = readString(input.userText, '问题或目标', 2_000);
   if (!userText.trim()) throw new Error('请输入问题或目标。');
   const currentNotePath = input.currentNotePath === undefined ? undefined : readString(input.currentNotePath, '当前笔记路径', 4_000);
-  if (scope === 'current-note' && !currentNotePath?.trim()) throw new Error('请先选择当前笔记。');
+  let currentDocument: AssistantTurnRequest['currentDocument'];
+  if (input.currentDocument !== undefined) {
+    if (!input.currentDocument || typeof input.currentDocument !== 'object' || Array.isArray(input.currentDocument)) throw new Error('当前文档会话无效。');
+    const target = input.currentDocument as Record<string, unknown>;
+    const documentSessionId = readString(target.documentSessionId, '文档会话标识', 128);
+    if (!requestIdPattern.test(documentSessionId) || !Number.isSafeInteger(target.draftRevision) || (target.draftRevision as number) < 0) throw new Error('当前文档草稿版本无效。');
+    if (scope !== 'current-note' || intent !== 'ask' || currentNotePath) throw new Error('当前任务不接受独立文档目标。');
+    currentDocument = { documentSessionId, draftRevision: target.draftRevision as number };
+  }
+  if (scope === 'current-note' && !currentNotePath?.trim() && !currentDocument) throw new Error('请先选择当前笔记。');
   if (scope !== 'current-note' && currentNotePath) throw new Error('当前任务不接受当前笔记路径。');
   const wikiTarget = input.wikiTarget === undefined ? undefined : readWikiTarget(input.wikiTarget);
   if (scope === 'wiki-node' && !wikiTarget) throw new Error('请先选择 Wiki 节点。');
@@ -781,6 +792,7 @@ export function validateAssistantTurnRequest(value: unknown): AssistantTurnReque
   const sessionId = input.sessionId === undefined ? undefined : readId(input.sessionId, '会话标识');
   const contextSources = input.contextSources === undefined ? [] : readContextSources(input.contextSources);
   const attachments = input.attachments === undefined ? [] : readAttachments(input.attachments);
+  if (currentDocument && (sessionId || contextSources.length || attachments.length || input.webSearch === 'on')) throw new Error('当前文档问答只能使用本轮文档草稿。');
   if (scope === 'chat' && contextSources.length) throw new Error('普通 AI 问答不接受资料库来源。');
   const hasDedicatedKnowledgeBaseSession = scope === 'library-search'
     && contextSources.length === 1
@@ -814,6 +826,7 @@ export function validateAssistantTurnRequest(value: unknown): AssistantTurnReque
     scope,
     userText,
     ...(currentNotePath ? { currentNotePath } : {}),
+    ...(currentDocument ? { currentDocument } : {}),
     ...(sessionId ? { sessionId } : {}),
     ...(contextSources.length ? { contextSources } : {}),
     ...(attachments.length ? { attachments } : {}),

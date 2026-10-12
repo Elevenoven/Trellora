@@ -11,7 +11,6 @@ export const selectionTransformActions = [
   'shorten',
   'expand',
   'proofread',
-  'explain',
   'translate',
   'custom',
 ] as const;

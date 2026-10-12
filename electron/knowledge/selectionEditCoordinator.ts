@@ -35,7 +35,6 @@ import { locateSelectionInSnapshot } from './selectionEditLocator';
 import type { SelectionLocatorCapture } from '../../shared/selectionLocatorTypes';
 import { resolveExpansionTarget } from '../../shared/selectionExpansionPolicy';
 import { collectExpansionSnapshotContext, isExpansionFullNoteEvidence, resolveExpansionThinkingMode, resolveSelectionExpansionMode, type SelectionExpansionMode } from './selectionExpansionContext';
-import { resolveSelectionEditPromptBudget } from './selectionEditPromptBudget';
 import { buildExpansionLengthInstruction, buildExpansionMarkdownInstruction, buildExpansionRepairInstruction } from './selectionExpansionPrompts';
 import { normalizeExpansionMarkdown } from '../../shared/selectionExpansionMarkdown';
 
@@ -78,7 +77,7 @@ interface CoordinatorPlan {
 }
 
 /**
- * The single execution path for all seven selection actions.  It owns no IPC
+ * The single execution path for all six selection actions.  It owns no IPC
  * and no editor mutation: callers may keep legacy transports while sharing
  * routing, evidence admission, validation, result shape and cancellation.
  */
@@ -99,48 +98,6 @@ export async function runSelectionEditCoordinator(input: SelectionEditCoordinato
   const route = resolveRoute(request, input.snapshot, input.synthesis);
   const plan = createCoordinatorPlan(request, route, input.synthesis);
   input.emit?.({ type: 'plan', plan: plan.publicPlan });
-
-  const targetExceedsModelOutput = targetExceedsModelOutputLimit(providerConfig, model, input.synthesis?.targetCharacters, adaptiveExpansion);
-  if (targetExceedsModelOutput) {
-    input.emit?.({ type: 'status', stage: 'validating', message: '目标长度超出当前模型已声明的输出上限，未发送生成请求。' });
-    const validation = validateSelectionEditOutput({
-      action: request.action,
-      selectedText: request.snapshot.selectedText,
-      candidateText: '',
-      targetLanguage: request.targetLanguage,
-      evidence: [],
-      protectedAnchorKinds: profile.protectedAnchorKinds,
-    });
-    const quality = applySelectionEditQualityGate({
-      action: request.action,
-      selectedText: request.snapshot.selectedText,
-      candidateText: '',
-      targetCharacters: input.synthesis?.targetCharacters,
-      requiredGoalIds: plan.goals.filter((goal) => goal.required).map((goal) => goal.goalId),
-      evidence: [],
-      validation,
-      targetExceedsModelOutput: true,
-    });
-    const result: SelectionEditResult = {
-      requestId: request.requestId,
-      action: request.action,
-      text: '',
-      writebackKind: 'copy-only',
-      suggestedApplyMode: 'copy-only',
-      receipt: createLocalReceipt(route, request),
-      evidence: [],
-      validation: quality.validation,
-      qualityReceipt: quality.receipt,
-      execution: createDirectExecutionReceipt(),
-      sourceSnapshotId: request.sourceSnapshotId,
-      selectedTextHash: request.snapshot.selectedTextHash,
-      provider: providerConfig.kind,
-      model,
-      generatedAt: new Date().toISOString(),
-    };
-    input.emit?.({ type: 'complete', result });
-    return result;
-  }
 
   let evidence: SelectionEvidenceItem[] = [];
   let receipt = createLocalReceipt(route, request);
@@ -279,7 +236,7 @@ export async function runSelectionEditCoordinator(input: SelectionEditCoordinato
     assertRunning(input);
   }
 
-  input.emit?.({ type: 'status', stage: 'validating', message: '正在检查锚点、长度和证据边界…' });
+  input.emit?.({ type: 'status', stage: 'validating', message: '正在检查锚点、格式和证据边界…' });
   const validateFinalCandidate = (candidateText: string, providedValidation?: SelectionEditValidation) => applySelectionEditQualityGate({
     action: request.action,
     selectedText: request.snapshot.selectedText,
@@ -322,7 +279,7 @@ export async function runSelectionEditCoordinator(input: SelectionEditCoordinato
         contextWindowTokens: promptBudget.contextWindowTokens,
       }), request.snapshot.selectedText.length, request.action);
       assertRunning(input);
-      input.emit?.({ type: 'status', stage: 'validating', message: '正在复核修复后的锚点、长度和证据边界…' });
+      input.emit?.({ type: 'status', stage: 'validating', message: '正在复核修复后的锚点、格式和证据边界…' });
       quality = validateFinalCandidate(text);
     } catch (error) {
       assertRunning(input);
@@ -477,7 +434,7 @@ function resolveRoute(
   if (!snapshot || !request.allowedSources.currentNote) return 'local-transform';
   if (options?.forceCurrentNoteResearch || request.contextScope === 'current-note') return 'current-note-research';
   if (selectionEditProfiles[request.action].contextStrategy === 'current-note-adaptive'
-    && (request.action === 'expand' || request.action === 'explain')) return 'current-note-research';
+    && request.action === 'expand') return 'current-note-research';
   return 'local-transform';
 }
 
@@ -577,22 +534,6 @@ function resolveCurrentNoteCapacity(
     contextWindowTokens,
     hasOutputAndHistoryReserve: snapshot.tokenEstimate + outputReserve + promptReserve < contextWindowTokens,
   };
-}
-
-function targetExceedsModelOutputLimit(
-  config: AiProviderConfig,
-  model: string,
-  targetCharacters: number | undefined,
-  adaptiveExpansion = false,
-): boolean {
-  if (!targetCharacters || targetCharacters <= 0) return false;
-  if (adaptiveExpansion) {
-    const budget = resolveSelectionEditPromptBudget({ config, model, action: 'expand', selectedText: '', prompt: '', targetCharacters });
-    return estimateTokenCount('扩'.repeat(Math.min(MAX_SUGGESTION_CHARACTERS, targetCharacters))) + 128 > budget.maxOutputTokens;
-  }
-  const maxOutputTokens = config.availableModels?.find((item) => item.name.trim() === model)?.maxOutputTokens;
-  if (!maxOutputTokens) return false;
-  return estimateTokenCount('扩'.repeat(Math.min(MAX_SUGGESTION_CHARACTERS, targetCharacters))) > maxOutputTokens;
 }
 
 function createDirectExecutionReceipt(): SelectionEditExecutionReceipt {
@@ -695,7 +636,6 @@ function actionTask(action: SelectionEditAction, targetLanguage?: string, instru
     case 'shorten': return '精简选区，保留关键结论与限定条件。';
     case 'expand': return '基于已读原文扩写选区，补齐必要解释与衔接。';
     case 'proofread': return '校对选区，只修正错别字、病句、标点和一致性。';
-    case 'explain': return '用清晰易懂的文字解释选区，并明确原文事实边界。';
     case 'translate': return `将选区忠实翻译为${targetLanguage ?? '目标语言'}。`;
     case 'custom': return `按用户要求编辑选区：${instruction ?? '保持原意改写'}。`;
   }
@@ -708,7 +648,7 @@ function normalizeSuggestion(value: string, selectedLength: number, action: Sele
     .replace(/<[^>]*>/gu, '')
     .replace(/\r\n?/gu, '\n')
     .trim();
-  if (!normalized && action !== 'expand' && action !== 'explain') throw new Error('模型没有返回可用建议。');
+  if (!normalized && action !== 'expand') throw new Error('模型没有返回可用建议。');
   if (normalized.length > maxLength) throw new Error('模型返回的建议过长，请缩小选区后重试。');
   return normalized;
 }

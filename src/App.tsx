@@ -1,4 +1,6 @@
 import './styles/editorPreferences.css';
+import { useReleaseUpdate } from './hooks/useReleaseUpdate';
+import ReleaseUpdateModal from './components/ReleaseUpdateModal';
 import { useExternalDocuments } from './hooks/useExternalDocuments';
 import ExternalDocumentWorkspace from './components/ExternalDocumentWorkspace';
 import { useTypewriterScroll } from './hooks/useTypewriterScroll';
@@ -72,7 +74,7 @@ const defaultPreferences: AppPreferences = {
   startupBehavior: 'library',
   externalLinkOpenMode: 'in-app',
   backupRetention: NOTE_BACKUP_RETENTION,
-  defaultEditorMode: 'wysiwyg',
+  defaultEditorMode: 'preview',
   autosaveDelayMs: 1_000,
   previewPreference: 'rendered',
   ...ASSISTANT_RELEASE_DEFAULTS,
@@ -177,6 +179,7 @@ function App({ onResolvedThemeChange, onStartupReady }: AppProps) {
   const [isLeftSidebarCollapsed, setIsLeftSidebarCollapsed] = useState(false);
   const [isRightPanelCollapsed, setIsRightPanelCollapsed] = useState(false);
   const [isCurrentNoteAssistantOpen, setIsCurrentNoteAssistantOpen] = useState(false);
+  const [isFocusAssistantOpen, setIsFocusAssistantOpen] = useState(false);
   const [selectionExpansionSession, setSelectionExpansionSession] = useState<SelectionExpansionDraftSession | null>(null);
   const selectionExpansionPreparationRef = useRef(0);
   const [selectionExpansionApply, setSelectionExpansionApply] = useState<SelectionExpansionApplyRequest | null>(null);
@@ -219,13 +222,19 @@ function App({ onResolvedThemeChange, onStartupReady }: AppProps) {
   const currentIsMarkdown = noteMeta?.kind !== 'text';
   // These surfaces own focus and must suspend editor-only floating controls.
   // Keep this derived state local: it is not user data and is never persisted.
-  const isEditorInteractionBlocked = isSearchOpen
+  const isOtherEditorInteractionBlocked = isSearchOpen
     || isCreateModalOpen
     || isSaveCopyModalOpen
     || isCreateLibraryModalOpen
     || materialsModal.opened
     || isTagModalOpen
     || isNoteLibraryDialogOpen;
+  const releaseUpdate = useReleaseUpdate({
+    readyToCheck: arePreferencesLoaded && startupDataLoaded,
+    readyToPrompt: startupRestoreFinished,
+    blocked: isOtherEditorInteractionBlocked || guide.visible || guide.celebrate || migrationBlocked || isMaintaining || saveView.frozen,
+  });
+  const isEditorInteractionBlocked = isOtherEditorInteractionBlocked || releaseUpdate.opened;
 
   useEffect(() => {
     setCachedMainViews((current) => {
@@ -516,22 +525,16 @@ function App({ onResolvedThemeChange, onStartupReady }: AppProps) {
   }, []);
 
   useEffect(() => {
-    if (noteMeta?.kind === 'text' && editorMode !== 'source') {
-      setEditorMode('source');
-    }
-  }, [editorMode, noteMeta?.kind]);
-
-  useEffect(() => {
     if (!headingJump || editorMode !== 'source') return;
     const line = document.querySelectorAll<HTMLElement>('.cm-line')[Math.max(headingJump.heading.line - 1, 0)];
     line?.scrollIntoView({ block: 'center', behavior: 'smooth' });
   }, [editorMode, headingJump]);
 
   useEffect(() => {
-    if (editorMode === 'source' || !currentIsMarkdown) {
+    if (editorMode === 'source') {
       setCurrentHeadings(noteMeta?.headings ?? []);
     }
-  }, [currentIsMarkdown, editorMode, noteMeta?.headings]);
+  }, [editorMode, noteMeta?.headings]);
 
   const handleSelectWorkspace = async () => {
     setMigrationRequest(current => ({ sequence: current.sequence + 1, mode: 'migrate' }));
@@ -812,15 +815,14 @@ function App({ onResolvedThemeChange, onStartupReady }: AppProps) {
       setBackups([]);
 
       setContent(snapshot.content); setNoteMeta(meta); setBackups(backupEntries); setAllTags(tags);
-      const preferredMode = meta?.kind === 'text'
-        ? 'source'
-        : appPreferences.defaultEditorMode === 'preview'
-          ? (appPreferences.previewPreference === 'source' ? 'source' : 'preview')
-          : appPreferences.defaultEditorMode;
+      // 文本与 Markdown 共用视图偏好，不再按扩展名强制进入源码。
+      const preferredMode = appPreferences.defaultEditorMode === 'preview'
+        ? (appPreferences.previewPreference === 'source' ? 'source' : 'preview')
+        : appPreferences.defaultEditorMode;
       const targetHeading = navigationTarget?.heading
         ? meta?.headings.find((heading) => heading.text.trim() === navigationTarget.heading?.trim())
         : undefined;
-      if (headingFragment && meta?.kind !== 'text') {
+      if (headingFragment) {
         setEditorMode('preview');
         setHeadingJump({
           heading: { id: headingFragment, level: 1, text: headingFragment, line: 1, index: -1 },
@@ -832,7 +834,7 @@ function App({ onResolvedThemeChange, onStartupReady }: AppProps) {
         // editor's positioning effect, so search results open in WYSIWYG.
         setEditorMode('wysiwyg');
         setHeadingJump({ heading: targetHeading, nonce: Date.now() });
-      } else if (navigationTarget?.snippet?.trim() && meta?.kind !== 'text') {
+      } else if (navigationTarget?.snippet?.trim()) {
         setEditorMode('wysiwyg');
         setSearchScrollTarget({ text: navigationTarget.snippet, nonce: Date.now() });
       } else {
@@ -1088,7 +1090,7 @@ function App({ onResolvedThemeChange, onStartupReady }: AppProps) {
 
   const handleStartAssistantTurn = useCallback(async (request: AssistantTurnRequest): Promise<{ requestId: string }> => {
     if (!window.electronAPI) throw new Error(t("桌面能力不可用。"));
-    if (request.scope === 'current-note') {
+    if (request.scope === 'current-note' && !request.currentDocument) {
       if (!currentPathRef.current) throw new Error(t("请先选择一篇笔记。"));
       const saved = await flushPendingSave();
       if (!saved) throw new Error(t("当前笔记尚未保存，无法作为本次上下文。"));
@@ -1609,6 +1611,14 @@ function App({ onResolvedThemeChange, onStartupReady }: AppProps) {
 
   const editorPreferences = normalizeEditorPreferences(appPreferences);
   const focusActive = editorPreferences.editorFocusModeEnabled && mainView === 'notes' && Boolean(currentPath || externalDocuments.controller.snapshot);
+  const focusAssistantEnabled = focusActive && !externalDocuments.controller.snapshot && editorPreferences.editorFocusAiButtonVisible;
+  const focusAssistantOptions = {
+    active: focusActive && !externalDocuments.controller.snapshot && !isEditorInteractionBlocked && !migrationBlocked && !isMaintaining,
+    preferences: editorPreferences,
+    onSave: handleSavePreferences,
+    onOpenSettings: (section: 'editor' | 'model') => { void handleOpenSettings(section); },
+    onVisibilityChange: setIsFocusAssistantOpen,
+  };
   const documentStyle = {
     '--editor-zoom': editorZoom,
     '--editor-font-size': `${editorPreferences.editorFontSizePx}px`,
@@ -1629,14 +1639,14 @@ function App({ onResolvedThemeChange, onStartupReady }: AppProps) {
     return { scroller: view.scrollDOM, content: view.contentDOM, collapsed: view.state.selection.main.empty,
       caret: caret ? getNoteViewportRect(caret, view.contentDOM) : null, requestMeasure: () => view.requestMeasure() };
   }, [saveView.frozen]);
-  useTypewriterScroll({ enabled: editorPreferences.editorTypewriterModeEnabled, active: mainView === 'notes' && !externalDocuments.controller.snapshot && (editorMode === 'source' || !currentIsMarkdown) && Boolean(currentPath),
+  useTypewriterScroll({ enabled: editorPreferences.editorTypewriterModeEnabled, active: mainView === 'notes' && !externalDocuments.controller.snapshot && editorMode === 'source' && Boolean(currentPath),
     getTarget: sourceTypewriterTarget, layoutKey: `${currentPath}:${editorMode}:${editorZoom}:${editorPreferences.editorFontSizePx}:${editorPreferences.editorLineHeight}:${editorPreferences.editorContentWidth}:${focusActive}`,
     navigationKey: `${headingJump?.nonce}:${searchScrollTarget?.nonce}`, zoom: editorZoom });
   useEffect(() => {
     const panels = document.querySelectorAll<HTMLElement>('.app-nav-rail, .notes-main-view > aside, .notes-main-view > .sidebar, .notes-main-view > .sidebar-collapsed, .notes-main-view .workspace > .knowledge-panel, .notes-main-view .workspace > .knowledge-panel-collapsed');
     panels.forEach(panel => { panel.inert = focusActive; });
     const escape = (event: KeyboardEvent) => {
-      if (!focusActive || isEditorInteractionBlocked || event.key !== 'Escape' || !canHandleEditorEscape(event) || hasVisibleOverlay('[role="dialog"], .mantine-Popover-dropdown, .selection-context-menu, .selection-floating-toolbar, .code-language-popover')) return;
+      if (!focusActive || isEditorInteractionBlocked || event.key !== 'Escape' || !canHandleEditorEscape(event) || hasVisibleOverlay('[role="dialog"], .mantine-Popover-dropdown, .mantine-Menu-dropdown, .selection-context-menu, .selection-floating-toolbar, .code-language-popover')) return;
       consumeEditorEscape(event);
       void handleSavePreferences({ editorFocusModeEnabled: false }).then(focusDocument).catch(error => window.alert(String(error)));
     };
@@ -1648,8 +1658,9 @@ function App({ onResolvedThemeChange, onStartupReady }: AppProps) {
     <>
       {modelConnectionDialog}
       {externalDocuments.dialog}
+      <ReleaseUpdateModal update={releaseUpdate} />
       <WorkspaceMigrationDialog request={migrationRequest} onBlockedChange={handleMigrationBlocked} onDataChanged={handleMigratedData} />
-      <div className={`app-shell${focusActive ? ' note-focus-active' : ''}`} ref={element => { if (element) element.inert = migrationBlocked; }} data-workspace-migration-blocked={migrationBlocked || undefined}>
+      <div className={`app-shell${focusActive ? ' note-focus-active' : ''}${focusAssistantEnabled ? ' focus-assistant-enabled' : ''}${isFocusAssistantOpen && focusAssistantEnabled ? ' focus-assistant-open' : ''}${editorPreferences.editorFocusAiButtonSide === 'left' ? ' focus-assistant-left' : ''}`} ref={element => { if (element) element.inert = migrationBlocked; }} data-workspace-migration-blocked={migrationBlocked || undefined}>
         {isMaintaining && !migrationBlocked && <div role="status" style={{ position: 'fixed', top: 8, left: '50%', transform: 'translateX(-50%)', zIndex: 1000, background: 'var(--mantine-color-body)', border: '1px solid var(--mantine-color-default-border)', borderRadius: 8, padding: '8px 16px' }}>{t('正在保存并捕获数据快照，完成后即可继续编辑。')}</div>}
         {!guide.state && guide.error && <div className="onboarding-state-error" role="status">{t('使用引导暂时无法读取，可在设置中重试')}<Button size="compact-xs" variant="subtle" onClick={() => void guide.refresh().catch(() => undefined)}>{t('重试')}</Button></div>}
         <NavRail activeView={mainView} tourSelected={guide.visible && guide.step === 'menus' ? introMenu : undefined} onNavigate={(view) => void navigateDuringGuide(view)} onOpenFile={() => void externalDocuments.open()} onRecoverFiles={() => void externalDocuments.recover()} onRecentFiles={() => void externalDocuments.recent()} onPendingFiles={externalDocuments.showPendingFiles} pendingFileCount={externalDocuments.pendingFiles.length} onOpenSettings={() => {
@@ -1698,6 +1709,7 @@ function App({ onResolvedThemeChange, onStartupReady }: AppProps) {
             {guide.visible && guide.step === 'ai' && <OnboardingBar guide={guide} />}
             <div className={guide.visible && guide.step === 'ai' ? 'onboarding-body' : 'onboarding-settings-content'}>
             <SettingsPanel
+              releaseUpdate={releaseUpdate}
               guidedModel={guide.visible && guide.step === 'ai'}
               onOnboardingModelDraft={setOnboardingModelDraft}
               onOpenOnboarding={() => void guide.open()}
@@ -1767,7 +1779,9 @@ function App({ onResolvedThemeChange, onStartupReady }: AppProps) {
         ) : null}
         {isMainViewMounted('notes') ? (
           <div className="notes-main-view" hidden={mainView !== 'notes'}>
-            {externalDocuments.controller.snapshot && <ExternalDocumentWorkspace documents={externalDocuments} libraries={libraries} preferences={editorPreferences} theme={resolvedTheme} documentStyle={documentStyle} active={mainView === 'notes'} blocked={isMaintaining || migrationBlocked} zoom={editorZoom} onZoom={setEditorZoom} onReturnLibrary={() => void externalDocuments.prepareTransition()} />}
+            {externalDocuments.controller.snapshot && <ExternalDocumentWorkspace documents={externalDocuments} libraries={libraries}
+              assistant={{ libraryPath, noteMeta: null, assistantAiOptions, onRefreshAssistantAiOptions: handleRefreshAssistantAiOptions, assistantContextRevision, onStartAssistantTurn: handleStartAssistantTurn, onCancelAssistantTurn: handleCancelAssistantTurn, onNavigateAssistantCitation: handleNavigateAssistantCitation }}
+              preferences={editorPreferences} theme={resolvedTheme} documentStyle={documentStyle} active={mainView === 'notes'} blocked={isMaintaining || migrationBlocked || releaseUpdate.opened} zoom={editorZoom} onZoom={setEditorZoom} onReturnLibrary={() => void externalDocuments.prepareTransition()} />}
             {!externalDocuments.controller.snapshot && <Sidebar
               files={files}
               currentPath={currentPath}
@@ -1816,14 +1830,12 @@ function App({ onResolvedThemeChange, onStartupReady }: AppProps) {
                   <div className="segmented-control">
                     <button
                       className={editorMode === 'wysiwyg' ? 'active' : ''}
-                      disabled={!currentIsMarkdown}
                       onClick={() => setEditorMode('wysiwyg')}
                     >
                       {t("编辑")}
                     </button>
                     <button
                       className={editorMode === 'preview' ? 'active' : ''}
-                      disabled={!currentIsMarkdown}
                       onClick={() => setEditorMode('preview')}
                     >
                       {t("预览")}
@@ -1844,7 +1856,7 @@ function App({ onResolvedThemeChange, onStartupReady }: AppProps) {
                       <option key={backup.id} value={backup.id}>{backup.id}</option>
                     ))}
                   </select>
-                  <EditorWordCount content={content} isMarkdown={currentIsMarkdown} />
+                  <EditorWordCount content={content} isMarkdown={currentIsMarkdown} active={!externalDocuments.controller.snapshot && mainView === 'notes'} />
                   <div className="note-save-notice" role="status" aria-live="polite" data-status={saveView.status}>
                     {saveView.status === 'clean' && saveView.indexState === 'pending' ? t("已保存，正在更新索引…") : ({ clean: t("已保存"), dirty: t("尚未保存"), saving: t("正在保存…"), conflict: t("保存冲突"), error: t("保存失败") })[saveView.status]}
                   </div>
@@ -1860,7 +1872,7 @@ function App({ onResolvedThemeChange, onStartupReady }: AppProps) {
                   {(saveView.status === 'conflict' || saveView.status === 'error') && <button disabled={saveView.frozen} onClick={() => setIsSaveCopyModalOpen(true)}>{t("另存为新笔记")}</button>}
                   {saveView.status === 'clean' && saveView.message && <button onClick={() => { if (saveController.snapshot) void window.electronAPI.retryNoteIndex(saveController.snapshot.editSessionId).then(() => saveController.indexState()).catch((error) => saveController.indexState(String(error))); }}>{t("重试索引")}</button>}
                 </div>}
-                {editorMode === 'wysiwyg' && currentIsMarkdown && (
+                {editorMode === 'wysiwyg' && (
                   <Editor
                     key={currentPath}
                     content={content}
@@ -1885,13 +1897,14 @@ function App({ onResolvedThemeChange, onStartupReady }: AppProps) {
                     onSelectionExpansionApplyResult={handleSelectionExpansionApplyResult}
                   />
                 )}
-                {editorMode === 'preview' && currentIsMarkdown && (
+                {editorMode === 'preview' && (
                   <MarkdownPreview
                     key={currentPath}
                     content={content}
                     currentPath={currentPath}
                     libraryPath={libraryPath}
                     zoom={editorZoom}
+                    frontmatter={currentIsMarkdown ? 'strip' : 'preserve'}
                     headingJump={headingJump}
                     highlightTerm={currentSearchTerm}
                     scrollTarget={searchScrollTarget}
@@ -1902,7 +1915,7 @@ function App({ onResolvedThemeChange, onStartupReady }: AppProps) {
                     onOutlineChange={setCurrentHeadings}
                   />
                 )}
-                {(editorMode === 'source' || !currentIsMarkdown) && (
+                {editorMode === 'source' && (
                   <div className="source-editor-zoom" style={{ zoom: editorZoom }}>
                     <CodeMirror
                       ref={sourceEditorRef}
@@ -1951,6 +1964,7 @@ function App({ onResolvedThemeChange, onStartupReady }: AppProps) {
                 onCancelAssistantTurn={handleCancelAssistantTurn}
                 onNavigateAssistantCitation={handleNavigateAssistantCitation}
                 onAssistantVisibilityChange={setIsCurrentNoteAssistantOpen}
+                focusAssistant={focusAssistantOptions}
                 selectionExpansionSession={selectionExpansionSession}
                 onSelectionExpansionSettingsChange={handleSelectionExpansionSettingsChange}
                 onSaveSelectionExpansionDefaults={handleSaveSelectionExpansionDefaults}
@@ -1962,7 +1976,7 @@ function App({ onResolvedThemeChange, onStartupReady }: AppProps) {
             </div>
           ) : (
             <div className="workspace">
-              <div className="empty-editor" style={{ flex: 1 }}>{t("选择笔记开始写作")}</div>
+              <div className="empty-editor" style={{ flex: 1 }}>{libraryPath ? t("选择笔记开始写作") : t("先创建或选择笔记库，再开始写作")}</div>
               <KnowledgePanel
                 libraryPath={libraryPath}
                 noteMeta={null}
@@ -1985,6 +1999,7 @@ function App({ onResolvedThemeChange, onStartupReady }: AppProps) {
                 onCancelAssistantTurn={handleCancelAssistantTurn}
                 onNavigateAssistantCitation={handleNavigateAssistantCitation}
                 onAssistantVisibilityChange={setIsCurrentNoteAssistantOpen}
+                focusAssistant={focusAssistantOptions}
               />
             </div>
           )}

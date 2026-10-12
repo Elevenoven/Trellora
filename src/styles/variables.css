@@ -5455,12 +5455,13 @@ body.resizing-materials-assistant * {
   padding: 0;
   overflow: hidden;
   border: 0;
-  background: rgb(11 13 16 / 88%);
-  color: #f5f7fa;
+  /* Match the SVG rendering theme and keep the underlying document out of the canvas. */
+  background: var(--bg-primary);
+  color: var(--text-primary);
 }
 
 .mermaid-diagram-viewer::backdrop {
-  background: rgb(11 13 16 / 88%);
+  background: var(--scrim);
 }
 
 .mermaid-diagram-viewer-shell {
@@ -5478,8 +5479,8 @@ body.resizing-materials-assistant * {
   gap: 4px;
   min-width: 0;
   padding: 7px 10px;
-  border-bottom: 1px solid rgb(255 255 255 / 14%);
-  background: rgb(18 21 26 / 96%);
+  border-bottom: 1px solid var(--border-color);
+  background: var(--bg-secondary);
 }
 
 .mermaid-diagram-viewer-icon-button {
@@ -5493,18 +5494,18 @@ body.resizing-materials-assistant * {
   border: 1px solid transparent;
   border-radius: 5px;
   background: transparent;
-  color: #e8ebef;
+  color: var(--text-primary);
   cursor: pointer;
 }
 
 .mermaid-diagram-viewer-icon-button:hover,
 .mermaid-diagram-viewer-icon-button[data-active='true'] {
-  border-color: rgb(255 255 255 / 18%);
-  background: rgb(255 255 255 / 10%);
+  border-color: var(--border-strong);
+  background: var(--bg-hover);
 }
 
 .mermaid-diagram-viewer-icon-button:focus-visible {
-  outline: 2px solid #75a7ff;
+  outline: 2px solid var(--accent-focus);
   outline-offset: 1px;
 }
 
@@ -5515,7 +5516,7 @@ body.resizing-materials-assistant * {
 
 .mermaid-diagram-viewer-scale {
   width: 54px;
-  color: #c9ced6;
+  color: var(--text-secondary);
   font-size: 12px;
   text-align: center;
 }
@@ -5578,9 +5579,9 @@ body.resizing-materials-assistant * {
   min-height: 42px;
   padding: 10px 18px 12px;
   overflow-wrap: anywhere;
-  border-top: 1px solid rgb(255 255 255 / 12%);
-  background: rgb(18 21 26 / 94%);
-  color: #c9ced6;
+  border-top: 1px solid var(--border-color);
+  background: var(--bg-secondary);
+  color: var(--text-secondary);
   font-size: 13px;
   line-height: 1.5;
   text-align: center;
@@ -8751,6 +8752,23 @@ body.resizing-knowledge-debug-rail * {
 .assistant-empty-state svg { color: var(--text-tertiary); }
 .assistant-empty-state strong { color: var(--text-primary); font-size: 13px; }
 .assistant-empty-state p { margin: 0; font-size: 12px; line-height: 1.55; }
+/* Keep the note prompt centered as one group instead of stretching its grid rows. */
+.assistant-message-list:has(.assistant-note-empty-state) { padding: 2px; scrollbar-gutter: auto; }
+.assistant-empty-state.assistant-note-empty-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  min-height: 0;
+  margin: auto;
+  padding: 20px 10px;
+  gap: 12px;
+  text-align: center;
+}
+.assistant-note-empty-state > svg { flex: 0 0 auto; width: 24px; height: 24px; }
+.assistant-note-empty-state strong { white-space: nowrap; }
+.assistant-empty-state.assistant-note-empty-state > div { justify-content: center; margin-top: 6px; }
 .assistant-empty-state > div,
 .assistant-presets { display: flex; flex-wrap: wrap; gap: 5px; }
 
@@ -8796,6 +8814,7 @@ body.resizing-knowledge-debug-rail * {
 .assistant-message.assistant {
   align-self: stretch;
   width: 100%;
+  grid-template-columns: minmax(0, 1fr);
   box-sizing: border-box;
 }
 
@@ -9003,6 +9022,41 @@ body.resizing-knowledge-debug-rail * {
   color: var(--text-primary);
   font-size: 13px;
   line-height: 1.58;
+}
+
+/* Bound every intermediate grid item so wide tables scroll inside the reply. */
+.assistant-message .collapsible-ai-content,
+.assistant-message .collapsible-ai-content-body,
+.assistant-message .assistant-knowledge-base-answer {
+  min-width: 0;
+  max-width: 100%;
+}
+
+.assistant-message .collapsible-ai-content-body {
+  grid-template-columns: minmax(0, 1fr);
+}
+
+.assistant-markdown-content .markdown-table-scroll {
+  min-width: 0;
+  overflow-y: hidden;
+}
+
+.assistant-markdown-content .markdown-table-scroll::-webkit-scrollbar {
+  height: 10px;
+}
+
+.assistant-markdown-content .markdown-table-scroll::-webkit-scrollbar-track {
+  background: var(--interaction-gray);
+  border-radius: 5px;
+}
+
+.assistant-markdown-content .markdown-table-scroll::-webkit-scrollbar-thumb {
+  background: color-mix(in srgb, var(--text-tertiary) 70%, var(--interaction-gray));
+  border-radius: 5px;
+}
+
+.assistant-markdown-content .markdown-table-scroll::-webkit-scrollbar-thumb:hover {
+  background: var(--text-tertiary);
 }
 
 .assistant-markdown-content > :first-child { margin-top: 0; }

@@ -13,3 +13,5 @@
 *.ico binary
 *.png binary
 *.docx binary
+
+*.exe binary
