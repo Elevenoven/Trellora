@@ -1,0 +1,61 @@
+{
+  "schemaVersion": 1,
+  "appVersion": "1.0.1",
+  "productName": "Trellora",
+  "sourceSha": "03fd644598f31287553e0caeceaaedf270aff83f",
+  "repositoryUrl": "https://github.com/Elevenoven/Trellora",
+  "createdAt": "2026-10-12T13:22:07.617Z",
+  "nodeVersion": "v24.13.0",
+  "runtime": {
+    "schemaVersion": 1,
+    "createdAt": "2026-10-12T13:03:40.666Z",
+    "python": {
+      "implementation": "CPython",
+      "version": "3.13.2",
+      "executableName": "python-worker.exe",
+      "standardLibrary": "Lib",
+      "dependencyDirectory": ".deps"
+    },
+    "worker": {
+      "protocolVersion": 1,
+      "engineVersion": "p5",
+      "version": "0.3.0",
+      "jiebaVersion": "0.42.1",
+      "capabilities": [
+        "hello",
+        "runStage:lines",
+        "runStage:signals",
+        "runStage:tree",
+        "runStage:chunks",
+        "runStage:chunks-v2",
+        "runStage:chunks-llm-v1",
+        "runStage:keywords",
+        "runStage:entities-v1",
+        "runStage:graph-v1",
+        "tokenizeSearch:jieba-v1",
+        "cancel",
+        "shutdown"
+      ]
+    }
+  },
+  "artifacts": [
+    {
+      "name": "Trellora-1.0.1-portable-x64.exe",
+      "byteLength": 92744573,
+      "sha256": "0879594d076abdbb89e469344aa606eb6452101d946d00236508d43874d8510c",
+      "signature": {
+        "status": "NotSigned",
+        "signer": null
+      }
+    },
+    {
+      "name": "Trellora-1.0.1-setup-x64.exe",
+      "byteLength": 92997675,
+      "sha256": "d980dae426417d8932621c2707e6eaf743c80e7c62dd508d3c3d3339331701be",
+      "signature": {
+        "status": "NotSigned",
+        "signer": null
+      }
+    }
+  ]
+}
