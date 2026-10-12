@@ -24,7 +24,7 @@ pnpm run rebuild:native
 pnpm dev
 ```
 
-构建安装包另需 Windows x64 CPython，将发行 Worker 的依赖安装到指定目录：
+构建安装包另需 Windows x64 CPython；生成发行清单需要 PowerShell 7（`pwsh`）。将发行 Worker 的依赖安装到指定目录：
 
 ```powershell
 py -3 -m pip install --target pipeline-python/.deps -r pipeline-python/requirements.lock

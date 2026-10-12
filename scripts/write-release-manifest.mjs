@@ -15,7 +15,7 @@ const artifacts = [];
 for (const name of artifactNames) {
   const file = path.join(output, name), digest = createHash('sha256');
   for await (const chunk of createReadStream(file)) digest.update(chunk);
-  const signature = JSON.parse(execFileSync('powershell.exe', ['-NoProfile', '-NonInteractive', '-File', path.join(root, 'scripts/read-release-signature.ps1'), file], { encoding: 'utf8', windowsHide: true }));
+  const signature = JSON.parse(execFileSync('pwsh.exe', ['-NoProfile', '-NonInteractive', '-File', path.join(root, 'scripts/read-release-signature.ps1'), file], { encoding: 'utf8', windowsHide: true }));
   artifacts.push({ name, byteLength: statSync(file).size, sha256: digest.digest('hex'), signature });
 }
 const runtime = JSON.parse(readFileSync(path.join(output, 'win-unpacked/resources/pipeline-runtime/runtime-manifest.json'), 'utf8'));

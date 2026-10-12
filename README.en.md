@@ -22,7 +22,7 @@ pnpm run rebuild:native
 pnpm dev
 ```
 
-For Windows packages, install a Windows x64 CPython and the slim Worker dependencies:
+For Windows packages, install Windows x64 CPython and the slim Worker dependencies. Generating release manifests also requires PowerShell 7 (`pwsh`):
 
 ```powershell
 py -3 -m pip install --target pipeline-python/.deps -r pipeline-python/requirements.lock
